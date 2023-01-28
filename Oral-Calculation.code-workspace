@@ -1,0 +1,16 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "editor.tabSize": 2
+    },
+    "extensions": {
+        "recommendations": [
+            "Vue.volar",
+            "Vue.vscode-typescript-vue-plugin"
+        ]
+    }
+}

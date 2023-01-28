@@ -1,0 +1,25 @@
+{
+  "name": "oral-calculation",
+  "version": "0.1.0-alpha.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@popperjs/core": "2.11.6",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@volar/vue-language-plugin-pug": "^1.0.24",
+    "big-integer": "^1.6.51",
+    "bootstrap": "5.2.3",
+    "pinia": "^2.0.29",
+    "pug": "^3.0.2",
+    "sass": "^1.57.1",
+    "vite": "^4.0.4",
+    "vitest": "^0.28.3",
+    "vue": "^3.2.45",
+    "vue-m-message": "^4.0.1",
+    "vue-router": "^4.1.6"
+  }
+}
