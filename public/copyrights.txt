@@ -1,0 +1,87 @@
+----------------
+Oral Calculation
+----------------
+MIT License
+Copyright © 2023 Jason Li <jasonmli@outlook.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+Vue
+---
+https://github.com/vuejs/core/blob/main/packages/vue/
+Copyright (c) 2018-present, Yuxi (Evan) You
+https://github.com/vuejs/core/blob/main/packages/vue/LICENSE
+
+----
+Vite
+----
+https://github.com/vitejs/vite
+Copyright (c) 2019-present, Yuxi (Evan) You and Vite contributors
+License under MIT: https://github.com/vitejs/vite/blob/main/LICENSE
+
+---------------
+Vite Plugin Vue
+---------------
+https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue
+Copyright (c) 2019-present, Yuxi (Evan) You and Vite contributors
+License under MIT: https://github.com/vitejs/vite-plugin-vue/blob/main/LICENSE
+
+-----
+volar
+-----
+https://github.com/johnsoncodehk/volar/
+Copyright (c) 2021-present Johnson Chu
+License under MIT: https://github.com/johnsoncodehk/volar/blob/master/LICENSE
+
+-------------
+BigInteger.js
+-------------
+https://github.com/peterolson/BigInteger.js
+License under The Unlicense: https://github.com/peterolson/BigInteger.js/blob/master/LICENSE
+
+-------------
+vue-m-message
+-------------
+https://github.com/mengdu/m-message
+Copyright (c) 2018 lanyueos@qq.com
+License under MIT: https://github.com/mengdu/m-message/blob/master/LICENSE
+
+
+---------
+Bootstrap
+---------
+https://github.com/twbs/bootstrap
+Copyright (c) 2011-2023 The Bootstrap Authors
+License under MIT: https://github.com/twbs/bootstrap/blob/main/LICENSE
+
+-----
+Pinia
+-----
+https://github.com/vuejs/pinia
+Copyright (c) 2019-present Eduardo San Martin Morote
+License under MIT: https://github.com/vuejs/pinia/blob/v2/LICENSE
+
+----------
+Vue Router
+----------
+https://github.com/vuejs/router
+Copyright (c) 2019-present Eduardo San Martin Morote
+License under MIT: https://github.com/vuejs/router/blob/main/LICENSE
+
+---
+Pug
+---
+https://github.com/pugjs/pug
+License under MIT: https://github.com/pugjs/pug#license
+
+---------
+dart-sass
+---------
+https://github.com/sass/dart-sass
+Copyright (c) 2016, Google Inc.
+https://github.com/sass/dart-sass/blob/main/LICENSE

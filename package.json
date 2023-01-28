@@ -1,6 +1,6 @@
 {
   "name": "oral-calculation",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -17,7 +17,6 @@
     "pug": "^3.0.2",
     "sass": "^1.57.1",
     "vite": "^4.0.4",
-    "vitest": "^0.28.3",
     "vue": "^3.2.45",
     "vue-m-message": "^4.0.1",
     "vue-router": "^4.1.6"
