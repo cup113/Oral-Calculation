@@ -14,7 +14,7 @@ const
     let res = milliseconds.value.toFixed(0);
     if (seconds.value > 0) {
       let l = 3 - res.length;
-      res = new Array(l > 0 ? l : 0).fill("0").join() + res;
+      res = new Array(l > 0 ? l : 0).fill("0").join("") + res;
     }
     return res;
   });
@@ -34,6 +34,7 @@ span.duration
 .duration {
   >.msec {
     font-size: 0.7em;
+    opacity: 0.75;
   }
 }
 </style>

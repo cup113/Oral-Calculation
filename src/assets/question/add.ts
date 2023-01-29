@@ -30,8 +30,10 @@ export default {
   },
   paramsConfig: [
     {
+      type: 'integer',
       name: "位数",
       min: 1,
+      default: 3,
     },
   ],
 } as QuestionModule;

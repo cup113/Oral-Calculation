@@ -89,12 +89,18 @@ export interface QuestionProviderStatic {
   (bigInt: Dependency, params: string): QuestionProvider;
 }
 
-export interface ParamConfig {
+export type ParamConfig = {
   name: string,
-  min?: number,
+  type: 'integer',
+  default: number,
+  min: number,
   max?: number,
-  choices?: string[],
-}
+} | {
+  name: string,
+  type: 'select',
+  default: number, // from 0
+  choices: string[],
+};
 
 export interface QuestionModule {
   get_provider: QuestionProviderStatic,

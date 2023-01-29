@@ -16,7 +16,7 @@ const
   problem = props.question.problem,
   duration = props.question.get_duration(),
   correctAnswer = props.question.correctAnswer,
-  wrongAnswersDisplay = [...props.question.wrongAnswers].join("\n");
+  wrongAnswers = [...props.question.wrongAnswers];
 
 </script>
 
@@ -28,7 +28,8 @@ div.question
     Duration(:duration="duration")
   span {{ problem }}
   span {{ correctAnswer }}
-  span(v-text="wrongAnswersDisplay")
+  span
+    span.wrong-answer(v-for="wrongAnswer in wrongAnswers") {{ wrongAnswer }}
 </template>
 
 <style lang="scss">
@@ -46,7 +47,6 @@ div.question
     "number correct duration"
     "problem problem problem"
     "corAns corAns wrongAnswers";
-  grid-template-columns: 3em 3em 8em;
   justify-content: center;
   align-content: center;
   border: 1px solid black;
@@ -58,6 +58,7 @@ div.question
     &:nth-child(1) {
       grid-area: number;
       font-size: 1.5em;
+      min-width: 1.5em;
       background-color: $blue-100;
     }
 
@@ -76,7 +77,7 @@ div.question
 
     &:nth-child(3) {
       grid-area: duration;
-      padding: 0.25em 0;
+      padding: 0.25em;
       background-color: $cyan-100;
     }
 
@@ -93,9 +94,15 @@ div.question
 
     &:nth-child(6) {
       grid-area: wrongAnswers;
+      font-size: 0.8rem;
       color: $red;
       background-color: $red-100;
     }
+  }
+
+  .wrong-answer {
+    display: block;
+    width: 100%;
   }
 }
 </style>

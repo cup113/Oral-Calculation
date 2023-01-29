@@ -31,8 +31,8 @@ div.customized-footer
     a.badge.text-bg-primary(target="_blank" :href="remoteUrl") 开源
   div
     a.badge.text-bg-primary(target="_blank" href="readme.html") 使用说明
-    a.badge.text-bg-primary(href="copyrights.txt") 版权声明
-    a.badge.text-bg-primary(href="CHANGELOG.html") 更新日志
+    a.badge.text-bg-primary(target="_blank" href="copyrights.txt") 版权声明
+    a.badge.text-bg-primary(target="_blank" href="CHANGELOG.html") 更新日志
 </template>
 
 <style lang="scss">

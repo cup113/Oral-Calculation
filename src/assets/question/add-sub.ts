@@ -26,12 +26,16 @@ export default {
   },
   paramsConfig: [
     {
+      type: 'integer',
       name: "位数",
       min: 1,
+      default: 2,
     },
     {
+      type: 'integer',
       name: "运算项个数",
       min: 2,
+      default: 3,
     }
   ],
 } as QuestionModule;

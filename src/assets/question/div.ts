@@ -56,16 +56,29 @@ export default {
   },
   paramsConfig: [
     {
+      type: 'integer',
       name: "运算项 #1 位数",
       min: 1,
+      default: 2,
     },
     {
+      type: 'integer',
       name: "运算项 #2 位数",
       min: 1,
+      default: 2,
     },
     {
-      name: "是否整除",
-      choices: ["保证除尽", "不保证，结果为分数", "不保证，结果为商和余数"]
+      type: 'integer',
+      name: "保证除尽题数(%)",
+      min: 0,
+      max: 100,
+      default: 100,
+    },
+    {
+      type: 'select',
+      name: "除不尽的答案表示",
+      choices: ["分数(a/b)", "商和余数(a...b)"],
+      default: 0,
     }
   ],
 } as QuestionModule;

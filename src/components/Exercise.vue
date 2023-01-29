@@ -38,6 +38,7 @@ const
     wrongAnswers: 0,
     accDuration: 0 as Milliseconds, // ms
   }),
+  ratio = computed(() => query.quantity === 0 ? 0 : (board.passed / query.quantity)),
   answerInput = ref(null as HTMLInputElement | null);
 
 interface Param {
@@ -136,16 +137,14 @@ function submit_question(ev: Event): void {
       end();
   }
   else {
-    if (currentQuestion.value.wrongAnswers.has(answer)) {
-      Message.error(`已经有过错误答案 ${answer}`, {
-        position: 'bottom-right'
-      });
+    if (answer.length === 0) {
+      Message.warning("答案不应为空");
+    } else if (currentQuestion.value.wrongAnswers.has(answer)) {
+      Message.error(`已经有过错误答案 ${answer}`);
     } else {
       currentQuestion.value.wrongAnswers.add(answer);
       board.wrongAnswers += 1;
-      Message.error(`答案 ${answer} 错误`, {
-        position: 'bottom-right'
-      });
+      Message.error(`答案 ${answer} 错误`);
     }
   }
 }
@@ -156,6 +155,9 @@ function submit_question(ev: Event): void {
 div.exercise
   button.go-back.btn.btn-secondary(type="button" @click="go_back") 返回
   h2 练习
+  div.progress
+    div.progress-bar.progress-bar-animated(:style="{ '--ratio': ratio }")
+      | {{ board.passed }} / {{ query.quantity }}
   div.board
     div.board-item
       span 正确题数 / 已答题目
@@ -182,12 +184,25 @@ div.exercise
 @import 'bootstrap/scss/_mixins.scss';
 
 @import 'bootstrap/scss/_buttons.scss';
+@import 'bootstrap/scss/_progress.scss';
 
 .exercise {
   .go-back {
     position: absolute;
     left: 1em;
     top: 1em;
+  }
+
+  >.progress {
+    --bs-progress-height: 2rem;
+    --bs-progress-font-size: 1.5em;
+    margin: 1em 3em;
+
+    >.progress-bar {
+      width: calc(var(--ratio) * 100%);
+      overflow: visible;
+      color: adjust-color($color: $success, $lightness: 25%);
+    }
   }
 
   .board-item {

@@ -3,10 +3,12 @@ import type { QuestionProvider, Dependency, Question, QuestionModule } from './i
 class SubtractQuestionProvider implements QuestionProvider {
   private dep: Dependency;
   public digits: number;
+  public allowNegative: boolean;
   constructor(dep: Dependency, params: string) {
     const paramArr = params.split(",");
     this.dep = dep;
     this.digits = parseInt(paramArr[0]);
+    this.allowNegative = parseInt(paramArr[1]) === 0 ? false: true;
   }
 
   public get_question(): Question {
@@ -15,8 +17,8 @@ class SubtractQuestionProvider implements QuestionProvider {
       const
         num1 = rand_big_int(this.digits),
         num2 = rand_big_int(this.digits),
-        correctAnswer = num1.add(num2);
-      if (correctAnswer.leq(bigInt[0]))
+        correctAnswer = num1.subtract(num2);
+      if (!this.allowNegative && correctAnswer.leq(bigInt[0]))
         continue;
       const problem = `${num1.toString()} - ${num2.toString()} = ?`;
       return new Question(problem, correctAnswer.toString());
@@ -34,9 +36,16 @@ export default {
   },
   paramsConfig: [
     {
+      type: 'integer',
       name: "位数",
       min: 1,
+      default: 3,
     },
+    {
+      type: 'select',
+      name: "允许结果为负数",
+      choices: ["不允许", "允许"],
+      default: 0,
+    }
   ],
 } as QuestionModule;
-
