@@ -44,7 +44,7 @@ function change_category(ev: Event) {
 
 <template lang="pug">
 .welcome
-  h2 欢迎来到速算练习
+  h2 欢迎来到口算练习
   form(@submit.prevent="submit_form")
     div.row
       label.col-form-label(for="category") 类别
@@ -86,7 +86,6 @@ function change_category(ev: Event) {
 
 @import 'bootstrap/scss/_variables.scss';
 @import 'bootstrap/scss/_mixins.scss';
-@import 'bootstrap/scss/_maps.scss';
 
 @import 'bootstrap/scss/_buttons.scss';
 @import 'bootstrap/scss/_forms.scss';
