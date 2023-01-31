@@ -7,3 +7,8 @@
 [![Version](https://img.shields.io/github/package-json/v/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
 [![MIT License](https://img.shields.io/github/license/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7c1fcffe-fbe5-42a6-a8ac-bbd05641bc58/deploy-status)](https://app.netlify.com/sites/oral-calculation/deploys)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcup113%2FOral-Calculation.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcup113%2FOral-Calculation?ref=badge_shield)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcup113%2FOral-Calculation.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcup113%2FOral-Calculation?ref=badge_large)
