@@ -11,13 +11,12 @@ import useStore from '@/store/index';
 import Duration from './Duration.vue';
 
 const
-  { set_module } = useStore(),
-  { questionProvider, questions, loaded } = storeToRefs(useStore());
+  { set_module, set_quantity } = useStore(),
+  { questionProvider, questions, loaded, quantity } = storeToRefs(useStore());
 
-questions.value.splice(0, questions.value.length);
-
-const router = useRouter();
-const route = useRoute();
+const
+  router = useRouter(),
+  route = useRoute();
 
 const enum Status {
   Loading,
@@ -38,7 +37,7 @@ const
     wrongAnswers: 0,
     accDuration: 0 as Milliseconds, // ms
   }),
-  ratio = computed(() => query.quantity === 0 ? 0 : (board.passed / query.quantity)),
+  ratio = computed(() => quantity.value === 0 ? 0 : (board.passed / quantity.value)),
   answerInput = ref(null as HTMLInputElement | null);
 
 interface Param {
@@ -133,7 +132,7 @@ function submit_question(ev: Event): void {
     board.passed += 1;
     if (currentQuestion.value.is_first_time_correct())
       board.correct += 1;
-    if (board.passed === query.quantity)
+    if (board.passed === quantity.value)
       end();
   }
   else {
@@ -149,6 +148,9 @@ function submit_question(ev: Event): void {
   }
 }
 
+questions.value.splice(0, questions.value.length);
+set_quantity(query.quantity);
+
 </script>
 
 <template lang="pug">
@@ -157,7 +159,7 @@ div.exercise
   h2 练习
   div.progress
     div.progress-bar.progress-bar-animated(:style="{ '--ratio': ratio }")
-      | {{ board.passed }} / {{ query.quantity }}
+      | {{ board.passed }} / {{ quantity }}
   div.board
     div.board-item
       span 正确题数 / 已答题目

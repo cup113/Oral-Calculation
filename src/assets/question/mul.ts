@@ -15,17 +15,13 @@ class MultiplyQuestionProvider implements QuestionProvider {
   }
 
   public get_question(): Question {
-    const { rand_big_int, bigInt, Question } = this.dep;
-    while (true) {
-      const
-        num1 = rand_big_int(this.digits1, { avoidIsOne: true }),
-        num2 = rand_big_int(this.digits2, { avoidIsOne: true }),
-        correctAnswer = num1.multiply(num2);
-      if (correctAnswer.leq(bigInt[0]))
-        continue;
-      const problem = `${num1.toString()} × ${num2.toString()} = ?`;
-      return new Question(problem, correctAnswer.toString());
-    }
+    const { rand_big_int, Question } = this.dep;
+    const
+      num1 = rand_big_int(this.digits1, { avoidIsOne: true, avoidEndsWithZero: true }),
+      num2 = rand_big_int(this.digits2, { avoidIsOne: true, avoidEndsWithZero: true }),
+      correctAnswer = num1.multiply(num2);
+    const problem = `${num1.toString()} × ${num2.toString()} = ?`;
+    return new Question(problem, correctAnswer.toString());
   }
 
   public get_title(): string {

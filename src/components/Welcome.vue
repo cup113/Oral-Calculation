@@ -10,7 +10,7 @@ import { storeToRefs } from 'pinia';
 
 const
   { set_module } = useStore(),
-  { category, questionModule } = storeToRefs(useStore());
+  { category, questionModule, quantity } = storeToRefs(useStore());
 
 const
   router = useRouter(),
@@ -32,12 +32,16 @@ function submit_form(ev: Event): void {
       params[parseInt(key.substring("param-".length))] = value as string;
     else
       throw Error("Form key error");
-  })
+  });
   router.push(`/exercise/${category}/${params.join(',')}/${quantity}`);
 }
 
 function change_category(ev: Event) {
   set_module((ev.target as HTMLSelectElement).value, "");
+}
+
+function change_quantity(ev: Event) {
+  quantity.value = (ev.target as HTMLInputElement).valueAsNumber;
 }
 
 </script>
@@ -70,6 +74,8 @@ function change_category(ev: Event) {
           step="1"
           placeholder="练习题数..."
           required="true"
+          :value="quantity"
+          @change="change_quantity"
         )
     ParamItem(
       v-for="(config, i) in paramsConfig"

@@ -9,6 +9,7 @@ export default defineStore("index", () => {
   const enum LocalStorageKeys {
     Category = "OC-Category",
     Params = "OC-Params",
+    Quantity = "OC-Quantity"
   }
 
   const
@@ -19,7 +20,10 @@ export default defineStore("index", () => {
     questions = ref([] as Question[]),
     questionProvider = computed(
       () => questionModule.value.get_provider(DEP, params.value)
-    );
+    ),
+    quantity = ref(parseInt(
+      localStorage.getItem(LocalStorageKeys.Quantity) ?? "10"
+    ));
 
   function set_module(_category: string, _params: string): Promise<QuestionModule> {
     category.value = _category as CategoryId;
@@ -46,11 +50,11 @@ export default defineStore("index", () => {
       case CategoryId.Sub:
         return import("@/assets/question/sub");
       case CategoryId.AddSub:
-        return import("@/assets/question/add-sub");
+        return import("@/assets/question/add-sub"); // TODO
       case CategoryId.Mul:
         return import("@/assets/question/mul");
       case CategoryId.Div:
-        return import("@/assets/question/div");
+        return import("@/assets/question/div"); // TODO
       case CategoryId.Arithmetic:
         return Promise.reject("该模块尚未完成"); // TODO
       case CategoryId.Pow:
@@ -66,10 +70,21 @@ export default defineStore("index", () => {
     }
   }
 
+  function set_quantity(_quantity: number): boolean {
+    if (isNaN(_quantity) || _quantity <= 0)
+      return false;
+    quantity.value = _quantity;
+    localStorage.setItem(LocalStorageKeys.Quantity, _quantity.toString());
+    return true;
+  }
+
   set_module(
     localStorage.getItem(LocalStorageKeys.Category) ?? "0",
     localStorage.getItem(LocalStorageKeys.Params) ?? ""
   );
+  set_quantity(parseInt(
+    localStorage.getItem(LocalStorageKeys.Quantity) ?? "0"
+  ));
 
   return {
     category,
@@ -78,6 +93,8 @@ export default defineStore("index", () => {
     questions,
     loaded,
     params,
+    quantity,
     set_module,
+    set_quantity,
   };
 });

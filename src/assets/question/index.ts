@@ -30,12 +30,19 @@ export const CATEGORIES: Category[] = [
 ];
 
 export function rand_big_int(digits: number, option: RandOption = {}): bigInt.BigInteger {
-  let
-    l = bigInt[10].pow(digits - 1),
-    r = l.multiply(10).minus(1);
-  if (option.avoidIsOne && l.eq(bigInt[1]))
-    l = bigInt[2];
-  return bigInt.randBetween(l, r);
+  if (digits <= 0)
+    digits = 1;
+  while (true) {
+    let
+      l = bigInt[10].pow(digits - 1),
+      r = l.multiply(10).minus(1);
+    if (option.avoidIsOne && l.eq(bigInt[1]))
+      l = bigInt[2];
+    let ans = bigInt.randBetween(l, r);
+    if (option.avoidEndsWithZero && ans.mod(10).isZero())
+      continue;
+    return ans;
+  }
 }
 
 export interface RandOption {
