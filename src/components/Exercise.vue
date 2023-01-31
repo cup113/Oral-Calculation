@@ -154,13 +154,12 @@ set_quantity(query.quantity);
 </script>
 
 <template lang="pug">
-div.exercise
-  button.go-back.btn.btn-secondary(type="button" @click="go_back") 返回
-  h2 练习
-  div.progress
-    div.progress-bar.progress-bar-animated(:style="{ '--ratio': ratio }")
+div.exercise.pt-12
+  button.btn.bg-gray-700.absolute.left-6.top-4(type="button" @click="go_back") 返回
+  div.progress.mx-24.text-2xl
+    div.progress-bar.text-green-400.bg-blue-600(:style="{ '--ratio': ratio }")
       | {{ board.passed }} / {{ quantity }}
-  div.board
+  div.bg-gray-100.w-max.mx-auto.py-1.my-4
     div.board-item
       span 正确题数 / 已答题目
       span {{ board.correct }} / {{ board.passed }}
@@ -171,92 +170,27 @@ div.exercise
       span 累计用时
       span
         Duration(:duration="board.accDuration")
-  form(@submit.prevent="submit_question")
-    div.problem {{ currentQuestion.problem }}
-    div.answer
-      input(ref="answerInput" type="text" name="answer" autocomplete="off")
-      button.btn.btn-primary(type="submit") 提交
-  button.btn.btn-success(type="button" @click="start" v-if="!started") 开始
+  form.text-2xl(@submit.prevent="submit_question")
+    div {{ currentQuestion.problem }}
+    div.px-2.py-2.flex.flex-nowrap.gap-1.ml-24.mr-12
+      input.text-center.grow.border(ref="answerInput" type="text" name="answer" autocomplete="off")
+      button.btn.bg-blue-500.w-max(type="submit") 提交
+  button.btn.bg-green-700(type="button" @click="start" v-if="!started") 开始
 </template>
 
 <style lang="scss">
-@import 'bootstrap/scss/_functions.scss';
+.exercise .board-item {
+  @apply text-lg w-max mx-auto mt-1 px-1;
 
-@import 'bootstrap/scss/_variables.scss';
-@import 'bootstrap/scss/_mixins.scss';
+  >span {
+    @apply inline-block;
 
-@import 'bootstrap/scss/_buttons.scss';
-@import 'bootstrap/scss/_progress.scss';
-
-.exercise {
-  .go-back {
-    position: absolute;
-    left: 1em;
-    top: 1em;
-  }
-
-  >.progress {
-    --bs-progress-height: 2rem;
-    --bs-progress-font-size: 1.5em;
-    margin: 1em 3em;
-
-    >.progress-bar {
-      width: calc(var(--ratio) * 100%);
-      overflow: visible;
-      color: adjust-color($color: $success, $lightness: 25%);
-    }
-  }
-
-  .board-item {
-    font-size: 1.2em;
-    width: max-content;
-    margin: 0 auto;
-    background-color: $light;
-    margin-bottom: 0.2em;
-    padding: 0.1em 0;
-
-    >span {
-      display: inline-block;
-
-      &:nth-child(1) {
-        width: 16em;
-      }
-
-      &:nth-child(2) {
-        width: 8em;
-        color: $primary;
-        font-weight: bold;
-      }
-    }
-  }
-
-  >form {
-    margin-top: 1em;
-
-    >.problem,
-    >.answer {
-      font-size: 2em;
-      width: 100%;
+    &:nth-child(1) {
+      @apply w-64;
     }
 
-    >.problem {
-      color: $primary;
-    }
-
-    >.answer {
-      padding: 0.5em 2em;
-      display: flex;
-      flex-wrap: nowrap;
-      column-gap: 0.25em;
-
-      >input {
-        flex-grow: 1;
-        display: inline-block;
-        text-align: center;
-        word-break: break-all;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-      }
+    &:nth-child(2) {
+      @apply w-32 text-blue-600 font-bold;
     }
   }
 }

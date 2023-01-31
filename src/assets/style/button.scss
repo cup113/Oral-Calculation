@@ -1,0 +1,13 @@
+@layer components {
+  .badge {
+    @apply
+      rounded px-2 py-0.5 text-white font-bold text-sm
+      hover:shadow-lg active:text-red-100;
+  }
+
+  .btn {
+    @apply
+      rounded-lg px-3 py-1 text-white
+      hover:shadow-xl active:font-bold;
+  }
+}

@@ -15,10 +15,10 @@ const
 </script>
 
 <template lang="pug">
-div.row
+div.param-item
   label.col-form-label(:for="itemName") {{ config.name }}
   span
-    input.form-control(
+    input(
       v-if="config.type === 'integer'"
       type="number"
       required="true"
@@ -30,7 +30,7 @@ div.row
       :value="value"
       :placeholder="itemTitle"
     )
-    select.form-control(
+    select(
       v-else-if="config.type === 'select'"
       required="true"
       :id="itemName"
@@ -40,7 +40,3 @@ div.row
     )
       option(v-for="(choice, i) in config.choices" :value="i" :key="i") {{ choice }}
 </template>
-
-<style lang="scss">
-
-</style>

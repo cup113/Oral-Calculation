@@ -6,8 +6,17 @@
     ],
     "settings": {
         "editor.tabSize": 2,
+        "scss.lint.unknownAtRules": "ignore",
         "cSpell.words": [
-            "Morote"
+            "Andrey",
+            "autoprefixer",
+            "Morote",
+            "pinia",
+            "popperjs",
+            "postcss",
+            "Sitnik",
+            "tailwindcss",
+            "Yuxi"
         ]
     },
     "extensions": {

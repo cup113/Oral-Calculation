@@ -12,7 +12,6 @@ const
   number = props.i + 1,
   isCorrect = props.question.is_first_time_correct(),
   correctDisplay = isCorrect ? "✅" : "❌",
-  correctClass = isCorrect ? "correct" : "wrong",
   problem = props.question.problem,
   duration = props.question.get_duration(),
   correctAnswer = props.question.correctAnswer,
@@ -21,88 +20,51 @@ const
 </script>
 
 <template lang="pug">
-div.question
-  span {{ number }}
-  span(:class="correctClass") {{ correctDisplay }}
-  span
+div.question.inline-grid.text-lg.border-2
+  span.text-2xl.bg-blue-100 {{ number }}
+  span.text-2xl(:class="isCorrect ? 'bg-green-100' : 'bg-red-100'") {{ correctDisplay }}
+  span.break-keep.bg-cyan-100.px-1
     Duration(:duration="duration")
-  span {{ problem }}
-  span {{ correctAnswer }}
-  span
-    span.wrong-answer(v-for="wrongAnswer in wrongAnswers") {{ wrongAnswer }}
+  span.bg-orange-100 {{ problem }}
+  span.text-green-700.bg-green-100 {{ correctAnswer }}
+  span.text-xs.text-red-700.bg-red-100
+    span.block.w-full(v-for="wrongAnswer in wrongAnswers") {{ wrongAnswer }}
 </template>
 
 <style lang="scss">
-@import 'bootstrap/scss/_functions.scss';
-
-@import 'bootstrap/scss/_variables.scss';
-@import 'bootstrap/scss/_mixins.scss';
-
 .question {
-  display: -ms-inline-grid;
-  display: -moz-inline-grid;
-  display: inline-grid;
-  font-size: 1.25em;
   grid-template-areas:
     "number correct duration"
     "problem problem problem"
     "corAns corAns wrongAnswers";
-  justify-content: center;
-  align-content: center;
-  border: 1px solid black;
 
   >span {
-    border: 2px solid black;
-    margin: -2px -2px 0 0;
+    @apply border-2 border-black -ml-0.5 -mt-0.5;
 
     &:nth-child(1) {
       grid-area: number;
-      font-size: 1.5em;
       min-width: 1.5em;
-      background-color: $blue-100;
     }
 
     &:nth-child(2) {
       grid-area: correct;
-      font-size: 1.5em;
-
-      &.correct {
-        background-color: $green-100;
-      }
-
-      &.wrong {
-        background-color: $red-100;
-      }
     }
 
     &:nth-child(3) {
       grid-area: duration;
-      padding: 0.25em;
-      background-color: $cyan-100;
     }
 
     &:nth-child(4) {
       grid-area: problem;
-      background-color: $orange-100;
     }
 
     &:nth-child(5) {
       grid-area: corAns;
-      color: $success;
-      background-color: $green-100;
     }
 
     &:nth-child(6) {
       grid-area: wrongAnswers;
-      font-size: 0.8rem;
-      color: $red;
-      background-color: $red-100;
     }
-  }
-
-  .wrong-answer {
-    display: block;
-    width: 100%;
   }
 }
 </style>

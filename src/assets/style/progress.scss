@@ -1,0 +1,11 @@
+@layer components {
+  .progress {
+    @apply border rounded-2xl bg-gray-50;
+  }
+
+  .progress-bar {
+    @apply whitespace-nowrap overflow-visible rounded-2xl;
+    width: calc(var(--ratio) * 100%);
+    transition: width 1s ease-in-out;
+  }
+}

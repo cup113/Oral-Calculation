@@ -23,18 +23,9 @@ const
 
 <template lang="pug">
 span.duration
-  span.sec(v-if="seconds > 0") {{ seconds }}秒
-  span.msec {{ millisecondsDisplay }}毫秒
+  template(v-if="seconds == 0")
+    span.text-sm {{ millisecondsDisplay }}毫秒
+  template(v-else)
+    span(v-if="seconds > 0") {{ seconds }}秒
+    span.text-xs.opacity-75 {{ millisecondsDisplay }}毫秒
 </template>
-
-<style lang="scss">
-@import 'bootstrap/scss/_functions.scss';
-@import 'bootstrap/scss/_variables.scss';
-
-.duration {
-  >.msec {
-    font-size: 0.7em;
-    opacity: 0.75;
-  }
-}
-</style>

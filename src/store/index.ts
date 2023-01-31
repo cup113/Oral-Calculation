@@ -7,9 +7,9 @@ import LoadingQuestion from '@/assets/question/loading';
 
 export default defineStore("index", () => {
   const enum LocalStorageKeys {
-    Category = "OC-Category",
-    Params = "OC-Params",
-    Quantity = "OC-Quantity"
+    Category = "OC_Category",
+    Params = "OC_Params",
+    Quantity = "OC_Quantity"
   }
 
   const
@@ -79,7 +79,7 @@ export default defineStore("index", () => {
   }
 
   set_module(
-    localStorage.getItem(LocalStorageKeys.Category) ?? "0",
+    localStorage.getItem(LocalStorageKeys.Category) ?? CategoryId.Null,
     localStorage.getItem(LocalStorageKeys.Params) ?? ""
   );
   set_quantity(parseInt(

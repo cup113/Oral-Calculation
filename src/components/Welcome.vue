@@ -47,27 +47,27 @@ function change_quantity(ev: Event) {
 </script>
 
 <template lang="pug">
-.welcome
-  h2 欢迎来到口算练习
-  form(@submit.prevent="submit_form")
-    div.row
-      label.col-form-label(for="category") 类别
+div.welcome
+  h2.text-3xl.font-bold.py-4 欢迎来到口算练习
+  form.w-max.mx-auto.text-lg(@submit.prevent="submit_form")
+    div.param-item
+      label(for="category") 类别
       span
-        select#category.form-control(
+        select#category(
           name="category"
+          title="类别"
           :value="category"
           @change="change_category"
-          title="类别"
         )
           option(
             v-for="category in CATEGORIES"
             :value="category.id"
             :key="category.id"
           ) {{ category.desc }}
-    div.row
-      label.col-form-label(for="quantity") 题数
+    div.param-item
+      label(for="quantity") 题数
       span
-        input#quantity.form-control(
+        input#quantity(
           type="number"
           name="quantity"
           min="1"
@@ -83,48 +83,26 @@ function change_quantity(ev: Event) {
       :i="i"
       :config="config"
     )
-    div.submit
-      button.btn.btn-primary(type="submit") 提交
+    div.text-right.relative.left-4.top-4
+      button.btn.bg-blue-500(type="submit") 提交
 </template>
 
 <style lang="scss">
-@import 'bootstrap/scss/_functions.scss';
-
-@import 'bootstrap/scss/_variables.scss';
-@import 'bootstrap/scss/_mixins.scss';
-
-@import 'bootstrap/scss/_buttons.scss';
-@import 'bootstrap/scss/_forms.scss';
-
 .welcome {
-  >form {
-    width: max-content;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 1.2em;
+  .param-item {
+    @apply w-fit;
 
-    >.row {
-      margin-top: 0.5em;
-      width: fit-content;
-
-      >label {
-        display: inline-block;
-        width: 8em;
-        margin-right: 1em;
-      }
-
-      >span {
-        display: inline-block;
-        width: 12em;
-      }
-
+    >label {
+      @apply text-left block w-fit;
     }
 
-    >.submit {
-      text-align: right;
-      position: relative;
-      left: 1em;
-      top: 1em;
+    >span {
+      @apply block;
+    }
+
+    input,
+    select {
+      @apply w-64 text-xl inline-block border border-gray-300 px-2 rounded;
     }
   }
 }

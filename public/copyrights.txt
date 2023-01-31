@@ -10,12 +10,20 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+------------------
+public/favicon.ico
+------------------
+https://github.com/bytedance/IconPark
+Copyright (c) ByteDance, Inc.
+License under Apache 2.0: https://github.com/bytedance/IconPark/blob/master/LICENSE
+Modified by Jason Li <jasonmli@outlook.com>
+
 ---
 Vue
 ---
 https://github.com/vuejs/core/blob/main/packages/vue/
 Copyright (c) 2018-present, Yuxi (Evan) You
-https://github.com/vuejs/core/blob/main/packages/vue/LICENSE
+License under MIT: https://github.com/vuejs/core/blob/main/packages/vue/LICENSE
 
 ----
 Vite
@@ -52,12 +60,26 @@ Copyright (c) 2018 lanyueos@qq.com
 License under MIT: https://github.com/mengdu/m-message/blob/master/LICENSE
 
 
----------
-Bootstrap
----------
-https://github.com/twbs/bootstrap
-Copyright (c) 2011-2023 The Bootstrap Authors
-License under MIT: https://github.com/twbs/bootstrap/blob/main/LICENSE
+------------
+Tailwind CSS
+------------
+https://github.com/tailwindlabs/tailwindcss
+Copyright (c) Tailwind Labs, Inc.
+License under MIT: https://github.com/tailwindlabs/tailwindcss/blob/master/LICENSE
+
+------------
+AutoPrefixer
+------------
+https://github.com/postcss/autoprefixer
+Copyright 2013 Andrey Sitnik <andrey@sitnik.ru>
+License under MIT: https://github.com/postcss/autoprefixer/blob/main/LICENSE
+
+----------
+Post CSS
+----------
+https://github.com/postcss/postcss
+Copyright 2013 Andrey Sitnik <andrey@sitnik.ru>
+License under MIT: https://github.com/postcss/postcss/blob/main/LICENSE
 
 -----
 Pinia
@@ -84,4 +106,4 @@ dart-sass
 ---------
 https://github.com/sass/dart-sass
 Copyright (c) 2016, Google Inc.
-https://github.com/sass/dart-sass/blob/main/LICENSE
+License under MIT: https://github.com/sass/dart-sass/blob/main/LICENSE

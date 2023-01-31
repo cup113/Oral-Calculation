@@ -45,10 +45,9 @@ function go_to_main_page() {
 </script>
 
 <template lang="pug">
-div.report
-  h2 成绩报告
-  div.report-overview
-    div.report-header {{ title }}
+div.report.pt-2
+  div.my-4
+    div.text-2xl.my-2 成绩单 - {{ title }}
     div.report-item
       span 生成时间
       span {{ generatedTimeDisplay }}
@@ -61,11 +60,11 @@ div.report
     div.report-item
       span 用时
       span
-        Duration(:duration="totalDuration")
-        | (平均
-        Duration(:duration="avgDuration")
+        Duration.mx-1(:duration="totalDuration")
+        | ( 题均
+        Duration.mx-1(:duration="avgDuration")
         | )
-  div.report-detail
+  div.mt-4.mx-12.flex.flex-wrap.content-center.justify-center.items-center.gap-x-6.gap-y-2
     QuestionDisplay(
       v-for="(question, i) in questions"
       :key="i"
@@ -75,56 +74,19 @@ div.report
 </template>
 
 <style lang="scss">
-@import 'bootstrap/scss/_functions.scss';
+.report .report-item {
+  @apply w-max mx-auto bg-gray-50 text-lg flex;
 
-@import 'bootstrap/scss/_variables.scss';
-@import 'bootstrap/scss/_mixins.scss';
+  >span {
+    @apply inline-block border-2 border-black -ml-0.5 -mt-0.5;
 
-.report {
-  >.report-overview {
-    margin-bottom: 2em;
-    font-size: 1.25em;
-
-    >.report-header,
-    >.report-item {
-      width: max-content;
-      margin: 0 auto;
+    &:nth-child(1) {
+      @apply w-24;
     }
 
-    >.report-header {
-      font-size: 1.2em;
-      margin-bottom: 0.5em;
+    &:nth-child(2) {
+      @apply w-64 text-blue-700;
     }
-
-    >.report-item {
-      background-color: $light;
-
-      >span {
-        display: inline-block;
-        border: 2px solid black;
-        margin: -2px -2px 0 0;
-
-        &:nth-child(1) {
-          width: 5em;
-        }
-
-        &:nth-child(2) {
-          color: $primary;
-          width: 15em;
-        }
-      }
-    }
-
-  }
-
-  >.report-detail {
-    margin: 0 5em;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: space-around;
-    align-items: center;
-    gap: 1.5em 0.5em;
   }
 }
 </style>

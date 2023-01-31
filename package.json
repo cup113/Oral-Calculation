@@ -1,6 +1,6 @@
 {
   "name": "oral-calculation",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.1-alpha.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -11,11 +11,13 @@
     "@popperjs/core": "^2.11.6",
     "@vitejs/plugin-vue": "^4.0.0",
     "@volar/vue-language-plugin-pug": "^1.0.24",
+    "autoprefixer": "^10.4.13",
     "big-integer": "^1.6.51",
-    "bootstrap": "^5.2.3",
     "pinia": "^2.0.29",
+    "postcss": "^8.4.21",
     "pug": "^3.0.2",
     "sass": "^1.57.1",
+    "tailwindcss": "^3.2.4",
     "vite": "^4.0.4",
     "vue": "^3.2.45",
     "vue-m-message": "^4.0.1",
