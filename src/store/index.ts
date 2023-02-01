@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import Message from 'vue-m-message';
 
-import { CategoryId, DEP, Question, QuestionModule } from '@/assets/question/index';
+import { CategoryId, DEP, Question, QuestionModule, get_module } from '@/assets/question/index';
 import LoadingQuestion from '@/assets/question/loading';
 
 export default defineStore("index", () => {
@@ -19,7 +19,7 @@ export default defineStore("index", () => {
     loaded = computed(() => questionModule.value !== LoadingQuestion),
     questions = ref([] as Question[]),
     questionProvider = computed(
-      () => questionModule.value.get_provider(DEP, params.value)
+      () => questionModule.value.get_provider(DEP, params.value.split(","))
     ),
     quantity = ref(parseInt(
       localStorage.getItem(LocalStorageKeys.Quantity) ?? "10"
@@ -30,7 +30,7 @@ export default defineStore("index", () => {
     params.value = _params;
     localStorage.setItem(LocalStorageKeys.Category, _category);
     localStorage.setItem(LocalStorageKeys.Params, _params);
-    return get_module()
+    return get_module(category.value)
       .then(
         (m) => {
           questionModule.value = m.default;
@@ -41,33 +41,6 @@ export default defineStore("index", () => {
           return questionModule.value;
         }
       );
-  }
-
-  async function get_module(): Promise<{ default: QuestionModule }> {
-    switch (category.value) {
-      case CategoryId.Add:
-        return import("@/assets/question/add");
-      case CategoryId.Sub:
-        return import("@/assets/question/sub");
-      case CategoryId.AddSub:
-        return import("@/assets/question/add-sub");
-      case CategoryId.Mul:
-        return import("@/assets/question/mul");
-      case CategoryId.Div:
-        return import("@/assets/question/div"); // TODO
-      case CategoryId.Arithmetic:
-        return Promise.reject("该模块尚未完成"); // TODO
-      case CategoryId.Pow:
-        return Promise.reject("该模块尚未完成"); // TODO
-      case CategoryId.PFF:
-        return Promise.reject("该模块尚未完成"); // TODO
-      case CategoryId.Disc2:
-        return Promise.reject("该模块尚未完成"); // TODO
-      case CategoryId.Sqrt:
-        return Promise.reject("该模块尚未完成"); // TODO
-      default:
-        return Promise.resolve({ default: LoadingQuestion });
-    }
   }
 
   function set_quantity(_quantity: number): boolean {

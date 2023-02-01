@@ -4,11 +4,10 @@ class MultiplyQuestionProvider implements QuestionProvider {
   private dep: Dependency;
   public digits1: number;
   public digits2: number;
-  constructor(dep: Dependency, params: string) {
-    const paramArr = params.split(",");
+  constructor(dep: Dependency, params: string[]) {
     this.dep = dep;
-    this.digits1 = parseInt(paramArr[0]);
-    this.digits2 = parseInt(paramArr[1]);
+    this.digits1 = parseInt(params[0]);
+    this.digits2 = parseInt(params[1]);
 
     if (this.digits1 < this.digits2)
       [this.digits1, this.digits2] = [this.digits2, this.digits1];
@@ -30,7 +29,7 @@ class MultiplyQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string): MultiplyQuestionProvider {
+  get_provider(bigIntModule: Dependency, params: string[]): MultiplyQuestionProvider {
     return new MultiplyQuestionProvider(bigIntModule, params);
   },
   paramsConfig: [

@@ -2,7 +2,7 @@ import type { QuestionProvider, Question, QuestionModule, Dependency } from './i
 
 class LoadingQuestionProvider implements QuestionProvider {
   private dep: Dependency;
-  constructor(dep: Dependency, _params: string) {
+  constructor(dep: Dependency, _params: string[]) {
     this.dep = dep;
   }
 
@@ -16,7 +16,7 @@ class LoadingQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(dep: Dependency, params: string): LoadingQuestionProvider {
+  get_provider(dep: Dependency, params: string[]): LoadingQuestionProvider {
     return new LoadingQuestionProvider(dep, params)
   },
   paramsConfig: [],

@@ -9,13 +9,12 @@ class AddSubQuestionProvider implements QuestionProvider {
   public mixedSetting: number;
   public allowNegative: boolean;
 
-  constructor(dep: Dependency, params: string) {
-    const paramArr = params.split(",");
+  constructor(dep: Dependency, params: string[]) {
     this.dep = dep;
-    this.digits = parseInt(paramArr[0]);
-    this.items = parseInt(paramArr[1]);
-    this.mixedSetting = parseInt(paramArr[2]);
-    this.allowNegative = paramArr[3] === '1';
+    this.digits = parseInt(params[0]);
+    this.items = parseInt(params[1]);
+    this.mixedSetting = parseInt(params[2]);
+    this.allowNegative = params[3] === '1';
   }
 
   private get_question_mixed(): Question {
@@ -95,7 +94,7 @@ class AddSubQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string): AddSubQuestionProvider {
+  get_provider(bigIntModule: Dependency, params: string[]): AddSubQuestionProvider {
     return new AddSubQuestionProvider(bigIntModule, params);
   },
   paramsConfig: [

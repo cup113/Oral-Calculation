@@ -18,13 +18,12 @@ class MultiplyQuestionProvider implements QuestionProvider {
   public divisible: Divisible;
   public indivisibleSetting: IndivisibleSetting;
 
-  constructor(dep: Dependency, params: string) {
-    const paramArr = params.split(",");
+  constructor(dep: Dependency, params: string[]) {
     this.dep = dep;
-    this.digits1 = parseInt(paramArr[0]);
-    this.digits2 = parseInt(paramArr[1]);
-    this.divisible = parseInt(paramArr[2]) as Divisible;
-    this.indivisibleSetting = parseInt(paramArr[3]) as IndivisibleSetting;
+    this.digits1 = parseInt(params[0]);
+    this.digits2 = parseInt(params[1]);
+    this.divisible = parseInt(params[2]) as Divisible;
+    this.indivisibleSetting = parseInt(params[3]) as IndivisibleSetting;
     // TODO this should be invalid
     if (this.divisible !== Divisible.Always && this.digits1 < this.digits2)
       [this.digits1, this.digits2] = [this.digits2, this.digits1];
@@ -91,7 +90,7 @@ class MultiplyQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string): MultiplyQuestionProvider {
+  get_provider(bigIntModule: Dependency, params: string[]): MultiplyQuestionProvider {
     return new MultiplyQuestionProvider(bigIntModule, params);
   },
   paramsConfig: [
@@ -108,7 +107,7 @@ export default {
       default: 2,
     },
     {
-      type: 'select', // TODO percent
+      type: 'select', // TODO range
       name: "保证除尽",
       choices: ["保证", "随机决定", "不保证"],
       default: 0,

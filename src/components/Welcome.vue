@@ -77,6 +77,7 @@ div.welcome
           :value="quantity"
           @change="change_quantity"
         )
+    hr.my-2.h-1
     ParamItem(
       v-for="(config, i) in paramsConfig"
       :key="`${category}-${i}`"

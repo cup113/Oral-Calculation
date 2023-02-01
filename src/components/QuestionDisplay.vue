@@ -25,9 +25,9 @@ div.question.inline-grid.text-lg.border-2
   span.text-2xl(:class="isCorrect ? 'bg-green-100' : 'bg-red-100'") {{ correctDisplay }}
   span.break-keep.bg-cyan-100.px-1
     Duration(:duration="duration")
-  span.bg-orange-100 {{ problem }}
-  span.text-green-700.bg-green-100 {{ correctAnswer }}
-  span.text-xs.text-red-700.bg-red-100
+  span.bg-orange-100.px-1 {{ problem }}
+  span.text-green-700.bg-green-100.px-1 {{ correctAnswer }}
+  span.text-xs.text-red-700.bg-red-100.px-1
     span.block.w-full(v-for="wrongAnswer in wrongAnswers") {{ wrongAnswer }}
 </template>
 

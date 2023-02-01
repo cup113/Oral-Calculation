@@ -4,11 +4,10 @@ class SubtractQuestionProvider implements QuestionProvider {
   private dep: Dependency;
   public digits: number;
   public allowNegative: boolean;
-  constructor(dep: Dependency, params: string) {
-    const paramArr = params.split(",");
+  constructor(dep: Dependency, params: string[]) {
     this.dep = dep;
-    this.digits = parseInt(paramArr[0]);
-    this.allowNegative = parseInt(paramArr[1]) === 0 ? false: true;
+    this.digits = parseInt(params[0]);
+    this.allowNegative = parseInt(params[1]) === 0 ? false: true;
   }
 
   public get_question(): Question {
@@ -31,7 +30,7 @@ class SubtractQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string): SubtractQuestionProvider {
+  get_provider(bigIntModule: Dependency, params: string[]): SubtractQuestionProvider {
     return new SubtractQuestionProvider(bigIntModule, params);
   },
   paramsConfig: [

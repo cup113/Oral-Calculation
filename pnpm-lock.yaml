@@ -2146,10 +2146,10 @@ packages:
       glob: registry.npmmirror.com/glob/7.2.3
     dev: true
 
-  registry.npmmirror.com/rollup/3.12.0:
-    resolution: {integrity: sha512-4MZ8kA2HNYahIjz63rzrMMRvDqQDeS9LoriJvMuV0V6zIGysP36e9t4yObUfwdT9h/szXoHQideICftcdZklWg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/rollup/-/rollup-3.12.0.tgz}
+  registry.npmmirror.com/rollup/3.12.1:
+    resolution: {integrity: sha512-t9elERrz2i4UU9z7AwISj3CQcXP39cWxgRWLdf4Tm6aKm1eYrqHIgjzXBgb67GNY1sZckTFFi0oMozh3/S++Ig==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/rollup/-/rollup-3.12.1.tgz}
     name: rollup
-    version: 3.12.0
+    version: 3.12.1
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
@@ -2543,7 +2543,7 @@ packages:
       esbuild: registry.npmmirror.com/esbuild/0.16.17
       postcss: registry.npmmirror.com/postcss/8.4.21
       resolve: registry.npmmirror.com/resolve/1.22.1
-      rollup: registry.npmmirror.com/rollup/3.12.0
+      rollup: registry.npmmirror.com/rollup/3.12.1
       sass: registry.npmmirror.com/sass/1.58.0
     optionalDependencies:
       fsevents: registry.npmmirror.com/fsevents/2.3.2
@@ -2580,7 +2580,7 @@ packages:
       esbuild: registry.npmmirror.com/esbuild/0.16.17
       postcss: registry.npmmirror.com/postcss/8.4.21
       resolve: registry.npmmirror.com/resolve/1.22.1
-      rollup: registry.npmmirror.com/rollup/3.12.0
+      rollup: registry.npmmirror.com/rollup/3.12.1
       sass: registry.npmmirror.com/sass/1.58.0
     optionalDependencies:
       fsevents: registry.npmmirror.com/fsevents/2.3.2

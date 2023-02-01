@@ -7,4 +7,4 @@
 [![Version](https://img.shields.io/github/package-json/v/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
 [![MIT License](https://img.shields.io/github/license/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7c1fcffe-fbe5-42a6-a8ac-bbd05641bc58/deploy-status)](https://app.netlify.com/sites/oral-calculation/deploys)
-![Code Coverage](https://img.shields.io/badge/code_coverage-68.92%-red)
+![Code Coverage](https://img.shields.io/badge/code_coverage-72.5%-orange)

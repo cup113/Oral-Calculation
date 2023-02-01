@@ -1,5 +1,5 @@
-import type { BigIntegerStatic as BigIntegerStatic } from "big-integer";
 import bigInt from "big-integer";
+import LoadingQuestion from './loading';
 
 export const enum CategoryId {
   Null = "null",
@@ -103,22 +103,13 @@ export class Fraction {
   }
 
   public reduce(): void {
-    const gcd = Fraction.gcd(this.numerator, this.denominator);
+    const gcd = bigInt.gcd(this.numerator, this.denominator);
     this.numerator = this.numerator.divide(gcd);
     this.denominator = this.denominator.divide(gcd);
   }
-
-  static gcd(num1: bigInt.BigInteger, num2: bigInt.BigInteger): bigInt.BigInteger {
-    while (num2.neq(bigInt[0])) {
-      const temp = num1;
-      num1 = num2;
-      num2 = temp.mod(num1);
-    }
-    return num1;
-  }
 }
 
-export const DEP: Dependency = {
+export const DEP = {
   bigInt,
   minmax_big_int,
   rand_big_int,
@@ -126,6 +117,8 @@ export const DEP: Dependency = {
   Question,
   Fraction,
 };
+
+export type Dependency = typeof DEP;
 
 export interface Category {
   id: CategoryId,
@@ -151,15 +144,33 @@ export type ParamConfig = {
 };
 
 export interface QuestionModule {
-  get_provider(bigInt: Dependency, params: string): QuestionProvider,
+  get_provider(bigInt: Dependency, params: string[]): QuestionProvider,
   paramsConfig: ParamConfig[],
 }
 
-export interface Dependency {
-  bigInt: BigIntegerStatic,
-  minmax_big_int: typeof minmax_big_int,
-  rand_big_int: typeof rand_big_int,
-  empty_array: typeof empty_array,
-  Question: typeof Question;
-  Fraction: typeof Fraction;
+export async function get_module(categoryId: CategoryId): Promise<{ default: QuestionModule }> {
+  switch (categoryId) {
+    case CategoryId.Add:
+      return import('./add');
+    case CategoryId.Sub:
+      return import('./sub');
+    case CategoryId.AddSub:
+      return import('./add-sub');
+    case CategoryId.Mul:
+      return import('./mul');
+    case CategoryId.Div:
+      return import('./div'); // TODO
+    case CategoryId.Arithmetic:
+      return Promise.reject("该模块尚未完成"); // TODO
+    case CategoryId.Pow:
+      return import('./pow');
+    case CategoryId.PFF:
+      return import("./pff"); // TODO
+    case CategoryId.Disc2:
+      return Promise.reject("该模块尚未完成"); // TODO
+    case CategoryId.Sqrt:
+      return Promise.reject("该模块尚未完成"); // TODO
+    default:
+      return Promise.resolve({ default: LoadingQuestion });
+  }
 }

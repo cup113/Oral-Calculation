@@ -3,20 +3,20 @@ import type { QuestionProvider, Dependency, Question, QuestionModule } from './i
 class AddQuestionProvider implements QuestionProvider {
   private dep: Dependency;
   public digits: number;
-  constructor(dep: Dependency, params: string) {
-    const paramArr = params.split(",");
+
+  constructor(dep: Dependency, params: string[]) {
     this.dep = dep;
-    this.digits = parseInt(paramArr[0]);
+    this.digits = parseInt(params[0]);
   }
 
   public get_question(): Question {
-    const rand_big_int = this.dep.rand_big_int;
+    const {rand_big_int, Question} = this.dep;
     const
       num1 = rand_big_int(this.digits),
       num2 = rand_big_int(this.digits),
       correctAnswer = num1.add(num2).toString(),
       problem = `${num1.toString()} + ${num2.toString()} = ?`;
-    return new this.dep.Question(problem, correctAnswer);
+    return new Question(problem, correctAnswer);
   }
 
   public get_title(): string {
@@ -25,7 +25,7 @@ class AddQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string): AddQuestionProvider {
+  get_provider(bigIntModule: Dependency, params: string[]): AddQuestionProvider {
     return new AddQuestionProvider(bigIntModule, params);
   },
   paramsConfig: [
@@ -37,4 +37,3 @@ export default {
     },
   ],
 } satisfies QuestionModule;
-
