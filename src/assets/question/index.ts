@@ -34,13 +34,18 @@ export interface RandOption {
   avoidEndsWithZero?: boolean,
 }
 
+export function minmax_big_int(digits: number): [bigInt.BigInteger, bigInt.BigInteger] {
+  const
+    l = bigInt[10].pow(digits - 1),
+    r = l.multiply(10).minus(1);
+  return [l, r];
+}
+
 export function rand_big_int(digits: number, option: RandOption = {}): bigInt.BigInteger {
   if (digits <= 0)
     digits = 1;
   while (true) {
-    let
-      l = bigInt[10].pow(digits - 1),
-      r = l.multiply(10).minus(1);
+    let [l, r] = minmax_big_int(digits);
     if (option.avoidIsOne && l.eq(bigInt[1]))
       l = bigInt[2];
     let ans = bigInt.randBetween(l, r);
@@ -84,7 +89,43 @@ export class Question {
   }
 }
 
-export const DEP: Dependency = { bigInt, rand_big_int, empty_array, Question };
+export class Fraction {
+  public numerator: bigInt.BigInteger; // p
+  public denominator: bigInt.BigInteger; // q
+
+  constructor(numerator: bigInt.BigInteger, denominator: bigInt.BigInteger) {
+    this.numerator = numerator;
+    this.denominator = denominator;
+  }
+
+  public to_string(): string {
+    return `${this.numerator.toString()}/${this.denominator.toString()}`;
+  }
+
+  public reduce(): void {
+    const gcd = Fraction.gcd(this.numerator, this.denominator);
+    this.numerator = this.numerator.divide(gcd);
+    this.denominator = this.denominator.divide(gcd);
+  }
+
+  static gcd(num1: bigInt.BigInteger, num2: bigInt.BigInteger): bigInt.BigInteger {
+    while (num2.neq(bigInt[0])) {
+      const temp = num1;
+      num1 = num2;
+      num2 = temp.mod(num1);
+    }
+    return num1;
+  }
+}
+
+export const DEP: Dependency = {
+  bigInt,
+  minmax_big_int,
+  rand_big_int,
+  empty_array,
+  Question,
+  Fraction,
+};
 
 export interface Category {
   id: CategoryId,
@@ -116,7 +157,9 @@ export interface QuestionModule {
 
 export interface Dependency {
   bigInt: BigIntegerStatic,
+  minmax_big_int: typeof minmax_big_int,
   rand_big_int: typeof rand_big_int,
   empty_array: typeof empty_array,
   Question: typeof Question;
+  Fraction: typeof Fraction;
 }

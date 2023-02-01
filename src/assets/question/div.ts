@@ -1,9 +1,14 @@
 import type { QuestionProvider, Dependency, Question, QuestionModule } from './index';
 
+const enum IndivisibleSetting {
+  Fraction = 0,
+  QuoRem = 1,
+}
+
 const enum Divisible {
   Always = 0,
-  Fraction = 1,
-  QuoRem = 2,
+  Random = 1,
+  Never = 2,
 }
 
 class MultiplyQuestionProvider implements QuestionProvider {
@@ -11,42 +16,77 @@ class MultiplyQuestionProvider implements QuestionProvider {
   public digits1: number;
   public digits2: number;
   public divisible: Divisible;
+  public indivisibleSetting: IndivisibleSetting;
+
   constructor(dep: Dependency, params: string) {
     const paramArr = params.split(",");
     this.dep = dep;
     this.digits1 = parseInt(paramArr[0]);
     this.digits2 = parseInt(paramArr[1]);
     this.divisible = parseInt(paramArr[2]) as Divisible;
+    this.indivisibleSetting = parseInt(paramArr[3]) as IndivisibleSetting;
     // TODO this should be invalid
-    if (this.digits1 < this.digits2)
+    if (this.divisible !== Divisible.Always && this.digits1 < this.digits2)
       [this.digits1, this.digits2] = [this.digits2, this.digits1];
   }
 
   private get_question_divisible(): Question {
-    const { rand_big_int, bigInt, Question } = this.dep;
+    const { minmax_big_int, rand_big_int, bigInt, Question } = this.dep;
+    const [num1Min, num1Max] = minmax_big_int(this.digits1);
+    const
+      num2 = rand_big_int(this.digits2, { avoidIsOne: true }),
+      quotient = bigInt.randBetween(
+        num1Min.add(num2.minus(1)).divide(num2),
+        num1Max.divide(num2)
+      ),
+      num1 = num2.multiply(quotient);
+    const
+      problem = `${num1.toString()} ÷ ${num2.toString()} = ?`,
+      correctAnswer = quotient.toString();
+    return new Question(problem, correctAnswer);
+  }
+
+  private get_question_indivisible(): Question {
+    const { rand_big_int, Question, Fraction } = this.dep;
     while (true) {
       const
-        num2 = rand_big_int(this.digits2, { avoidIsOne: true });
+        num1 = rand_big_int(this.digits1, { avoidIsOne: true }),
+        num2 = rand_big_int(this.digits2, { avoidIsOne: true }),
+        question = `${num1.toString()} ÷ ${num2.toString()} = ?`;
+      if (num1.isDivisibleBy(num2))
+        continue;
+      let correctAnswer: string;
+      switch (this.indivisibleSetting) {
+        case IndivisibleSetting.Fraction:
+          let fraction = new Fraction(num1, num2);
+          fraction.reduce();
+          correctAnswer = fraction.to_string();
+          break;
+        case IndivisibleSetting.QuoRem: {
+          let { quotient, remainder } = num1.divmod(num2);
+          correctAnswer = `${quotient.toString()}...${remainder.toString()}`;
+          break;
+        }
+      }
+      return new Question(question, correctAnswer);
     }
   }
 
   public get_question(): Question {
-    // TODO
-    const { rand_big_int, bigInt, Question } = this.dep;
-    while (true) {
-      const
-        num1 = rand_big_int(this.digits1),
-        num2 = rand_big_int(this.digits2, { avoidIsOne: true }),
-        correctAnswer = num1.multiply(num2);
-      if (correctAnswer.leq(bigInt[0]))
-        continue;
-      const problem = `${num1.toString()} × ${num2.toString()} = ?`;
-      return new Question(problem, correctAnswer.toString());
+    switch (this.divisible) {
+      case Divisible.Always:
+        return this.get_question_divisible();
+      case Divisible.Random:
+        return Math.random() < 0.5 ?
+          this.get_question_divisible() :
+          this.get_question_indivisible();
+      case Divisible.Never:
+        return this.get_question_indivisible();
     }
   }
 
   public get_title(): string {
-    return `${this.digits1}位数乘${this.digits2}位数`;
+    return `${this.digits1}位数除以${this.digits2}位数`;
   }
 }
 
@@ -59,7 +99,7 @@ export default {
       type: 'integer',
       name: "运算项 #1 位数",
       min: 1,
-      default: 2,
+      default: 3,
     },
     {
       type: 'integer',
@@ -68,11 +108,10 @@ export default {
       default: 2,
     },
     {
-      type: 'integer', // TODO percent
-      name: "保证除尽题数(%)",
-      min: 0,
-      max: 100,
-      default: 100,
+      type: 'select', // TODO percent
+      name: "保证除尽",
+      choices: ["保证", "随机决定", "不保证"],
+      default: 0,
     },
     {
       type: 'select',
@@ -82,4 +121,3 @@ export default {
     }
   ],
 } satisfies QuestionModule;
-
