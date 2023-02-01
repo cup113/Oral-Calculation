@@ -92,10 +92,6 @@ function question_module_onload() {
 function next_question(): void {
   currentQuestion.value = questionProvider.value.get_question();
   questions.value.push(currentQuestion.value);
-  Message.info("请作答", {
-    duration: 500,
-    position: 'bottom-right'
-  });
   answerInput.value!.focus();
   status.value = Status.Answering;
   answerInput.value!.value = "";
@@ -173,7 +169,13 @@ div.exercise.pt-12
   form.text-2xl(@submit.prevent="submit_question")
     div {{ currentQuestion.problem }}
     div.px-2.py-2.flex.flex-nowrap.gap-1.ml-24.mr-12
-      input.text-center.grow.border(ref="answerInput" type="text" name="answer" autocomplete="off")
+      input.text-center.grow.border.break-keep(
+        type="text"
+        name="answer"
+        autocomplete="off"
+        placeholder="请在此处输入答案..."
+        ref="answerInput"
+      )
       button.btn.bg-blue-500.w-max(type="submit") 提交
   button.btn.bg-green-700(type="button" @click="start" v-if="!started") 开始
 </template>

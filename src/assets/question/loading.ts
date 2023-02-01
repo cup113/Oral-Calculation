@@ -16,8 +16,8 @@ class LoadingQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider: function (bigInt: Dependency, params: string): LoadingQuestionProvider {
-    return new LoadingQuestionProvider(bigInt, params)
+  get_provider(dep: Dependency, params: string): LoadingQuestionProvider {
+    return new LoadingQuestionProvider(dep, params)
   },
   paramsConfig: [],
-} as QuestionModule;
+} satisfies QuestionModule;

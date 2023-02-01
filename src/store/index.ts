@@ -14,7 +14,7 @@ export default defineStore("index", () => {
 
   const
     category = ref(CategoryId.Null),
-    questionModule = ref(LoadingQuestion),
+    questionModule = ref(LoadingQuestion as QuestionModule),
     params = ref(""),
     loaded = computed(() => questionModule.value !== LoadingQuestion),
     questions = ref([] as Question[]),
@@ -38,7 +38,7 @@ export default defineStore("index", () => {
         },
         (e) => {
           Message.error("获取该类别模块失败: " + e);
-          return LoadingQuestion;
+          return questionModule.value;
         }
       );
   }
@@ -50,7 +50,7 @@ export default defineStore("index", () => {
       case CategoryId.Sub:
         return import("@/assets/question/sub");
       case CategoryId.AddSub:
-        return import("@/assets/question/add-sub"); // TODO
+        return import("@/assets/question/add-sub");
       case CategoryId.Mul:
         return import("@/assets/question/mul");
       case CategoryId.Div:

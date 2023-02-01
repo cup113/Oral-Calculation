@@ -68,7 +68,7 @@ export default {
       default: 2,
     },
     {
-      type: 'integer',
+      type: 'integer', // TODO percent
       name: "保证除尽题数(%)",
       min: 0,
       max: 100,
@@ -81,5 +81,5 @@ export default {
       default: 0,
     }
   ],
-} as QuestionModule;
+} satisfies QuestionModule;
 

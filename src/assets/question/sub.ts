@@ -48,4 +48,4 @@ export default {
       default: 0,
     }
   ],
-} as QuestionModule;
+} satisfies QuestionModule;

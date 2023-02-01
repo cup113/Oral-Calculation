@@ -36,5 +36,5 @@ export default {
       default: 3,
     },
   ],
-} as QuestionModule;
+} satisfies QuestionModule;
 

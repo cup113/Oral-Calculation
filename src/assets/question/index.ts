@@ -29,6 +29,11 @@ export const CATEGORIES: Category[] = [
   { id: CategoryId.Sqrt, desc: "开平方" },
 ];
 
+export interface RandOption {
+  avoidIsOne?: boolean,
+  avoidEndsWithZero?: boolean,
+}
+
 export function rand_big_int(digits: number, option: RandOption = {}): bigInt.BigInteger {
   if (digits <= 0)
     digits = 1;
@@ -45,9 +50,8 @@ export function rand_big_int(digits: number, option: RandOption = {}): bigInt.Bi
   }
 }
 
-export interface RandOption {
-  avoidIsOne?: boolean,
-  avoidEndsWithZero?: boolean,
+export function empty_array(length: number): (0)[] {
+  return new Array(length).fill(0);
 }
 
 export type Milliseconds = number;
@@ -80,7 +84,7 @@ export class Question {
   }
 }
 
-export const DEP: Dependency = { bigInt, rand_big_int, Question };
+export const DEP: Dependency = { bigInt, rand_big_int, empty_array, Question };
 
 export interface Category {
   id: CategoryId,
@@ -90,10 +94,6 @@ export interface Category {
 export interface QuestionProvider {
   get_question(): Question;
   get_title(): string;
-}
-
-export interface QuestionProviderStatic {
-  (bigInt: Dependency, params: string): QuestionProvider;
 }
 
 export type ParamConfig = {
@@ -110,12 +110,13 @@ export type ParamConfig = {
 };
 
 export interface QuestionModule {
-  get_provider: QuestionProviderStatic,
+  get_provider(bigInt: Dependency, params: string): QuestionProvider,
   paramsConfig: ParamConfig[],
 }
 
 export interface Dependency {
   bigInt: BigIntegerStatic,
   rand_big_int: typeof rand_big_int,
+  empty_array: typeof empty_array,
   Question: typeof Question;
 }
