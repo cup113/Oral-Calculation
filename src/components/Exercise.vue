@@ -4,7 +4,7 @@ import { computed, reactive, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import Message from 'vue-m-message';
 
-import { CategoryId, DEP } from '@/assets/question';
+import { CategoryId, DEP, AnswerResult } from '@/assets/question';
 import type { Milliseconds } from '@/assets/question';
 import useStore from '@/store/index';
 
@@ -31,6 +31,7 @@ const
   currentQuestion = ref(questionProvider.value.get_question()),
   status = ref(Status.Loading),
   started = computed(() => status.value !== Status.Loaded && status.value !== Status.Loading),
+  passedQuestionsDuration = ref(0 as Milliseconds),
   board = reactive({
     passed: 0, // passed questions count
     correct: 0, // passed at the first time
@@ -117,30 +118,34 @@ function submit_question(ev: Event): void {
   const
     formData = new FormData(ev.target as HTMLFormElement),
     answer = (formData.get("answer") as string).trim(),
-    isCorrect = answer == currentQuestion.value.correctAnswer;
-  currentQuestion.value.end = new Date();
-  board.accDuration += currentQuestion.value.get_duration();
-  if (isCorrect) {
-    status.value = Status.Ready;
-    Message.success(`答案 ${answer} 正确`, {
-      position: 'bottom-right'
-    });
-    board.passed += 1;
-    if (currentQuestion.value.is_first_time_correct())
-      board.correct += 1;
-    if (board.passed === quantity.value)
-      end();
-  }
-  else {
-    if (answer.length === 0) {
+    answerResult = currentQuestion.value.try_answer(answer);
+  switch (answerResult) {
+    case AnswerResult.Correct:
+      passedQuestionsDuration.value += currentQuestion.value.get_duration();
+      board.accDuration = passedQuestionsDuration.value;
+      status.value = Status.Ready;
+      Message.success(`答案 ${answer} 正确`, {
+        position: 'bottom-right'
+      });
+      board.passed += 1;
+      if (currentQuestion.value.is_first_time_correct())
+        board.correct += 1;
+      if (board.passed === quantity.value)
+        end();
+      break;
+    case AnswerResult.WrongEmpty:
+      board.accDuration = passedQuestionsDuration.value + currentQuestion.value.get_elapsed();
       Message.warning("答案不应为空");
-    } else if (currentQuestion.value.wrongAnswers.has(answer)) {
+      break;
+    case AnswerResult.WrongAnswered:
+      board.accDuration = passedQuestionsDuration.value + currentQuestion.value.get_elapsed();
       Message.error(`已经有过错误答案 ${answer}`);
-    } else {
-      currentQuestion.value.wrongAnswers.add(answer);
+      break;
+    case AnswerResult.WrongNew:
+      board.accDuration = passedQuestionsDuration.value + currentQuestion.value.get_elapsed();
       board.wrongAnswers += 1;
       Message.error(`答案 ${answer} 错误`);
-    }
+      break;
   }
 }
 

@@ -11,26 +11,26 @@ class PffQuestionProvider implements QuestionProvider {
   }
 
   private pff(num: bigInt.BigInteger): bigInt.BigInteger[] {
-    const { bigInt } = this.dep;
+    const { bigInt, sqrt_big_int } = this.dep;
     let divisor = bigInt[2], value = num;
-    // TODO sqrt optimize
+    const [maxPossibleDivisor,] = sqrt_big_int(num);
     let ans: bigInt.BigInteger[] = [];
-    while (divisor.lt(value)) {
+    while (divisor.lt(value) && divisor.leq(maxPossibleDivisor)) {
       if (value.isDivisibleBy(divisor)) {
         ans.push(divisor);
-        value = value.divide(bigInt(divisor)); // reference to owned
+        value = value.divide(divisor); // reference to owned
       } else {
         divisor = divisor.add(1);
       }
     }
-    ans.push(divisor);
+    ans.push(value);
     return ans;
   }
 
   public get_question(): Question {
-    const { rand_big_int, Question } = this.dep;
+    const { rand_digit_big_int, Question } = this.dep;
     const
-      num = rand_big_int(this.digits),
+      num = rand_digit_big_int(this.digits, { avoidIsOne: true }),
       factors = this.pff(num),
       problem = num.toString().concat(" 的质因数有:"),
       correctAnswer = factors.map(factor => factor.toString()).join(",");
@@ -51,6 +51,7 @@ export default {
       type: 'integer',
       name: "位数",
       min: 1,
+      max: 10,
       default: 3,
     },
   ],

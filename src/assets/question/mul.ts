@@ -14,10 +14,10 @@ class MultiplyQuestionProvider implements QuestionProvider {
   }
 
   public get_question(): Question {
-    const { rand_big_int, Question } = this.dep;
+    const { rand_digit_big_int, Question } = this.dep;
     const
-      num1 = rand_big_int(this.digits1, { avoidIsOne: true, avoidEndsWithZero: true }),
-      num2 = rand_big_int(this.digits2, { avoidIsOne: true, avoidEndsWithZero: true }),
+      num1 = rand_digit_big_int(this.digits1, { avoidIsOne: true, avoidEndsWithZero: true }),
+      num2 = rand_digit_big_int(this.digits2, { avoidIsOne: true, avoidEndsWithZero: true }),
       correctAnswer = num1.multiply(num2);
     const problem = `${num1.toString()} × ${num2.toString()} = ?`;
     return new Question(problem, correctAnswer.toString());

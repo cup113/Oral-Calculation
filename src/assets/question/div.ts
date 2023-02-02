@@ -24,16 +24,16 @@ class MultiplyQuestionProvider implements QuestionProvider {
     this.digits2 = parseInt(params[1]);
     this.divisible = parseInt(params[2]) as Divisible;
     this.indivisibleSetting = parseInt(params[3]) as IndivisibleSetting;
-    // TODO this should be invalid
+    // TODO these should be invalid
     if (this.divisible !== Divisible.Always && this.digits1 < this.digits2)
       [this.digits1, this.digits2] = [this.digits2, this.digits1];
   }
 
   private get_question_divisible(): Question {
-    const { minmax_big_int, rand_big_int, bigInt, Question } = this.dep;
+    const { minmax_big_int, rand_digit_big_int, bigInt, Question } = this.dep;
     const [num1Min, num1Max] = minmax_big_int(this.digits1);
     const
-      num2 = rand_big_int(this.digits2, { avoidIsOne: true }),
+      num2 = rand_digit_big_int(this.digits2, { avoidIsOne: true }),
       quotient = bigInt.randBetween(
         num1Min.add(num2.minus(1)).divide(num2),
         num1Max.divide(num2)
@@ -46,11 +46,11 @@ class MultiplyQuestionProvider implements QuestionProvider {
   }
 
   private get_question_indivisible(): Question {
-    const { rand_big_int, Question, Fraction } = this.dep;
+    const { rand_digit_big_int, Question, Fraction } = this.dep;
     while (true) {
       const
-        num1 = rand_big_int(this.digits1, { avoidIsOne: true }),
-        num2 = rand_big_int(this.digits2, { avoidIsOne: true }),
+        num1 = rand_digit_big_int(this.digits1, { avoidIsOne: true }),
+        num2 = rand_digit_big_int(this.digits2, { avoidIsOne: true }),
         question = `${num1.toString()} ÷ ${num2.toString()} = ?`;
       if (num1.isDivisibleBy(num2))
         continue;
@@ -59,7 +59,7 @@ class MultiplyQuestionProvider implements QuestionProvider {
         case IndivisibleSetting.Fraction:
           let fraction = new Fraction(num1, num2);
           fraction.reduce();
-          correctAnswer = fraction.to_string();
+          correctAnswer = fraction.toString();
           break;
         case IndivisibleSetting.QuoRem: {
           let { quotient, remainder } = num1.divmod(num2);

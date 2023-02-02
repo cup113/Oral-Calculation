@@ -10,10 +10,10 @@ class AddQuestionProvider implements QuestionProvider {
   }
 
   public get_question(): Question {
-    const {rand_big_int, Question} = this.dep;
+    const { rand_digit_big_int, Question } = this.dep;
     const
-      num1 = rand_big_int(this.digits),
-      num2 = rand_big_int(this.digits),
+      num1 = rand_digit_big_int(this.digits),
+      num2 = rand_digit_big_int(this.digits),
       correctAnswer = num1.add(num2).toString(),
       problem = `${num1.toString()} + ${num2.toString()} = ?`;
     return new Question(problem, correctAnswer);

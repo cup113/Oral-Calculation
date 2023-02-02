@@ -7,15 +7,15 @@ class SubtractQuestionProvider implements QuestionProvider {
   constructor(dep: Dependency, params: string[]) {
     this.dep = dep;
     this.digits = parseInt(params[0]);
-    this.allowNegative = parseInt(params[1]) === 0 ? false: true;
+    this.allowNegative = parseInt(params[1]) === 0 ? false : true;
   }
 
   public get_question(): Question {
-    const { rand_big_int, bigInt, Question } = this.dep;
+    const { rand_digit_big_int, bigInt, Question } = this.dep;
     while (true) {
       const
-        num1 = rand_big_int(this.digits),
-        num2 = rand_big_int(this.digits),
+        num1 = rand_digit_big_int(this.digits),
+        num2 = rand_digit_big_int(this.digits),
         correctAnswer = num1.subtract(num2);
       if (!this.allowNegative && correctAnswer.leq(bigInt[0]))
         continue;
