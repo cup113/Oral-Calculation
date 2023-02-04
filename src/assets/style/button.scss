@@ -1,8 +1,9 @@
 @layer components {
   .badge {
     @apply
-      rounded px-2 py-0.5 text-white font-bold text-sm
-      hover:shadow-lg active:text-red-100;
+      rounded px-2 py-0.5 text-white font-bold
+      text-sm select-none mx-1 no-underline
+      hover:shadow-lg active:text-gray-200;
   }
 
   .btn {

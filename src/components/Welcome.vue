@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-
-import { CATEGORIES, CategoryId } from '@/assets/question/index';
-import useStore from '@/store/index';
-
-import ParamItem from './ParamItem.vue';
 import { storeToRefs } from 'pinia';
 
+import { CATEGORIES } from '@/assets/question/index';
+import useQuestionStore from '@/store/question';
+import useSettingStore from '@/store/setting';
+
+import ParamItem from './ParamItem.vue';
+
 const
-  { set_module } = useStore(),
-  { category, questionModule, quantity } = storeToRefs(useStore());
+  { questionModule } = storeToRefs(useQuestionStore()),
+  { categoryIdManager, quantityManager, avoidRepeatManager, generateAtOnceManager } = useSettingStore(),
+  { categoryId, quantity, avoidRepeat, generateAtOnce } = storeToRefs(useSettingStore());
 
 const
   router = useRouter(),
@@ -20,28 +22,28 @@ const
 
 function submit_form(ev: Event): void {
   const data = new FormData(ev.target as HTMLFormElement);
-  let category = CategoryId.Null;
-  let quantity = "";
   let params: string[] = new Array(paramsConfig.value.length);
   data.forEach((value, key) => {
-    if (key == 'quantity')
-      quantity = value as string;
-    else if (key == 'category')
-      category = value as CategoryId;
-    else if (key.startsWith("param-"))
+    if (key.startsWith("param-"))
       params[parseInt(key.substring("param-".length))] = value as string;
-    else
-      throw Error("Form key error");
   });
-  router.push(`/exercise/${category}/${params.join(',')}/${quantity}`);
+  router.push(`/exercise/${categoryId.value}/${params.join(',')}/${quantity.value}`);
 }
 
 function change_category(ev: Event) {
-  set_module((ev.target as HTMLSelectElement).value, "");
+  categoryIdManager.set((ev.target as HTMLSelectElement).value);
 }
 
 function change_quantity(ev: Event) {
-  quantity.value = (ev.target as HTMLInputElement).valueAsNumber;
+  quantityManager.set((ev.target as HTMLInputElement).value);
+}
+
+function change_avoid_repeat(ev: Event) {
+  avoidRepeatManager.set((ev.target as HTMLSelectElement).value);
+}
+
+function change_generate_at_once(ev: Event) {
+  generateAtOnceManager.set((ev.target as HTMLSelectElement).value);
 }
 
 </script>
@@ -56,7 +58,7 @@ div.welcome
         select#category(
           name="category"
           title="类别"
-          :value="category"
+          :value="categoryId"
           @change="change_category"
         )
           option(
@@ -77,10 +79,32 @@ div.welcome
           :value="quantity"
           @change="change_quantity"
         )
+    div.param-item
+      label(for="avoid-repeat") 避免重复题
+      span
+        select#avoid-repeat(
+          name="avoid-repeat"
+          title="避免重复题"
+          :value="avoidRepeat"
+          @change="change_avoid_repeat"
+        )
+          option(value="true") 尽量避免
+          option(value="false") 不避免
+    div.param-item
+      label(for="generate-at-once") 生成题目
+      span
+        select#generate-at-once(
+          name="generate-at-once"
+          title="生成题目"
+          :value="generateAtOnce"
+          @change="change_generate_at_once"
+        )
+          option(value="false") 答题时生成
+          option(value="true") 开始时立即生成
     hr.my-2.h-1
     ParamItem(
       v-for="(config, i) in paramsConfig"
-      :key="`${category}-${i}`"
+      :key="`${categoryId}-${i}`"
       :i="i"
       :config="config"
     )

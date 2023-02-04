@@ -1,7 +1,7 @@
 /** Question utilities & manager.
  */
 
-import bigInt from "big-integer";
+import bigInt from 'big-integer';
 import LoadingQuestion from './loading';
 
 /** Ids of categories. Used in select value, module getting, etc. */

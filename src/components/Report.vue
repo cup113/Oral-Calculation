@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { useRoute } from 'vue-router';
 import { useRouter } from 'vue-router';
 
-import useStore from '@/store/index';
+import useQuestionStore from '@/store/question';
 import type { Milliseconds } from '@/assets/question';
 
 import Duration from './Duration.vue';
@@ -11,7 +10,13 @@ import QuestionDisplay from './QuestionDisplay.vue';
 const
   router = useRouter();
 
-const { questions, questionProvider } = useStore(); // These shouldn't be changed when reporting
+const {
+  questions,
+  questionProvider,
+  correctCnt,
+  accumulatedDuration,
+  wrongAnswerCnt
+} = useQuestionStore(); // These shouldn't be changed when reporting
 
 if (questions.length === 0) {
   go_to_main_page();
@@ -22,21 +27,9 @@ const
   generatedTime: Date = new Date(),
   generatedTimeDisplay = generatedTime.toLocaleString(),
   totalQuestions: number = questions.length,
-  correctQuestions: number = questions.reduce(
-    (pre, cur) => pre + (cur.is_first_time_correct() ? 1 : 0),
-    0
-  ),
-  correctRate: number = correctQuestions / (totalQuestions || 1),
+  correctRate: number = correctCnt / (totalQuestions || 1),
   correctRateDisplay: string = (correctRate * 100).toFixed(1) + "%",
-  totalDuration: Milliseconds = questions.reduce(
-    (pre, cur) => pre + cur.get_duration(),
-    0
-  ),
-  avgDuration: Milliseconds = totalDuration / (totalQuestions || 1),
-  wrongAnswers = questions.reduce(
-    (pre, cur) => pre + cur.wrongAnswers.size,
-    0
-  );
+  avgDuration: Milliseconds = accumulatedDuration / (totalQuestions || 1);
 
 function go_to_main_page() {
   return router.push("/");
@@ -53,14 +46,14 @@ div.report.pt-2
       span {{ generatedTimeDisplay }}
     div.report-item
       span 正确率
-      span {{ correctQuestions }} / {{ totalQuestions }} ({{ correctRateDisplay }})
+      span {{ correctCnt }} / {{ totalQuestions }} ({{ correctRateDisplay }})
     div.report-item
       span 错误次数
-      span {{ wrongAnswers }}
+      span {{ wrongAnswerCnt }}
     div.report-item
       span 用时
       span
-        Duration.mx-1(:duration="totalDuration")
+        Duration.mx-1(:duration="accumulatedDuration")
         | ( 题均
         Duration.mx-1(:duration="avgDuration")
         | )

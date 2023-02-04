@@ -30,7 +30,7 @@ div.customized-footer.absolute.bg-gray-50.w-full.leading-6.py-4.bottom-0
     a.badge.bg-blue-500(target="_blank" :href="remoteUrl + '/issues'") 问题报告
     a.badge.bg-blue-500(target="_blank" :href="remoteUrl") 开源
   div
-    a.badge.bg-blue-500(target="_blank" href="readme.html") 使用说明
+    a.badge.bg-blue-500(target="_blank" href="README.html") 使用说明
     a.badge.bg-blue-500(target="_blank" href="copyrights.txt") 版权声明
     a.badge.bg-blue-500(target="_blank" href="CHANGELOG.html") 更新日志
 </template>
@@ -47,10 +47,5 @@ $gap: 2rem;
 
 .customized-footer {
   height: $height;
-
-  a {
-    margin: 0 0.25em;
-    text-decoration: none;
-  }
 }
 </style>
