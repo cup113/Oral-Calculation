@@ -1,5 +1,5 @@
 @echo off
-if "%1" == "" ( goto warning )
+if [%2] == [] ( goto warning )
 echo Please make sure you have:
 echo (1) Edited version information in src/App.vue.
 echo (2) Edited version of package.json.
@@ -11,14 +11,14 @@ set /p ready="Ready? (y/N) "
 if not "%ready%" == "y" ( goto end )
 call pnpm build
 call git add .
-call git commit -m "Release: %1"
+call git commit -m %2
 call git tag %1
 call netlify deploy --prod -d dist --message %1
-call git push origin main && echo Push successfully!
+call git push origin main && call gh release create %1 -t %1
 goto end
 
 :warning
-echo build\release.bat version(with 'v')
+echo build\release.bat version(with 'v') commit-info
 goto end
 
 :end

@@ -137,15 +137,15 @@ export default defineStore("question", () => {
           correctCnt.value += 1;
         return true;
       case AnswerResult.WrongEmpty:
-        currentQuestionDuration.value += currentQuestion.value.get_elapsed();
+        currentQuestionDuration.value = currentQuestion.value.get_elapsed();
         Message.warning("答案不应为空");
         return false;
       case AnswerResult.WrongAnswered:
-        currentQuestionDuration.value += currentQuestion.value.get_elapsed();
+        currentQuestionDuration.value = currentQuestion.value.get_elapsed();
         Message.error(`已经有过错误答案 ${answer}`);
         return false;
       case AnswerResult.WrongNew:
-        currentQuestionDuration.value += currentQuestion.value.get_elapsed();
+        currentQuestionDuration.value = currentQuestion.value.get_elapsed();
         wrongAnswerCnt.value += 1;
         Message.error(`答案 ${answer} 错误`);
         return false;

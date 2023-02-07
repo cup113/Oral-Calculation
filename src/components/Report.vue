@@ -32,7 +32,11 @@ const
   avgDuration: Milliseconds = accumulatedDuration / (totalQuestions || 1);
 
 function go_to_main_page() {
-  return router.push("/");
+  router.push("/");
+}
+
+function go_to_share() {
+  router.push("/report-share");
 }
 
 </script>
@@ -64,7 +68,9 @@ div.report.pt-2
       :question="question"
       :i="i"
     )
-  button.btn.bg-gray-700.mt-8(type="button" @click="go_to_main_page") 返回主页
+  div.mt-8
+    button.btn.bg-gray-700.mr-4(type="button" @click="go_to_main_page") 返回主页
+    button.btn.bg-green-500(type="button" @click="go_to_share") 分享
 </template>
 
 <style lang="scss">

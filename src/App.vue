@@ -8,7 +8,7 @@ div#root.text-center
   RouterView
   CustomizedFooter(
     remote-url="https://github.com/cup113/Oral-Calculation"
-    version="0.3.0"
+    version="0.3.1"
     license="MIT"
     years="2023"
     detailed

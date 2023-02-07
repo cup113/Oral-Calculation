@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { ParamConfig } from '@/assets/question';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
   config: ParamConfig,
@@ -11,7 +11,7 @@ const props = defineProps<{
 const
   itemName = computed(() => `param-${props.i}`),
   itemTitle = computed(() => props.config.name + "..."),
-  value = ref(props.default ?? props.config.default);
+  value = computed(() => props.default ?? props.config.default);
 
 </script>
 

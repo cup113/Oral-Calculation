@@ -9,7 +9,19 @@ and this project adheres to [Semantic Versioning].
 
 - Developing
 
-## [0.2.2] - 2023-02-07
+## [0.3.1] - 2023-02-07
+
+### Changed
+
+- 修正更新日志的链接错误。
+- 完善版本发布流程。
+
+### Fixed
+
+- [#12] 修复了欢迎界面参数不同步的问题。
+- 修复了回答错误时总计时长暂时出错的问题。
+
+## [0.3.0] - 2023-02-07
 
 ### Added
 
@@ -54,10 +66,11 @@ Initial release version
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.2.2..HEAD
-[0.2.2]: https://github.com/cup113/Oral-Calculation/compare/v0.2.1..v0.2.2
-[0.2.1]: https://github.com/cup113/Oral-Calculation/compare/v0.2.0..v0.2.1
-[0.2.0]: https://github.com/cup113/Oral-Calculation/tree/v0.2.0
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.3.1..HEAD
+[0.3.1]: https://github.com/cup113/Oral-Calculation/compare/v0.3.0..v0.3.1
+[0.3.0]: https://github.com/cup113/Oral-Calculation/compare/v0.2.1..v0.3.0
+[0.2.1]: https://github.com/cup113/Oral-Calculation/compare/7461c35de227dd6afaa50cec66fa5fa8e9deeab4..v0.2.1
+[0.2.0]: https://github.com/cup113/Oral-Calculation/tree/7461c35de227dd6afaa50cec66fa5fa8e9deeab4
 
 <!--Issues-->
 [#3]: https://github.com/cup113/Oral-Calculation/issues/3
@@ -66,3 +79,4 @@ Initial release version
 [#9]: https://github.com/cup113/Oral-Calculation/issues/9
 [#10]: https://github.com/cup113/Oral-Calculation/issues/10
 [#11]: https://github.com/cup113/Oral-Calculation/issues/11
+[#12]: https://github.com/cup113/Oral-Calculation/issues/12

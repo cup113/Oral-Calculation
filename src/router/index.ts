@@ -3,17 +3,18 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import WelcomeVue from '@/components/Welcome.vue';
 import ExerciseVue from "@/components/Exercise.vue";
 import ReportVue from '@/components/Report.vue';
+import ReportShareVue from '@/components/ReportShare.vue';
 
 export default createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: "/",
-      redirect: "/welcome"
+      redirect: "/welcome",
     },
     {
       path: "/welcome",
-      component: WelcomeVue
+      component: WelcomeVue,
     },
     {
       path: "/exercise/:category/:params/:quantity",
@@ -22,7 +23,15 @@ export default createRouter({
     },
     {
       path: "/report",
-      component: ReportVue
+      component: ReportVue,
+    },
+    {
+      path: "/report-share",
+      component: ReportShareVue,
+    },
+    {
+      path: "/print-question",
+      component: () => import('@/components/QuestionsPrint.vue'),
     },
     {
       path: "/:PathMatch(.*)", // 404

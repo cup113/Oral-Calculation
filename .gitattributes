@@ -1,3 +1,4 @@
 /package.json   text eol=lf
 /pnpm-lock.yaml text eol=lf
 /*.config.js    text eol=lf
+/public/*.html  text eol=lf

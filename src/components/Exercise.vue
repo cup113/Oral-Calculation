@@ -167,8 +167,8 @@ div.exercise.pt-12
         Duration(:duration="accumulatedDuration")
   form.text-2xl(@submit.prevent="submit_question")
     div {{ currentQuestion.problem }}
-    div.px-2.py-2.flex.flex-nowrap.gap-1.ml-24.mr-12
-      input.text-center.grow.border.break-keep(
+    div.main-qa-wrapper
+      input.answer.text-center.grow.border.break-keep(
         type="text"
         name="answer"
         autocomplete="off"
@@ -194,5 +194,9 @@ div.exercise.pt-12
       @apply w-32 text-blue-600 font-bold;
     }
   }
+}
+
+.exercise .main-qa-wrapper {
+  @apply px-2 py-2 flex flex-nowrap gap-1 lg:ml-24 lg:mr-12 sm:ml-12 sm:mr-2;
 }
 </style>

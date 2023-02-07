@@ -11,6 +11,8 @@ import ExerciseVue from "@/components/Exercise.vue";
 import ParamItemVue from "@/components/ParamItem.vue";
 import QuestionDisplayVue from "@/components/QuestionDisplay.vue";
 import WelcomeVue from "@/components/Welcome.vue";
+import PrettierReportVue from '@/components/ReportShare.vue';
+import PrintQuestionsVue from '@/components/QuestionsPrint.vue';
 
 let el = document.createElement("div");
 const app = createApp(AppVue);
