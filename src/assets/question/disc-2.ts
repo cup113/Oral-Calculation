@@ -1,16 +1,16 @@
-import type { QuestionProvider, Dependency, Question, QuestionModule } from './index';
+import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 class Disc2QuestionProvider implements QuestionProvider {
-  private dep: Dependency;
+  private context: QuestionContext;
   public maxCoefficientDigits: number;
 
-  constructor(dep: Dependency, params: string[]) {
-    this.dep = dep;
+  constructor(context: QuestionContext, params: string[]) {
+    this.context = context;
     this.maxCoefficientDigits = parseInt(params[0]);
   }
 
   public get_question(): Question {
-    const {rand_digit_big_int, rand_sign, rand_between, Question, bigInt} = this.dep;
+    const {rand_digit_big_int, rand_sign, rand_between, Question, bigInt} = this.context;
     const
       a = rand_digit_big_int(rand_between(1, this.maxCoefficientDigits, 1)),
       b = rand_sign(rand_digit_big_int(this.maxCoefficientDigits)),
@@ -28,8 +28,8 @@ class Disc2QuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string[]): Disc2QuestionProvider {
-    return new Disc2QuestionProvider(bigIntModule, params);
+  get_provider(context: QuestionContext, params: string[]): Disc2QuestionProvider {
+    return new Disc2QuestionProvider(context, params);
   },
   paramsConfig: [
     {
@@ -39,4 +39,5 @@ export default {
       default: 1,
     },
   ],
+  id: 'disc-2',
 } satisfies QuestionModule;

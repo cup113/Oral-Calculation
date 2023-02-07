@@ -1,17 +1,17 @@
 import type bigInt from 'big-integer';
-import type { QuestionProvider, Dependency, Question, QuestionModule } from './index';
+import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 class PffQuestionProvider implements QuestionProvider {
-  private dep: Dependency;
+  private context: QuestionContext;
   public digits: number;
 
-  constructor(dep: Dependency, params: string[]) {
-    this.dep = dep;
+  constructor(context: QuestionContext, params: string[]) {
+    this.context = context;
     this.digits = parseInt(params[0]);
   }
 
   private pff(num: bigInt.BigInteger): bigInt.BigInteger[] {
-    const { bigInt, sqrt_big_int } = this.dep;
+    const { bigInt, sqrt_big_int } = this.context;
     let divisor = bigInt[2], value = num;
     const [maxPossibleDivisor,] = sqrt_big_int(num);
     let ans: bigInt.BigInteger[] = [];
@@ -28,7 +28,7 @@ class PffQuestionProvider implements QuestionProvider {
   }
 
   public get_question(): Question {
-    const { rand_digit_big_int, Question } = this.dep;
+    const { rand_digit_big_int, Question } = this.context;
     const
       num = rand_digit_big_int(this.digits, { avoidIsOne: true }),
       factors = this.pff(num),
@@ -43,8 +43,8 @@ class PffQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string[]): PffQuestionProvider {
-    return new PffQuestionProvider(bigIntModule, params);
+  get_provider(context: QuestionContext, params: string[]): PffQuestionProvider {
+    return new PffQuestionProvider(context, params);
   },
   paramsConfig: [
     {
@@ -55,4 +55,5 @@ export default {
       default: 3,
     },
   ],
+  id: 'pff',
 } satisfies QuestionModule;

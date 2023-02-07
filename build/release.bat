@@ -9,12 +9,12 @@ echo (5) printed README.md to public/README.html.
 echo (6) printed CHANGELOG.md to public/CHANGELOG.html.
 set /p ready="Ready? (y/N) "
 if not "%ready%" == "y" ( goto end )
-git add .
-git commit -m "Release: %1"
-git tag %1
 call pnpm build
+call git add .
+call git commit -m "Release: %1"
+call git tag %1
 call netlify deploy --prod -d dist --message %1
-git push origin main && echo Push successfully!
+call git push origin main && echo Push successfully!
 goto end
 
 :warning

@@ -1,7 +1,9 @@
-/** Question utilities & manager.
- */
+/** Question utilities & manager. */
 
 import bigInt from 'big-integer';
+
+import type { Milliseconds } from '@/assets/util';
+import { empty_array } from '@/assets/util';
 import LoadingQuestion from './loading';
 
 /** Ids of categories. Used in select value, module getting, etc. */
@@ -197,14 +199,6 @@ function sqrt_big_int(num: bigInt.BigInteger): [bigInt.BigInteger, bigInt.BigInt
   return [left, num.minus(left.square())];
 }
 
-/** Return an array of `length` filled with `0`. */
-function empty_array(length: number): (0)[] {
-  return new Array(length).fill(0);
-}
-
-/** Semantic unit of duration. */
-export type Milliseconds = number;
-
 /** The result of `Question.prototype.try_answer` */
 export const enum AnswerResult {
   /// Answer is correct.
@@ -309,8 +303,8 @@ class Fraction {
   }
 }
 
-/** Global-singleton Dependency */
-export const DEP = {
+/** Global-singleton question context dependency. */
+export const QUESTION_CONTEXT = {
   bigInt,
   minmax_big_int,
   sqrt_big_int,
@@ -323,8 +317,8 @@ export const DEP = {
   Fraction,
 };
 
-/** Type of `DEP` to be used by question provider to reduce packaged size. */
-export type Dependency = typeof DEP;
+/** Type of `context` to be used by question provider to reduce packaged size. */
+export type QuestionContext = typeof QUESTION_CONTEXT;
 
 /** Part of `QuestionModule` */
 export interface QuestionProvider {
@@ -349,6 +343,18 @@ export type ParamConfig = {
 
 /** Question module interface. (implemented in files under `question` directory.) */
 export interface QuestionModule {
-  get_provider(bigInt: Dependency, params: string[]): QuestionProvider,
+  /** Get the question provider of the module.
+   * @param context The question context.
+   * @param params Parameters correspond to `paramsConfig` of the module.
+   * @returns The question provider
+   */
+  get_provider(context: QuestionContext, params: string[]): QuestionProvider,
+  /** The configuration of parameters of the question provider. */
   paramsConfig: ParamConfig[],
+  /** The optional **extra** validator to check if params are legal.
+   * @returns Error information if the params are illegal, **or an empty string**.
+   */
+  validate?: (params: string[]) => string;
+  /** The category id of the module. Specially, the id of loading module is `loading`. */
+  id: string;
 }

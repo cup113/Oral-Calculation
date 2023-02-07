@@ -4,13 +4,14 @@ import { computed, ref } from 'vue';
 
 const props = defineProps<{
   config: ParamConfig,
-  i: number
+  i: number,
+  default?: string,
 }>();
 
 const
   itemName = computed(() => `param-${props.i}`),
   itemTitle = computed(() => props.config.name + "..."),
-  value = ref(props.config.default);
+  value = ref(props.default ?? props.config.default);
 
 </script>
 

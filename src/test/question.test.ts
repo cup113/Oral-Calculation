@@ -1,4 +1,4 @@
-import { suite, test, assert } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 
 import * as question from '@/assets/question';
 import loading from '@/assets/question/loading';
@@ -12,10 +12,19 @@ import pff from '@/assets/question/pff';
 import disc2 from '@/assets/question/disc-2';
 import sqrt from '@/assets/question/sqrt';
 
-const { DEP } = question;
-const { bigInt } = DEP;
+const { QUESTION_CONTEXT: context } = question;
+const { bigInt } = context;
 
-suite("question-util", () => {
+function expect_in_range_bigint(num: bigInt.BigInteger, l: bigInt.BigInteger, r: bigInt.BigInteger) {
+  assert(num.geq(l), `${num} is not greater than ${l}`);
+  assert(num.leq(r), `${num} is not less than ${l}`);
+}
+
+function expect_in_range(num: number, l: number, r: number) {
+  expect(num).greaterThanOrEqual(l).lessThanOrEqual(r);
+}
+
+describe("question-util", () => {
   const { CATEGORIES, CategoryId, get_module } = question;
   const {
     sqrt_big_int,
@@ -26,9 +35,9 @@ suite("question-util", () => {
     empty_array,
     rand_sign,
     Fraction,
-  } = DEP;
+  } = context;
 
-  test("categories-module", async () => {
+  it("categories-module", () => {
     const ids = [
       CategoryId.Null,
       CategoryId.Add,
@@ -42,25 +51,26 @@ suite("question-util", () => {
       CategoryId.Sqrt,
     ];
     for (let i in ids) {
-      assert(ids[i] === CATEGORIES[i].id);
-      assert(await get_module(ids[i]));
+      expect(ids[i]).toEqual(CATEGORIES[i].id);
+      expect(get_module(ids[i])).resolves.toBeTypeOf('object');
     }
   });
 
-  test("minmax-big-int", () => {
+  it("minmax-big-int", () => {
     let l = bigInt[1], r = bigInt[9];
     for (let i = 1; i < 1000; ++i) {
       let [minBigInt, maxBigInt] = minmax_big_int(i);
-      assert(l.eq(minBigInt) && r.eq(maxBigInt));
+      assert(l.eq(minBigInt));
+      assert(r.eq(maxBigInt));
       l = l.multiply(10);
       r = r.multiply(10).add(9);
     }
   });
 
-  test("rand-digit-big-int", () => {
+  it("rand-digit-big-int", () => {
     for (let i = 1; i < 1000; ++i) {
       let num = rand_digit_big_int(i);
-      assert(num.geq(minmax_big_int(i)[0]) && num.leq(minmax_big_int(i)[1]));
+      expect_in_range_bigint(num, ...minmax_big_int(i))
     }
     for (let i = 0; i < 100; ++i) {
       let num = rand_digit_big_int(1, { avoidIsOne: true });
@@ -68,43 +78,40 @@ suite("question-util", () => {
     }
     for (let i = 1; i < 100; ++i) {
       let num = rand_digit_big_int(i, { avoidEndsWithZero: true });
-      assert(!num.mod(10).isZero())
+      expect(num.mod(10).isZero()).toBeFalsy();
     }
   });
 
-  test("rand-between", () => {
+  it("rand-between", () => {
     // ! This test may fail for a very small probability.
     let acc;
 
     acc = 0;
     for (let i = 0; i < 1000; ++i) {
       let num = rand_between(1, 10);
-      assert(num >= 1);
-      assert(num <= 10);
+      expect_in_range(num, 1, 10);
       acc += num;
     }
-    assert(acc > 3000 && acc < 7000, `acc=${acc}`);
+    expect_in_range(acc, 3000, 7000);
 
     acc = 0;
     for (let i = 0; i < 1000; ++i) {
       let num = rand_between(1, 10, 8);
-      assert(num >= 1);
-      assert(num <= 10);
+      expect_in_range(num, 1, 10);
       acc += num;
     }
-    assert(acc > 8000 && acc < 9800, `acc=${acc}`);
+    expect_in_range(acc, 8000, 9800);
 
     acc = 0;
     for (let i = 0; i < 1000; ++i) {
       let num = rand_between(1, 10, -8);
-      assert(num >= 1);
-      assert(num <= 10);
+      expect_in_range(num, 1, 10);
       acc += num;
     }
-    assert(acc > 1200 && acc < 3000, `acc=${acc}`);
+    expect_in_range(acc, 1200, 3000);
   });
 
-  test("rand-between-big-int", () => {
+  it("rand-between-big-int", () => {
     // ! This test may fail for a very small probability.
     const L = bigInt("100010001000"), R = bigInt("100020001000");
     let acc: bigInt.BigInteger;
@@ -112,32 +119,41 @@ suite("question-util", () => {
     acc = bigInt[0];
     for (let i = 0; i < 1000; ++i) {
       let num = rand_between_big_int(L, R);
-      assert(num.geq(L));
-      assert(num.leq(R));
+      expect_in_range_bigint(num, L, R);
       acc = acc.add(num);
     }
-    assert(acc.gt(L.multiply(700).add(R.multiply(300))) && acc.lt(L.multiply(300).add(R.multiply(700))), `acc=${acc}`);
+    expect_in_range_bigint(
+      acc,
+      L.multiply(700).add(R.multiply(300)),
+      L.multiply(300).add(R.multiply(700))
+    );
 
     acc = bigInt[0];
     for (let i = 0; i < 1000; ++i) {
       let num = rand_between_big_int(L, R, 10);
-      assert(num.geq(L));
-      assert(num.leq(R));
+      expect_in_range_bigint(num, L, R);
       acc = acc.add(num);
     }
-    assert(acc.gt(L.multiply(250).add(R.multiply(750))) && acc.lt(L.multiply(20).add(R.multiply(980))), `acc=${acc}`);
+    expect_in_range_bigint(
+      acc,
+      L.multiply(250).add(R.multiply(750)),
+      L.multiply(20).add(R.multiply(980))
+    );
 
     acc = bigInt[0];
     for (let i = 0; i < 1000; ++i) {
       let num = rand_between_big_int(L, R, -10);
-      assert(num.geq(L));
-      assert(num.leq(R));
+      expect_in_range_bigint(num, L, R);
       acc = acc.add(num);
     }
-    assert(acc.gt(L.multiply(980).add(R.multiply(20))) && acc.lt(L.multiply(750).add(R.multiply(250))), `acc=${acc}`);
+    expect_in_range_bigint(
+      acc,
+      L.multiply(980).add(R.multiply(20)),
+      L.multiply(750).add(R.multiply(250))
+    );
   });
 
-  test("rand-sign", () => {
+  it("rand-sign", () => {
     // ! This test may fail for a very small probability.
     let changed = 0;
     for (let i = 0; i < 1000; ++i) {
@@ -146,32 +162,32 @@ suite("question-util", () => {
       assert(num.abs().eq(rand_signed.abs()));
       changed += num.eq(rand_signed) ? 1 : 0;
     }
-    assert(changed > 300 && changed < 700);
+    expect_in_range(changed, 300, 700);
   });
 
-  test("sqrt-big-int", () => {
+  it("sqrt-big-int", () => {
     let num = bigInt[0];
     for (let i = 0; i < 100; ++i) {
       for (let j = 0; j < i * 2 + 1; ++j) {
         let [a, b] = sqrt_big_int(num);
-        assert(a.eq(i), `a=${a} b=${b} i=${i} num=${num}`);
-        assert(b.eq(j), `a=${a} b=${b} j=${j} num=${num}`);
+        assert(a.eq(i));
+        assert(b.eq(j));
         num = num.add(1);
       }
     }
   });
 
-  test("empty-array", () => {
-    assert(empty_array(100).length === 100);
+  it("empty-array", () => {
+    expect(empty_array(100).length).toBe(100);
     assert(empty_array(100).every(value => value === 0));
   });
 
-  test("fraction", () => {
+  it("fraction", () => {
     for (let i = 1; i < 200; ++i) {
       for (let j = 1; j < 200; ++j) {
         let fraction = new Fraction(bigInt(i), bigInt(j));
         let value1 = fraction.numerator.multiply(100).divide(fraction.denominator);
-        assert(fraction.toString() === `${i}/${j}`);
+        expect(fraction.toString()).toBe(`${i}/${j}`);
         let value2 = fraction.numerator.multiply(100).divide(fraction.denominator);
         fraction.reduce();
         assert(value1.eq(value2));
@@ -181,58 +197,57 @@ suite("question-util", () => {
   });
 });
 
-suite("question-class", () => {
-  test("question", () => {
+describe("question-class", () => {
+  it("question", () => {
     const { AnswerResult } = question;
-    const { Question } = DEP;
-    assert(Question.new_loaded().problem.length > 0);
-    assert(Question.new_loaded().correctAnswer.length === 0);
+    const { Question } = context;
+    expect(Question.new_loaded().problem.length).toBeGreaterThan(0);
+    expect(Question.new_loaded().correctAnswer.length).toBe(0);
     const q1 = new Question("3/2", "1..1");
-    assert(q1.correctAnswer === "1..1");
-    assert(q1.end.getTime() === q1.start.getTime());
-    assert(q1.get_duration() === q1.end.getTime() - q1.start.getTime());
+    expect(q1.correctAnswer).toBe("1..1");
+    expect(q1.end.getTime()).toBe(q1.start.getTime());
+    expect(q1.get_duration()).toBe(q1.end.getTime() - q1.start.getTime());
     assert(!q1.passed);
-    assert(q1.wrongAnswers.size === 0);
-    assert(q1.try_answer("1") === AnswerResult.WrongNew);
-    assert(q1.try_answer("") === AnswerResult.WrongEmpty);
-    assert(q1.try_answer("2") === AnswerResult.WrongNew);
-    assert(q1.try_answer("1") === AnswerResult.WrongAnswered);
+    expect(q1.wrongAnswers.size).toBe(0);
+    expect(q1.try_answer("1")).toBe(AnswerResult.WrongNew);
+    expect(q1.try_answer("")).toBe(AnswerResult.WrongEmpty);
+    expect(q1.try_answer("2")).toBe(AnswerResult.WrongNew);
+    expect(q1.try_answer("1")).toBe(AnswerResult.WrongAnswered);
     setTimeout(() => {
-      assert(q1.get_elapsed() > 0);
-      assert(q1.try_answer("1..1") === AnswerResult.Correct);
+      expect(q1.get_elapsed()).toBeGreaterThan(0);
+      expect(q1.try_answer("1..1")).toBe(AnswerResult.Correct);
       assert(!q1.is_first_time_correct());
     }, 4);
     setTimeout(() => {
-      assert(q1.get_duration() > 0);
+      expect(q1.get_duration()).toBeGreaterThan(0);
     }, 8);
     const q2 = new Question("p", "a");
     setTimeout(() => {
-      assert(q2.try_answer("a") === AnswerResult.Correct);
+      expect(q2.try_answer("a")).toBe(AnswerResult.Correct);
       assert(q2.is_first_time_correct());
-      assert(q2.get_duration() > 0);
+      expect(q2.get_duration()).toBeGreaterThan(0);
     }, 4);
   });
 });
 
-suite("question-provider", () => {
-  test("loading", () => {
+describe("question-provider", () => {
+  it("loading", () => {
     const { get_provider, paramsConfig } = loading;
-    assert(paramsConfig.length === 0);
-    const provider = get_provider(DEP, []);
+    expect(paramsConfig.length).toBe(0);
+    const provider = get_provider(context, []);
     const question = provider.get_question();
-    assert(provider.get_title() === "ERROR");
-    assert(question.problem.length > 0);
-    assert(question.correctAnswer.length === 0);
+    expect(provider.get_title()).toBe("ERROR");
+    expect(question.problem.length).toBeGreaterThan(0);
+    expect(question.correctAnswer.length).toBe(0);
   });
 
-  test("add", () => {
+  it("add", () => {
     const { get_provider, paramsConfig } = add;
-    assert(paramsConfig.length === 1);
+    expect(paramsConfig.length).toBe(1);
     for (let i = 1; i < 10; ++i) {
-      let provider = get_provider(DEP, [i.toString()]);
-      assert(provider.digits === i);
-      assert(provider.get_title().includes(i.toString()));
-      assert(provider.get_title().includes("加"));
+      let provider = get_provider(context, [i.toString()]);
+      expect(provider.digits).toBe(i);
+      expect(provider.get_title()).contain(i.toString()).contain("加");
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = /(\d+)\s\+\s(\d+)/.exec(question.problem);
@@ -241,23 +256,22 @@ suite("question-provider", () => {
           num1 = bigInt(problem[1]),
           num2 = bigInt(problem[2]),
           answer = num1.add(num2);
-        assert(num1.toString().length === i);
-        assert(num2.toString().length === i);
-        assert(question.correctAnswer === answer.toString());
+        expect(num1.toString().length).toBe(i);
+        expect(num2.toString().length).toBe(i);
+        expect(question.correctAnswer).toBe(answer.toString());
       }
     }
   });
 
-  test("sub", () => {
+  it("sub", () => {
     const { get_provider, paramsConfig } = sub;
-    assert(paramsConfig.length === 2);
+    expect(paramsConfig.length).toBe(2);
     for (let i = 1; i < 10; ++i) {
       let allowNegative = i % 2 === 0;
-      let provider = get_provider(DEP, [i.toString(), allowNegative ? '1' : '0']);
-      assert(provider.digits === i);
-      assert(provider.allowNegative === allowNegative);
-      assert(provider.get_title().includes(i.toString()));
-      assert(provider.get_title().includes("减"));
+      let provider = get_provider(context, [i.toString(), allowNegative ? '1' : '0']);
+      expect(provider.digits).toBe(i);
+      expect(provider.allowNegative).toBe(allowNegative);
+      expect(provider.get_title()).contain(i.toString()).contain("减");
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = /(\d+)\s\-\s(\d+)/.exec(question.problem);
@@ -266,31 +280,32 @@ suite("question-provider", () => {
           num1 = bigInt(problem[1]),
           num2 = bigInt(problem[2]),
           answer = num1.subtract(num2);
-        assert(num1.toString().length === i);
-        assert(num2.toString().length === i);
-        assert(question.correctAnswer === answer.toString());
+        expect(num1.toString().length).toBe(i);
+        expect(num2.toString().length).toBe(i);
+        expect(question.correctAnswer).toBe(answer.toString());
         if (!allowNegative)
           assert(!num1.isNegative());
       }
     }
   });
 
-  test("add-sub", () => {
+  it("add-sub", () => {
     const { get_provider, paramsConfig } = add_sub;
-    assert(paramsConfig.length === 4);
+    expect(paramsConfig.length).toBe(4);
     for (let i = 1; i < 200; ++i) {
       let
         digits = Math.floor(i / 10) + 1,
         items = i % 10 + 3,
         mixedSetting = i % 3,
         allowNegative = (i % 7) % 2 === 0 ? 1 : 0;
-      let provider = get_provider(DEP, [digits.toString(), items.toString(), mixedSetting.toString(), allowNegative.toString()]);
-      assert(provider.digits === digits);
-      assert(provider.items === items);
-      assert(provider.mixedSetting === mixedSetting);
-      assert(provider.allowNegative === (allowNegative === 1));
-      assert(provider.get_title().includes(digits.toString()));
-      assert(provider.get_title().includes(provider.mixedSetting === 2 ? "连加连减" : "加减混合"));
+      let provider = get_provider(context, [digits.toString(), items.toString(), mixedSetting.toString(), allowNegative.toString()]);
+      expect(provider.digits).toBe(digits);
+      expect(provider.items).toBe(items);
+      expect(provider.mixedSetting).toBe(mixedSetting);
+      expect(provider.allowNegative).toBe(allowNegative === 1);
+      expect(provider.get_title())
+        .contain(digits.toString())
+        .contain(provider.mixedSetting === 2 ? "连加连减" : "加减混合");
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = [...question.problem.matchAll(/\d+|\+|\-/g)];
@@ -303,26 +318,27 @@ suite("question-provider", () => {
               lastSign = problem[k][0];
               break;
             default:
-              assert(problem[k][0].length === digits);
+              expect(problem[k][0].length).toBe(digits);
               answer = lastSign === '+' ? answer.add(bigInt(problem[k][0])) : answer.subtract(problem[k][0]);
               break;
           }
         }
-        assert(question.correctAnswer === answer.toString());
+        expect(question.correctAnswer).toBe(answer.toString());
       }
     }
   });
 
-  test("mul", () => {
+  it("mul", () => {
     const { get_provider, paramsConfig } = mul;
-    assert(paramsConfig.length === 2);
+    expect(paramsConfig.length).toBe(2);
     for (let i = 1; i < 50; ++i) {
       let digits1 = Math.floor(i / 7) + 1, digits2 = i % 7 + 1;
-      let provider = get_provider(DEP, [digits1.toString(), digits2.toString()]);
-      assert(provider.digits1 + provider.digits2 === digits1 + digits2);
-      assert(provider.get_title().includes(digits1.toString()));
-      assert(provider.get_title().includes(digits2.toString()));
-      assert(provider.get_title().includes("乘"));
+      let provider = get_provider(context, [digits1.toString(), digits2.toString()]);
+      expect(provider.digits1 + provider.digits2).toBe(digits1 + digits2);
+      expect(provider.get_title())
+        .contain(digits1.toString())
+        .contain(digits2.toString())
+        .contain("乘");
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = /(\d+)\s×\s(\d+)/.exec(question.problem);
@@ -331,15 +347,15 @@ suite("question-provider", () => {
           num1 = bigInt(problem[1]),
           num2 = bigInt(problem[2]),
           answer = num1.multiply(num2);
-        assert(num1.toString().length + num2.toString().length === digits1 + digits2);
-        assert(question.correctAnswer === answer.toString());
+        expect(num1.toString().length + num2.toString().length).toBe(digits1 + digits2);
+        expect(question.correctAnswer).toBe(answer.toString());
       }
     }
   });
 
-  test("div", () => {
+  it("div", () => {
     const { get_provider, paramsConfig } = div;
-    assert(paramsConfig.length === 4);
+    expect(paramsConfig.length).toBe(4);
     for (let i = 1; i < 200; ++i) {
       let
         digits1 = Math.floor(i / 10) + 1,
@@ -348,14 +364,15 @@ suite("question-provider", () => {
         indivisibleSetting = (i % 7) % 2 === 0 ? 1 : 0;
       if (digits1 < digits2)
         continue;
-      let provider = get_provider(DEP, [digits1.toString(), digits2.toString(), divisible.toString(), indivisibleSetting.toString()]);
-      assert(provider.digits1 === digits1);
-      assert(provider.digits2 === digits2);
-      assert(provider.divisible === divisible);
-      assert(provider.indivisibleSetting === indivisibleSetting);
-      assert(provider.get_title().includes(digits1.toString()));
-      assert(provider.get_title().includes(digits2.toString()));
-      assert(provider.get_title().includes("除以"));
+      let provider = get_provider(context, [digits1.toString(), digits2.toString(), divisible.toString(), indivisibleSetting.toString()]);
+      expect(provider.digits1).toBe(digits1);
+      expect(provider.digits2).toBe(digits2);
+      expect(provider.divisible).toBe(divisible);
+      expect(provider.indivisibleSetting).toBe(indivisibleSetting);
+      expect(provider.get_title())
+        .contain(digits1.toString())
+        .contain(digits2.toString())
+        .contain("除以")
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = /(\d+)\s÷\s(\d+)/.exec(question.problem);
@@ -383,13 +400,12 @@ suite("question-provider", () => {
     }
   });
 
-  test("pow", () => {
+  it("pow", () => {
     const { get_provider, paramsConfig } = pow;
-    assert(paramsConfig.length === 2);
+    expect(paramsConfig.length).toBe(2);
     for (let i = 2; i < 10; ++i) {
-      let provider = get_provider(DEP, [i.toString(), (Math.floor(i / 2) + 1).toString()]);
-      assert(provider.get_title().includes(i.toString()));
-      assert(provider.get_title().includes("幂运算"));
+      let provider = get_provider(context, [i.toString(), (Math.floor(i / 2) + 1).toString()]);
+      expect(provider.get_title()).contain(i.toString()).contain("幂运算");
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = /(\d+)\s\^\s(\d+)/.exec(question.problem);
@@ -398,20 +414,19 @@ suite("question-provider", () => {
           num1 = bigInt(problem[1]),
           num2 = bigInt(problem[2]),
           answer = num1.pow(num2);
-        assert(answer.toString().length <= i);
+        expect(answer.toString().length).toBeLessThanOrEqual(i);
         assert(num1.neq(1));
-        assert(question.correctAnswer === answer.toString());
+        expect(question.correctAnswer).toBe(answer.toString());
       }
     }
   });
 
-  test("pff", () => {
+  it("pff", () => {
     const { get_provider, paramsConfig } = pff;
-    assert(paramsConfig.length === 1);
+    expect(paramsConfig.length).toBe(1);
     for (let i = 1; i < 11; ++i) {
-      let provider = get_provider(DEP, [i.toString()]);
-      assert(provider.get_title().includes(i.toString()));
-      assert(provider.get_title().includes("质因数分解"));
+      let provider = get_provider(context, [i.toString()]);
+      expect(provider.get_title()).contain(i.toString()).contain("质因数分解");
       for (let j = i === 10 ? 90 : 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = /(\d+)\s/.exec(question.problem);
@@ -419,22 +434,21 @@ suite("question-provider", () => {
         let
           num = bigInt(problem[1]),
           correctAnswer = question.correctAnswer;
-        assert(num.toString().length === i);
-        assert(correctAnswer.split(",").every(value => bigInt(value).isPrime()), `correctAnswer=${correctAnswer},problem=${problem}`);
+        expect(num.toString().length).toBe(i);
+        assert(correctAnswer.split(",").every(value => bigInt(value).isPrime()));
         assert(correctAnswer.split(",").map(value => bigInt(value)).reduce(
           (pre, cur) => pre.multiply(cur), bigInt[1]
-        ));
+        ).eq(num));
       }
     }
   });
 
-  test("disc-2", () => {
+  it("disc-2", () => {
     const { get_provider, paramsConfig } = disc2;
-    assert(paramsConfig.length === 1);
+    expect(paramsConfig.length).toBe(1);
     for (let i = 1; i < 10; ++i) {
-      let provider = get_provider(DEP, [i.toString()]);
-      assert(provider.get_title().includes(i.toString()));
-      assert(provider.get_title().includes("根的判别式"));
+      let provider = get_provider(context, [i.toString()]);
+      expect(provider.get_title()).contain(i.toString()).contain("根的判别式");
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = /(\d+)x²\s([+-])\s(\d+)x\s([+-])\s(\d+)\s=/.exec(question.problem);
@@ -445,25 +459,24 @@ suite("question-provider", () => {
           c = bigInt(problem[4] + problem[5]),
           answer = b.square().minus(a.multiply(c).multiply(4)).toString(),
           correctAnswer = question.correctAnswer;
-        assert(b.abs().toString().length === i);
-        assert(a.toString().length <= i);
-        assert(c.abs().toString().length <= i);
-        assert(correctAnswer === answer);
+        expect(b.abs().toString().length).toBe(i);
+        expect(a.toString().length).toBeLessThanOrEqual(i);
+        expect(c.abs().toString().length).toBeLessThanOrEqual(i);
+        expect(correctAnswer).toBe(answer);
       }
     }
   });
 
-  test("sqrt", () => {
-    const { sqrt_big_int } = DEP;
+  it("sqrt", () => {
+    const { sqrt_big_int } = context;
     const { get_provider, paramsConfig } = sqrt;
-    assert(paramsConfig.length === 2);
+    expect(paramsConfig.length).toBe(2);
     for (let i = 2; i < 21; ++i) {
       let
         digits = Math.floor(i / 2),
         isPerfectSquare = i % 2; // Always=0, NoAndFloor=1
-      let provider = get_provider(DEP, [digits.toString(), isPerfectSquare.toString()]);
-      assert(provider.get_title().includes(digits.toString()));
-      assert(provider.get_title().includes("开平方"));
+      let provider = get_provider(context, [digits.toString(), isPerfectSquare.toString()]);
+      expect(provider.get_title()).contain(digits.toString()).contain("开平方");
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = /(⌊)?√\((\d+)\)/.exec(question.problem);
@@ -473,8 +486,8 @@ suite("question-provider", () => {
           num = bigInt(problem[2]),
           [answer, remainder] = sqrt_big_int(num),
           correctAnswer = question.correctAnswer;
-        assert(num.toString().length === digits, `num=${num}, digits=${digits}`);
-        assert(correctAnswer === answer.toString());
+        expect(num.toString().length).toBe(digits);
+        expect(correctAnswer).toBe(answer.toString());
         if (!floored)
           assert(remainder.isZero());
       }

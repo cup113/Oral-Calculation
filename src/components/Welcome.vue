@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
@@ -12,7 +12,7 @@ import ParamItem from './ParamItem.vue';
 const
   { questionModule } = storeToRefs(useQuestionStore()),
   { categoryIdManager, quantityManager, avoidRepeatManager, generateAtOnceManager } = useSettingStore(),
-  { categoryId, quantity, avoidRepeat, generateAtOnce } = storeToRefs(useSettingStore());
+  { categoryId, quantity, params, avoidRepeat, generateAtOnce } = storeToRefs(useSettingStore());
 
 const
   router = useRouter(),
@@ -107,6 +107,7 @@ div.welcome
       :key="`${categoryId}-${i}`"
       :i="i"
       :config="config"
+      :default="params.length > i ? params[i] : undefined"
     )
     div.text-right.relative.left-4.top-4
       button.btn.bg-blue-500(type="submit") 提交

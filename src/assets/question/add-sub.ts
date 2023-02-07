@@ -1,4 +1,4 @@
-import { QuestionProvider, Dependency, Question, QuestionModule } from './index';
+import { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 type Sign = '+' | '-';
 
@@ -9,14 +9,14 @@ const enum MixedSetting {
 }
 
 class AddSubQuestionProvider implements QuestionProvider {
-  private dep: Dependency;
+  private context: QuestionContext;
   public digits: number;
   public items: number;
   public mixedSetting: MixedSetting;
   public allowNegative: boolean;
 
-  constructor(dep: Dependency, params: string[]) {
-    this.dep = dep;
+  constructor(context: QuestionContext, params: string[]) {
+    this.context = context;
     this.digits = parseInt(params[0]);
     this.items = parseInt(params[1]);
     this.mixedSetting = parseInt(params[2]) as MixedSetting;
@@ -24,7 +24,7 @@ class AddSubQuestionProvider implements QuestionProvider {
   }
 
   private get_question_mixed(): Question {
-    const { rand_digit_big_int, empty_array, Question } = this.dep;
+    const { rand_digit_big_int, empty_array, Question } = this.context;
     while (true) {
       let
         numbers = empty_array(this.items).map(() => rand_digit_big_int(this.digits)),
@@ -51,7 +51,7 @@ class AddSubQuestionProvider implements QuestionProvider {
   }
 
   private get_question_not_mixed(): Question {
-    const { rand_digit_big_int, bigInt, Question, empty_array } = this.dep;
+    const { rand_digit_big_int, bigInt, Question, empty_array } = this.context;
     const sign: Sign = Math.random() < 0.4 ? '+' : '-';
     if (sign == '+') {
       const
@@ -102,8 +102,8 @@ class AddSubQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string[]): AddSubQuestionProvider {
-    return new AddSubQuestionProvider(bigIntModule, params);
+  get_provider(context: QuestionContext, params: string[]): AddSubQuestionProvider {
+    return new AddSubQuestionProvider(context, params);
   },
   paramsConfig: [
     {
@@ -131,4 +131,5 @@ export default {
       default: 0,
     }
   ],
+  id: 'add-sub',
 } satisfies QuestionModule;

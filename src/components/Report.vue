@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router';
 
 import useQuestionStore from '@/store/question';
-import type { Milliseconds } from '@/assets/question';
+import type { Milliseconds } from '@/assets/util';
 
 import Duration from './Duration.vue';
 import QuestionDisplay from './QuestionDisplay.vue';
@@ -64,6 +64,7 @@ div.report.pt-2
       :question="question"
       :i="i"
     )
+  button.btn.bg-gray-700.mt-8(type="button" @click="go_to_main_page") 返回主页
 </template>
 
 <style lang="scss">

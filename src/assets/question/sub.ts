@@ -1,17 +1,17 @@
-import type { QuestionProvider, Dependency, Question, QuestionModule } from './index';
+import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 class SubtractQuestionProvider implements QuestionProvider {
-  private dep: Dependency;
+  private context: QuestionContext;
   public digits: number;
   public allowNegative: boolean;
-  constructor(dep: Dependency, params: string[]) {
-    this.dep = dep;
+  constructor(context: QuestionContext, params: string[]) {
+    this.context = context;
     this.digits = parseInt(params[0]);
     this.allowNegative = parseInt(params[1]) === 0 ? false : true;
   }
 
   public get_question(): Question {
-    const { rand_digit_big_int, bigInt, Question } = this.dep;
+    const { rand_digit_big_int, bigInt, Question } = this.context;
     while (true) {
       const
         num1 = rand_digit_big_int(this.digits),
@@ -30,8 +30,8 @@ class SubtractQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string[]): SubtractQuestionProvider {
-    return new SubtractQuestionProvider(bigIntModule, params);
+  get_provider(context: QuestionContext, params: string[]): SubtractQuestionProvider {
+    return new SubtractQuestionProvider(context, params);
   },
   paramsConfig: [
     {
@@ -47,4 +47,5 @@ export default {
       default: 0,
     }
   ],
+  id: 'sub',
 } satisfies QuestionModule;

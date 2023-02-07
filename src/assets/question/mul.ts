@@ -1,11 +1,11 @@
-import type { QuestionProvider, Dependency, Question, QuestionModule } from './index';
+import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 class MultiplyQuestionProvider implements QuestionProvider {
-  private dep: Dependency;
+  private context: QuestionContext;
   public digits1: number;
   public digits2: number;
-  constructor(dep: Dependency, params: string[]) {
-    this.dep = dep;
+  constructor(context: QuestionContext, params: string[]) {
+    this.context = context;
     this.digits1 = parseInt(params[0]);
     this.digits2 = parseInt(params[1]);
 
@@ -14,7 +14,7 @@ class MultiplyQuestionProvider implements QuestionProvider {
   }
 
   public get_question(): Question {
-    const { rand_digit_big_int, Question } = this.dep;
+    const { rand_digit_big_int, Question } = this.context;
     const
       num1 = rand_digit_big_int(this.digits1, { avoidIsOne: true, avoidEndsWithZero: true }),
       num2 = rand_digit_big_int(this.digits2, { avoidIsOne: true, avoidEndsWithZero: true }),
@@ -29,8 +29,8 @@ class MultiplyQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string[]): MultiplyQuestionProvider {
-    return new MultiplyQuestionProvider(bigIntModule, params);
+  get_provider(context: QuestionContext, params: string[]): MultiplyQuestionProvider {
+    return new MultiplyQuestionProvider(context, params);
   },
   paramsConfig: [
     {
@@ -46,5 +46,5 @@ export default {
       default: 1,
     }
   ],
+  id: 'mul',
 } satisfies QuestionModule;
-

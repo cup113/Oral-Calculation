@@ -1,14 +1,18 @@
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import Message from 'vue-m-message';
 
-import { DEP } from '@/assets/question';
+import { QUESTION_CONTEXT } from '@/assets/question';
 import useQuestionStore from '@/store/question';
 import useSettingStore from '@/store/setting';
 
 import Duration from './Duration.vue';
+
+onMounted(() => {
+  answerInput.value!.focus();
+}); // This should be in the beginning of the program.
 
 const
   router = useRouter(),
@@ -19,6 +23,7 @@ const
     reset_questions,
     update_question,
     answer_current_question,
+    validate_params,
   } = useQuestionStore(),
   {
     currentQuestion,
@@ -95,9 +100,15 @@ function warn_loading(): void {
 }
 
 function question_module_onload() {
-  status.value = Status.Loaded;
-  currentQuestion.value = DEP.Question.new_loaded();
-  Message.info("加载完成。点击“开始”答题。");
+  let validate_result = validate_params();
+  if (validate_result.length > 0) {
+    Message.error(`验证参数时出错: 当前模块${validate_result}`);
+    go_back();
+  } else {
+    status.value = Status.Loaded;
+    currentQuestion.value = QUESTION_CONTEXT.Question.new_loaded();
+    Message.info("加载完成。点击“开始”答题。");
+  }
 }
 
 function next_question(): void {

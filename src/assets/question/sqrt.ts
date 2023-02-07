@@ -1,4 +1,4 @@
-import type { QuestionProvider, Dependency, Question, QuestionModule } from './index';
+import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 const enum IsPerfectSquare {
   Always = 0,
@@ -6,18 +6,18 @@ const enum IsPerfectSquare {
 }
 
 class SqrtQuestionProvider implements QuestionProvider {
-  private dep: Dependency;
+  private context: QuestionContext;
   public digits: number;
   public isPerfectSquare: IsPerfectSquare;
 
-  constructor(dep: Dependency, params: string[]) {
-    this.dep = dep;
+  constructor(context: QuestionContext, params: string[]) {
+    this.context = context;
     this.digits = parseInt(params[0]);
     this.isPerfectSquare = parseInt(params[1]) as IsPerfectSquare;
   }
 
   public get_question(): Question {
-    const { rand_digit_big_int, rand_between_big_int, minmax_big_int, Question, bigInt } = this.dep;
+    const { rand_digit_big_int, rand_between_big_int, minmax_big_int, Question, bigInt } = this.context;
     const [minNum, maxNum] = minmax_big_int(this.digits);
     while (true) {
       const correctAnswer = rand_digit_big_int(Math.floor((this.digits + 1) / 2), { avoidEndsWithZero: true });
@@ -46,8 +46,8 @@ class SqrtQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string[]): SqrtQuestionProvider {
-    return new SqrtQuestionProvider(bigIntModule, params);
+  get_provider(context: QuestionContext, params: string[]): SqrtQuestionProvider {
+    return new SqrtQuestionProvider(context, params);
   },
   paramsConfig: [
     {
@@ -63,4 +63,5 @@ export default {
       default: 0,
     }
   ],
+  id: 'sqrt',
 } satisfies QuestionModule;

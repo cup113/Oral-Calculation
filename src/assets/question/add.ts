@@ -1,16 +1,16 @@
-import type { QuestionProvider, Dependency, Question, QuestionModule } from './index';
+import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 class AddQuestionProvider implements QuestionProvider {
-  private dep: Dependency;
+  private context: QuestionContext;
   public digits: number;
 
-  constructor(dep: Dependency, params: string[]) {
-    this.dep = dep;
+  constructor(context: QuestionContext, params: string[]) {
+    this.context = context;
     this.digits = parseInt(params[0]);
   }
 
   public get_question(): Question {
-    const { rand_digit_big_int, Question } = this.dep;
+    const { rand_digit_big_int, Question } = this.context;
     const
       num1 = rand_digit_big_int(this.digits),
       num2 = rand_digit_big_int(this.digits),
@@ -25,8 +25,8 @@ class AddQuestionProvider implements QuestionProvider {
 }
 
 export default {
-  get_provider(bigIntModule: Dependency, params: string[]): AddQuestionProvider {
-    return new AddQuestionProvider(bigIntModule, params);
+  get_provider(context: QuestionContext, params: string[]): AddQuestionProvider {
+    return new AddQuestionProvider(context, params);
   },
   paramsConfig: [
     {
@@ -36,4 +36,5 @@ export default {
       default: 3,
     },
   ],
+  id: 'add'
 } satisfies QuestionModule;

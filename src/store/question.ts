@@ -3,8 +3,8 @@ import Message from 'vue-m-message';
 import { defineStore, storeToRefs } from "pinia";
 import { ref, computed, watch } from 'vue';
 
-import type { Milliseconds } from '@/assets/question/index';
-import { DEP, Question, QuestionModule, get_module, AnswerResult } from '@/assets/question/index';
+import type { Milliseconds } from '@/assets/util';
+import { QUESTION_CONTEXT, Question, QuestionModule, get_module, AnswerResult } from '@/assets/question/index';
 import LoadingQuestion from '@/assets/question/loading';
 import useSettingStore from './setting';
 
@@ -21,8 +21,8 @@ export default defineStore("question", () => {
     questions = ref([] as Question[]),
     existProblems = ref(new Set() as Set<string>),
     questionModule = ref(LoadingQuestion as QuestionModule),
-    loaded = computed(() => questionModule.value !== LoadingQuestion),
-    questionProvider = computed(() => questionModule.value.get_provider(DEP, params.value)),
+    loaded = computed(() => questionModule.value.id !== 'loading'),
+    questionProvider = computed(() => questionModule.value.get_provider(QUESTION_CONTEXT, params.value)),
     currentQuestion = ref(questionProvider.value.get_question()),
     passedCnt = ref(0),
     correctCnt = ref(0),
@@ -41,6 +41,46 @@ export default defineStore("question", () => {
       err => Message.error(`获取类别信息失败: ${err}`)
     );
   }, { immediate: true });
+
+  /** Validate current parameters of current question module.
+   * @returns An empty string if parameters are legal, otherwise a string with error information.
+   */
+  function validate_params(): string {
+    const paramsConfig = questionModule.value.paramsConfig;
+    if (paramsConfig.length !== params.value.length)
+      return `应有${paramsConfig.length}个配置项，只得到了${params.value.length}个。`;
+    for (let i = 0; i < paramsConfig.length; ++i) {
+      const param = params.value[i], paramConfig = paramsConfig[i];
+      switch (paramConfig.type) {
+        case 'integer': {
+          let paramNum = parseInt(param);
+          if (!Number.isInteger(paramNum))
+            return `配置项“${paramConfig.name}”传入参数时应为整数，但接受到“${param}”`;
+          if (paramNum < paramConfig.min)
+            return `配置项”${paramConfig.name}“传入参数时应为不小于${paramConfig.min}的数，但接受到“${param}”`;
+          if (paramConfig.max !== undefined && paramNum > paramConfig.max)
+            return `配置项”${paramConfig.name}“传入参数时应为不大于${paramConfig.max}的数，但接受到“${param}”`;
+          break;
+        }
+        case 'select': {
+          let paramNum = parseInt(param);
+          if (!Number.isInteger(paramNum))
+            return `配置项“${paramConfig.name}”传入参数时应为整数，但接受到“${param}”`;
+          if (paramNum < 0)
+            return `配置项”${paramConfig.name}“传入参数时应为不小于 0 的数，但接受到“${param}”`;
+          if (paramNum >= paramConfig.choices.length)
+            return `配置项”${paramConfig.name}“传入参数时应为不大于${paramConfig.choices.length}的数，但接受到“${param}”`;
+          break;
+        }
+      }
+    }
+    if (questionModule.value.validate !== undefined) {
+      let validate_result = questionModule.value.validate(params.value);
+      if (validate_result.length > 0)
+        return validate_result;
+    }
+    return "";
+  }
 
   function reset_questions() {
     questions.value.splice(0, questions.value.length);
@@ -123,6 +163,7 @@ export default defineStore("question", () => {
     wrongAnswerCnt,
     accumulatedDuration,
     passedRatio,
+    validate_params,
     reset_questions,
     get_question,
     add_question,

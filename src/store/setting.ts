@@ -1,23 +1,24 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
+import { PARAMS_SEP, bool_to_string, string_to_bool } from '@/assets/util';
 import { CATEGORIES, CategoryId } from '@/assets/question';
 
-/** The keys of localStorage */
-const enum LocalStorageKeys {
-  /** Default category. The id string of the category. */
-  CategoryId = "OC_CategoryId",
-  /** Default quantity. A decimal number. */
-  Quantity = "OC_Quantity",
-  /** Default param **prefix**. Each stores an array-string joined by ','. */
-  Params = "OC_Params",
-  /** Avoid repeated questions as possible. */
-  AvoidRepeat = "OC_AvoidRepeat",
-  /** If generate the questions as soon as the provider loaded. */
-  GenerateAtOnce = "OC_GenerateAtOnce",
-}
-
 export default defineStore("setting", () => {
+  /** The keys of localStorage */
+  const enum LocalStorageKeys {
+    /** Default category. The id string of the category. */
+    CategoryId = "OC_CategoryId",
+    /** Default quantity. A decimal number. */
+    Quantity = "OC_Quantity",
+    /** Default param **prefix**. Each stores an array-string joined by ','. */
+    Params = "OC_Params",
+    /** Avoid repeated questions as possible. */
+    AvoidRepeat = "OC_AvoidRepeat",
+    /** If generate the questions as soon as the provider loaded. */
+    GenerateAtOnce = "OC_GenerateAtOnce",
+  }
+
   /** Basic getter for `localStorage`.
    * @returns the value of `key` in `localStorage`. If null, return `defaultValue`.
    */
@@ -29,9 +30,6 @@ export default defineStore("setting", () => {
   function storage_set(key: string, value: string) {
     localStorage.setItem(key, value);
   }
-
-  /** The separator of params when serializing. */
-  const PARAMS_SEP = ',';
 
   const
     categoryId = ref(CategoryId.Null),
@@ -85,24 +83,31 @@ export default defineStore("setting", () => {
   };
 
   const paramsManager = {
+    filter_empty(arr: string[]) {
+      if (arr.length === 1 && arr[0].length === 0) // arr: ['']
+        arr.splice(0, arr.length);
+      return arr;
+    },
     get(): string[] {
-      return storage_get(
+      return this.filter_empty(storage_get(
         `${LocalStorageKeys.Params}_${categoryId.value}`,
         params.value.join(PARAMS_SEP)
-      ).split(PARAMS_SEP);
+      ).split(PARAMS_SEP));
     },
     set(_params: string): void {
-      params.value = _params.split(PARAMS_SEP);
+      params.value = this.filter_empty(_params.split(PARAMS_SEP));
       storage_set(`${LocalStorageKeys.Params}_${categoryId.value}`, _params);
     }
   };
 
   const avoidRepeatManager = {
     get(): boolean {
-      return storage_get(LocalStorageKeys.AvoidRepeat, avoidRepeat.value ? 'true' : 'false') === 'true';
+      return string_to_bool(storage_get(
+        LocalStorageKeys.AvoidRepeat, bool_to_string(avoidRepeat.value)
+      ));
     },
     set(_avoidRepeat: string): void {
-      let value = _avoidRepeat === 'true';
+      let value = string_to_bool(_avoidRepeat);
       avoidRepeat.value = value;
       storage_set(LocalStorageKeys.AvoidRepeat, _avoidRepeat);
     }
@@ -110,10 +115,12 @@ export default defineStore("setting", () => {
 
   const generateAtOnceManager = {
     get(): boolean {
-      return storage_get(LocalStorageKeys.GenerateAtOnce, generateAtOnce.value ? 'true' : 'false') === 'true';
+      return string_to_bool(storage_get(
+        LocalStorageKeys.GenerateAtOnce, bool_to_string(generateAtOnce.value)
+      ));
     },
     set(_generateAtOnce: string): void {
-      let value = _generateAtOnce === 'true';
+      let value = string_to_bool(_generateAtOnce);
       generateAtOnce.value = value;
       storage_set(LocalStorageKeys.GenerateAtOnce, _generateAtOnce);
     }

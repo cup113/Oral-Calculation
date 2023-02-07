@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import type { Milliseconds } from '@/assets/question';
+import type { Milliseconds } from '@/assets/util';
+import { empty_array } from '@/assets/util';
 
 const props = defineProps<{
   duration: Milliseconds
@@ -14,7 +15,7 @@ const
     let res = milliseconds.value.toFixed(0);
     if (seconds.value > 0) {
       let l = 3 - res.length;
-      res = new Array(l > 0 ? l : 0).fill("0").join("") + res;
+      res = empty_array(Math.max(l, 0)).join("") + res;
     }
     return res;
   });
@@ -26,6 +27,6 @@ span.duration
   template(v-if="seconds == 0")
     span.text-sm {{ millisecondsDisplay }}毫秒
   template(v-else)
-    span(v-if="seconds > 0") {{ seconds }}秒
+    span {{ seconds }}秒
     span.text-xs.opacity-75 {{ millisecondsDisplay }}毫秒
 </template>

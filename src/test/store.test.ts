@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { createApp } from 'vue';
-import { suite, expect, assert, test } from 'vitest';
+import { describe, expect, assert, it } from 'vitest';
 import { createPinia } from 'pinia';
 
 import useSettingStore from '@/store/setting';
@@ -12,22 +12,22 @@ import App from '@/App.vue';
 const app = createApp(App);
 app.use(createPinia());
 
-suite("store-setting", () => {
+describe("store-setting", () => {
   const store = useSettingStore();
 
-  test("category", () => {});
-  test("quantity", () => {});
-  test("avoid-repeat", () => {});
-  test("generate-at-once", () => {});
-  test("params", () => {});
+  it.todo("category", () => {});
+  it.todo("quantity", () => {});
+  it.todo("avoid-repeat", () => {});
+  it.todo("generate-at-once", () => {});
+  it.todo("params", () => {});
 });
 
-suite("store-question", () => {
+describe("store-question", () => {
   const store = useQuestionStore();
 
-  test("reset-questions", () => {});
-  test("get-question", () => {});
-  test("add-question", () => {});
-  test("update-question", () => {});
-  test("answer-current-question", () => {});
+  it.todo("reset-questions", () => {});
+  it.todo("get-question", () => {});
+  it.todo("add-question", () => {});
+  it.todo("update-question", () => {});
+  it.todo("answer-current-question", () => {});
 });

@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { suite, test, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, createVNode, createApp } from 'vue';
 import { createPinia } from 'pinia';
 import router from '@/router';
@@ -17,8 +17,9 @@ const app = createApp(AppVue);
 app.use(createPinia());
 app.use(router);
 
-suite("vue-app", () => {
-  test("initialize", () => {
+describe("vue-app", () => {
+  it("initialize", () => {
     app.mount(el);
   });
+  it.todo("dom");
 })
