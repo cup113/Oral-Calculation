@@ -48,69 +48,65 @@ function change_generate_at_once(ev: Event) {
 
 </script>
 
-<template lang="pug">
-div.welcome
-  h2.text-3xl.font-bold.py-4 欢迎来到口算练习
-  form.w-max.mx-auto.text-lg(@submit.prevent="submit_form")
-    div.param-item
-      label(for="category") 类别
-      span
-        select#category(
-          name="category"
-          title="类别"
-          :value="categoryId"
-          @change="change_category"
-        )
-          option(
-            v-for="category in CATEGORIES"
-            :value="category.id"
-            :key="category.id"
-          ) {{ category.desc }}
-    div.param-item
-      label(for="quantity") 题数
-      span
-        input#quantity(
-          type="number"
-          name="quantity"
-          min="1"
-          step="1"
-          placeholder="练习题数..."
-          required="true"
-          :value="quantity"
-          @change="change_quantity"
-        )
-    div.param-item
-      label(for="avoid-repeat") 避免重复题
-      span
-        select#avoid-repeat(
-          name="avoid-repeat"
-          title="避免重复题"
-          :value="avoidRepeat"
-          @change="change_avoid_repeat"
-        )
-          option(value="true") 尽量避免
-          option(value="false") 不避免
-    div.param-item
-      label(for="generate-at-once") 生成题目
-      span
-        select#generate-at-once(
-          name="generate-at-once"
-          title="生成题目"
-          :value="generateAtOnce"
-          @change="change_generate_at_once"
-        )
-          option(value="false") 答题时生成
-          option(value="true") 开始时立即生成
-    hr.my-2.h-1
-    ParamItem(
-      v-for="(config, i) in paramsConfig"
-      :key="`${categoryId}-${i}`"
-      :i="i"
-      :config="config"
-      :default="params.length > i ? params[i] : undefined"
-    )
-    div.text-right.relative.left-4.top-4
-      button.btn.bg-blue-500(type="submit") 提交
+<template>
+  <div class="welcome">
+    <h2 class="text-3xl font-bold py-4">欢迎来到口算练习</h2>
+    <form class="w-max mx-auto text-lg" @submit.prevent="submit_form">
+      <div class="param-item">
+        <label for="category">类别</label>
+        <span>
+          <select id="category" name="category" title="类别" :value="categoryId"
+            @change="change_category">
+            <option v-for="category in CATEGORIES" :value="category.id" :key="category.id">
+              {{ category.desc }}
+            </option>
+          </select>
+        </span>
+      </div>
+      <div class="param-item">
+        <label for="quantity">题数</label>
+        <span>
+          <input
+            id="quantity" name="quantity"
+            type="number" required="true"
+            min="1" step="1"
+            placeholder="练习题数..."
+            :value="quantity" @change="change_quantity">
+        </span>
+      </div>
+      <div class="param-item">
+        <label for="avoid-repeat">避免重复题</label>
+        <span>
+          <select
+            id="avoid-repeat" name="avoid-repeat"
+            title="避免重复题" :value="avoidRepeat" @change="change_avoid_repeat">
+            <option value="true">尽量避免</option>
+            <option value="false">不避免</option>
+          </select>
+        </span>
+      </div>
+      <div class="param-item">
+        <label for="generate-at-once">生成题目</label>
+        <span>
+          <select
+            id="generate-at-once" name="generate-at-once"
+            title="生成题目"
+            :value="generateAtOnce" @change="change_generate_at_once">
+            <option value="false">答题时生成</option>
+            <option value="true">开始时立即生成</option>
+          </select>
+        </span>
+      </div>
+      <hr class="my-2 h-1">
+      <ParamItem
+        v-for="(config, i) in paramsConfig" :key="`${categoryId}-${i}`"
+        :i="i" :config="config" :default="params.length > i ? params[i] : undefined">
+      </ParamItem>
+      <div class="text-right relative left-4 top-4">
+        <button class="btn bg-blue-500" type="submit">提交</button>
+      </div>
+    </form>
+  </div>
 </template>
 
 <style lang="scss">

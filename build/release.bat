@@ -14,7 +14,7 @@ call git add .
 call git commit -m %2
 call git tag %1
 call netlify deploy --prod -d dist --message %1
-call git push origin main && call gh release create %1 -t %1
+call git push origin main && echo Push successfully!
 goto end
 
 :warning

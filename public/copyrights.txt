@@ -95,11 +95,20 @@ https://github.com/vuejs/router
 Copyright (c) 2019-present Eduardo San Martin Morote
 License under MIT: https://github.com/vuejs/router/blob/main/LICENSE
 
----
-Pug
----
-https://github.com/pugjs/pug
-License under MIT: https://github.com/pugjs/pug#license
+------
+Vitest
+------
+https://github.com/vitest-dev/vitest
+Copyright (c) 2021-Present Anthony Fu <https://github.com/antfu>
+Copyright (c) 2021-Present Matias Capeletto <https://github.com/patak-dev>
+License under MIT: https://github.com/vitest-dev/vitest/blob/main/LICENSE
+
+-----
+jsdom
+-----
+https://github.com/jsdom/jsdom
+Copyright (c) 2010 Elijah Insua
+License under MIT: https://github.com/jsdom/jsdom/blob/master/LICENSE.txt
 
 ---------
 dart-sass
@@ -107,3 +116,10 @@ dart-sass
 https://github.com/sass/dart-sass
 Copyright (c) 2016, Google Inc.
 License under MIT: https://github.com/sass/dart-sass/blob/main/LICENSE
+
+----------------
+qrcode-generator
+----------------
+https://github.com/kazuhikoarase/qrcode-generator
+Copyright (c) 2009 Kazuhiko Arase
+License under MIT: https://github.com/kazuhikoarase/qrcode-generator/blob/master/LICENSE

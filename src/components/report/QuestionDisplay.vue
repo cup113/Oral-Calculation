@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Question } from '@/assets/question';
 
-import Duration from './Duration.vue';
+import Duration from '../Duration.vue';
 
 const props = defineProps<{
   question: Question,
@@ -19,20 +19,25 @@ const
 
 </script>
 
-<template lang="pug">
-div.question.inline-grid.text-lg.border-2
-  span.text-2xl.bg-blue-100 {{ number }}
-  span.text-2xl(:class="isCorrect ? 'bg-green-100' : 'bg-red-100'") {{ correctDisplay }}
-  span.break-keep.bg-cyan-100.px-1
-    Duration(:duration="duration")
-  span.bg-orange-100.px-1 {{ problem }}
-  span.text-green-700.bg-green-100.px-1 {{ correctAnswer }}
-  span.text-xs.text-red-700.bg-red-100.px-1
-    span.block.w-full(v-for="wrongAnswer in wrongAnswers") {{ wrongAnswer }}
+<template>
+  <div class="question-item inline-grid text-lg border-2">
+    <span class="text-2xl bg-blue-100">{{ number }}</span>
+    <span class="text-2xl" :class="isCorrect ? 'bg-green-100' : 'bg-red-100'">
+      {{ correctDisplay }}
+    </span>
+    <span class="break-keep bg-cyan-100 px-1">
+      <Duration :duration="duration"></Duration>
+    </span>
+    <span class="bg-orange-100 px-1">{{ problem }}</span>
+    <span class="text-green-700 bg-green-100 px-1">{{ correctAnswer }}</span>
+    <span class="text-xs text-red-700 bg-red-100 px-1">
+      <span class="block w-full" v-for="wrongAnswer in wrongAnswers">{{ wrongAnswer }}</span>
+    </span>
+  </div>
 </template>
 
 <style lang="scss">
-.question {
+.question-item {
   grid-template-areas:
     "number correct duration"
     "problem problem problem"

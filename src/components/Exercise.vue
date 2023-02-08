@@ -148,35 +148,40 @@ function submit_question(ev: Event): void {
 
 </script>
 
-<template lang="pug">
-div.exercise.pt-12
-  button.btn.bg-gray-700.absolute.left-6.top-4(type="button" @click="go_back") 返回
-  div.progress.mx-24.text-2xl
-    div.progress-bar.text-green-400.bg-blue-600(:style="{ '--ratio': passedRatio }")
-      | {{ passedCnt }} / {{ quantity }}
-  div.bg-gray-100.w-max.mx-auto.py-1.my-4
-    div.board-item
-      span 正确题数 / 已答题目
-      span {{ correctCnt }} / {{ passedCnt }}
-    div.board-item
-      span 错误回答数
-      span {{ wrongAnswerCnt }}
-    div.board-item
-      span 累计用时
-      span
-        Duration(:duration="accumulatedDuration")
-  form.text-2xl(@submit.prevent="submit_question")
-    div {{ currentQuestion.problem }}
-    div.main-qa-wrapper
-      input.answer.text-center.grow.border.break-keep(
-        type="text"
-        name="answer"
-        autocomplete="off"
-        placeholder="请在此处输入答案..."
-        ref="answerInput"
-      )
-      button.btn.bg-blue-500.w-max(type="submit") 提交
-  button.btn.bg-green-700(type="button" @click="start" v-if="!started") 开始
+<template>
+  <div class="exercise pt-12">
+    <button class="btn bg-gray-700 absolute left-6 top-4" type="button" @click="go_back">返回</button>
+    <div class="progress mx-24 text-2xl">
+      <div class="progress-bar text-green-400 bg-blue-600" :style="{ '--ratio': passedRatio }">
+        {{ passedCnt }} / {{ quantity }}
+      </div>
+    </div>
+    <div class="bg-gray-100 w-max mx-auto py-1 my-4">
+      <div class="board-item">
+        <span>正确题数 / 已答题目</span>
+        <span>{{ correctCnt }} / {{ passedCnt }}</span>
+      </div>
+      <div class="board-item">
+        <span>错误回答数</span>
+        <span>{{ wrongAnswerCnt }}</span>
+      </div>
+      <div class="board-item">
+        <span>累计用时</span>
+        <span>
+          <Duration :duration="accumulatedDuration"></Duration>
+        </span>
+      </div>
+    </div>
+    <form class="text-2xl" @submit.prevent="submit_question">
+      <div>{{ currentQuestion.problem }}</div>
+      <div class="px-2 py-2 flex flex-nowrap gap-1 lg:ml-24 lg:mr-12 sm:ml-12 sm:mr-2">
+        <input class="answer text-center grow border break-keep" type="text" name="answer"
+          autocomplete="off" placeholder="请在此处输入答案..." ref="answerInput">
+        <button class="btn bg-blue-500 w-max" type="submit">提交</button>
+      </div>
+    </form>
+    <button class="btn bg-green-700" type="button" @click="start" v-if="!started">开始</button>
+  </div>
 </template>
 
 <style lang="scss">
@@ -194,9 +199,5 @@ div.exercise.pt-12
       @apply w-32 text-blue-600 font-bold;
     }
   }
-}
-
-.exercise .main-qa-wrapper {
-  @apply px-2 py-2 flex flex-nowrap gap-1 lg:ml-24 lg:mr-12 sm:ml-12 sm:mr-2;
 }
 </style>

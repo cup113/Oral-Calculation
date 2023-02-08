@@ -5,7 +5,7 @@ import useQuestionStore from '@/store/question';
 import type { Milliseconds } from '@/assets/util';
 
 import Duration from './Duration.vue';
-import QuestionDisplay from './QuestionDisplay.vue';
+import QuestionDisplay from './report/QuestionDisplay.vue';
 
 const
   router = useRouter();
@@ -41,36 +41,42 @@ function go_to_share() {
 
 </script>
 
-<template lang="pug">
-div.report.pt-2
-  div.my-4
-    div.text-2xl.my-2 成绩单 - {{ title }}
-    div.report-item
-      span 生成时间
-      span {{ generatedTimeDisplay }}
-    div.report-item
-      span 正确率
-      span {{ correctCnt }} / {{ totalQuestions }} ({{ correctRateDisplay }})
-    div.report-item
-      span 错误次数
-      span {{ wrongAnswerCnt }}
-    div.report-item
-      span 用时
-      span
-        Duration.mx-1(:duration="accumulatedDuration")
-        | ( 题均
-        Duration.mx-1(:duration="avgDuration")
-        | )
-  div.mt-4.mx-12.flex.flex-wrap.content-center.justify-center.items-center.gap-x-6.gap-y-2
-    QuestionDisplay(
-      v-for="(question, i) in questions"
-      :key="i"
-      :question="question"
-      :i="i"
-    )
-  div.mt-8
-    button.btn.bg-gray-700.mr-4(type="button" @click="go_to_main_page") 返回主页
-    button.btn.bg-green-500(type="button" @click="go_to_share") 分享
+<template>
+  <div class="report pt-2">
+    <div class="my-4">
+      <div class="text-2xl my-2">成绩单 - {{ title }}</div>
+      <div class="report-item">
+        <span>生成时间</span>
+        <span>{{ generatedTimeDisplay }}</span>
+      </div>
+      <div class="report-item">
+        <span>正确率</span>
+        <span>{{ correctCnt }} / {{ totalQuestions }} ({{ correctRateDisplay }})</span>
+      </div>
+      <div class="report-item">
+        <span>错误次数</span>
+        <span>{{ wrongAnswerCnt }}</span>
+      </div>
+      <div class="report-item">
+        <span>用时</span>
+        <span>
+          <Duration class="mx-1" :duration="accumulatedDuration"></Duration>
+          (题均
+          <Duration class="mx-1" :duration="avgDuration"></Duration>
+          )
+        </span>
+      </div>
+    </div>
+    <div
+      class="mt-4 mx-12 flex flex-wrap content-center justify-center items-center gap-x-6 gap-y-2">
+      <QuestionDisplay v-for="(question, i) in questions" :key="i" :question="question" :i="i">
+      </QuestionDisplay>
+    </div>
+    <div class="mt-8">
+      <button class="btn bg-gray-700 mr-4" type="button" @click="go_to_main_page">返回主页</button>
+      <button class="btn bg-green-500" type="button" @click="go_to_share">分享</button>
+    </div>
+  </div>
 </template>
 
 <style lang="scss">

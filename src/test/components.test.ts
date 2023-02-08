@@ -1,18 +1,10 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from 'vitest';
-import { render, createVNode, createApp } from 'vue';
+import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import router from '@/router';
 
 import AppVue from "@/App.vue";
-import CustomizedFooterVue from "@/components/CustomizedFooter.vue";
-import DurationVue from "@/components/Duration.vue";
-import ExerciseVue from "@/components/Exercise.vue";
-import ParamItemVue from "@/components/ParamItem.vue";
-import QuestionDisplayVue from "@/components/QuestionDisplay.vue";
-import WelcomeVue from "@/components/Welcome.vue";
-import PrettierReportVue from '@/components/ReportShare.vue';
-import PrintQuestionsVue from '@/components/QuestionsPrint.vue';
 
 let el = document.createElement("div");
 const app = createApp(AppVue);

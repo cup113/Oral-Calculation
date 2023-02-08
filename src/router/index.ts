@@ -3,7 +3,6 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import WelcomeVue from '@/components/Welcome.vue';
 import ExerciseVue from "@/components/Exercise.vue";
 import ReportVue from '@/components/Report.vue';
-import ReportShareVue from '@/components/ReportShare.vue';
 
 export default createRouter({
   history: createWebHashHistory(),
@@ -27,7 +26,7 @@ export default createRouter({
     },
     {
       path: "/report-share",
-      component: ReportShareVue,
+      component: () => import('@/components/ReportShare.vue'),
     },
     {
       path: "/print-question",

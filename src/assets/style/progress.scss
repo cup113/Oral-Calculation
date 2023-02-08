@@ -6,6 +6,6 @@
   .progress-bar {
     @apply whitespace-nowrap overflow-visible rounded-2xl;
     width: calc(var(--ratio) * 100%);
-    transition: width 1s ease-in-out;
+    transition: width 0.75s ease-in-out;
   }
 }

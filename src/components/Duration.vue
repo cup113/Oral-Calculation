@@ -22,11 +22,14 @@ const
 
 </script>
 
-<template lang="pug">
-span.duration
-  template(v-if="seconds == 0")
-    span.text-sm {{ millisecondsDisplay }}毫秒
-  template(v-else)
-    span {{ seconds }}秒
-    span.text-xs.opacity-75 {{ millisecondsDisplay }}毫秒
+<template>
+  <span class="duration">
+    <template v-if="seconds == 0">
+      <span class="text-sm">{{ millisecondsDisplay }}毫秒</span>
+    </template>
+    <template v-else>
+      <span>{{ seconds }}秒</span>
+      <span class="text-xs opacity-75">{{ millisecondsDisplay }}毫秒</span>
+    </template>
+  </span>
 </template>

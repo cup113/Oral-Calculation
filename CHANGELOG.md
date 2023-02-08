@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning].
 
 - Developing
 
+## [0.4.0] - 2023-02-08
+
+### Added
+
+- [#6] 增加了生成报告分享功能。
+- 完善 `README` 说明文档。
+
+### Changed
+
+- 修改架构，弃用 `Pug` 改用 `HTML`。
+- 优化练习界面部分样式。
+
 ## [0.3.1] - 2023-02-07
 
 ### Changed
@@ -45,28 +57,29 @@ and this project adheres to [Semantic Versioning].
 
 ### Added
 
-- [#7] [#8] 增加“避免重复题”（`avoidRepeat`）和“生成题目”（`generateAtOnce`）设置
+- [#7] [#8] 增加“避免重复题”（`avoidRepeat`）和“生成题目”（`generateAtOnce`）设置。
 - [#3] 增加了 `localStorage` 数据存取时的有效性检查
-- 增加了 Pinia store 和 Vue 组件测试
+- 增加了 Pinia store 和 Vue 组件测试。
 
 ### Changed
 
-- [#3] 重构设置系统
-- 重构练习数据存储，将逻辑从 Vue 组件中提取到 Pinia store 中
-- 优化按钮 UI 界面
-- 优化提示信息
-- 改变`localStorage`中存储数据的方式
+- [#3] 重构设置系统。
+- 重构练习数据存储，将逻辑从 Vue 组件中提取到 Pinia store 中。
+- 优化按钮 UI 界面。
+- 优化提示信息。
+- 改变`localStorage`中存储数据的方式。
 
 ## [0.2.0] - 2023-02-02
 
-Initial release version
+第一版发行版本。
 
 <!-- Links -->
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.3.1..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.4.0..HEAD
+[0.4.0]: https://github.com/cup113/Oral-Calculation/compare/v0.3.1..v0.4.0
 [0.3.1]: https://github.com/cup113/Oral-Calculation/compare/v0.3.0..v0.3.1
 [0.3.0]: https://github.com/cup113/Oral-Calculation/compare/v0.2.1..v0.3.0
 [0.2.1]: https://github.com/cup113/Oral-Calculation/compare/7461c35de227dd6afaa50cec66fa5fa8e9deeab4..v0.2.1
@@ -74,6 +87,7 @@ Initial release version
 
 <!--Issues-->
 [#3]: https://github.com/cup113/Oral-Calculation/issues/3
+[#6]: https://github.com/cup113/Oral-Calculation/issues/6
 [#7]: https://github.com/cup113/Oral-Calculation/issues/7
 [#8]: https://github.com/cup113/Oral-Calculation/issues/8
 [#9]: https://github.com/cup113/Oral-Calculation/issues/9
