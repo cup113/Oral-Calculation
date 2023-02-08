@@ -16,3 +16,15 @@ export function bool_to_string(value: boolean): 'true' | 'false' {
 export function string_to_bool(value: string): boolean {
   return value === 'true';
 }
+
+/** Basic getter for `localStorage`.
+ * @returns the value of `key` in `localStorage`. If null, return `defaultValue`.
+ */
+export function storage_get(key: string, defaultValue: string): string {
+  return localStorage.getItem(key) ?? defaultValue;
+}
+
+/** Basic setter for `localStorage`. */
+export function storage_set(key: string, value: string) {
+  localStorage.setItem(key, value);
+}

@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-import { PARAMS_SEP, bool_to_string, string_to_bool } from '@/assets/util';
-import { CATEGORIES, CategoryId } from '@/assets/question';
+import { PARAMS_SEP, bool_to_string, string_to_bool, storage_get, storage_set } from '@/util';
+import { CATEGORIES, CategoryId } from '@/question';
 
 export default defineStore("setting", () => {
-  /** The keys of localStorage */
-  const enum LocalStorageKeys {
+  /** The keys of localStorage. */
+  const enum SettingStorageKeys {
     /** Default category. The id string of the category. */
     CategoryId = "OC_CategoryId",
     /** Default quantity. A decimal number. */
@@ -17,18 +17,6 @@ export default defineStore("setting", () => {
     AvoidRepeat = "OC_AvoidRepeat",
     /** If generate the questions as soon as the provider loaded. */
     GenerateAtOnce = "OC_GenerateAtOnce",
-  }
-
-  /** Basic getter for `localStorage`.
-   * @returns the value of `key` in `localStorage`. If null, return `defaultValue`.
-   */
-  function storage_get(key: string, defaultValue: string): string {
-    return localStorage.getItem(key) ?? defaultValue;
-  }
-
-  /** Basic setter for `localStorage`. */
-  function storage_set(key: string, value: string) {
-    localStorage.setItem(key, value);
   }
 
   const
@@ -43,7 +31,7 @@ export default defineStore("setting", () => {
       return !CATEGORIES.every(c => c.id !== _category);
     },
     get(): CategoryId {
-      let ans = storage_get(LocalStorageKeys.CategoryId, categoryId.value);
+      let ans = storage_get(SettingStorageKeys.CategoryId, categoryId.value);
       if (this.validate(ans))
         return ans;
       return categoryId.value;
@@ -51,7 +39,7 @@ export default defineStore("setting", () => {
     set(_category: string): _category is CategoryId {
       if (this.validate(_category)) {
         categoryId.value = _category;
-        storage_set(LocalStorageKeys.CategoryId, _category);
+        storage_set(SettingStorageKeys.CategoryId, _category);
         return true;
       }
       return false;
@@ -66,7 +54,7 @@ export default defineStore("setting", () => {
       return value >= MIN_QUANTITY;
     },
     get(): number {
-      let value = parseInt(storage_get(LocalStorageKeys.Quantity, quantity.value.toString()));
+      let value = parseInt(storage_get(SettingStorageKeys.Quantity, quantity.value.toString()));
       if (this.validate(value))
         return value;
       return quantity.value;
@@ -75,7 +63,7 @@ export default defineStore("setting", () => {
       let value = parseInt(_quantity);
       if (this.validate(value)) {
         quantity.value = value;
-        storage_set(LocalStorageKeys.Quantity, _quantity);
+        storage_set(SettingStorageKeys.Quantity, _quantity);
         return true;
       }
       return false;
@@ -90,39 +78,39 @@ export default defineStore("setting", () => {
     },
     get(): string[] {
       return this.filter_empty(storage_get(
-        `${LocalStorageKeys.Params}_${categoryId.value}`,
+        `${SettingStorageKeys.Params}_${categoryId.value}`,
         params.value.join(PARAMS_SEP)
       ).split(PARAMS_SEP));
     },
     set(_params: string): void {
       params.value = this.filter_empty(_params.split(PARAMS_SEP));
-      storage_set(`${LocalStorageKeys.Params}_${categoryId.value}`, _params);
+      storage_set(`${SettingStorageKeys.Params}_${categoryId.value}`, _params);
     }
   };
 
   const avoidRepeatManager = {
     get(): boolean {
       return string_to_bool(storage_get(
-        LocalStorageKeys.AvoidRepeat, bool_to_string(avoidRepeat.value)
+        SettingStorageKeys.AvoidRepeat, bool_to_string(avoidRepeat.value)
       ));
     },
     set(_avoidRepeat: string): void {
       let value = string_to_bool(_avoidRepeat);
       avoidRepeat.value = value;
-      storage_set(LocalStorageKeys.AvoidRepeat, _avoidRepeat);
+      storage_set(SettingStorageKeys.AvoidRepeat, _avoidRepeat);
     }
   };
 
   const generateAtOnceManager = {
     get(): boolean {
       return string_to_bool(storage_get(
-        LocalStorageKeys.GenerateAtOnce, bool_to_string(generateAtOnce.value)
+        SettingStorageKeys.GenerateAtOnce, bool_to_string(generateAtOnce.value)
       ));
     },
     set(_generateAtOnce: string): void {
       let value = string_to_bool(_generateAtOnce);
       generateAtOnce.value = value;
-      storage_set(LocalStorageKeys.GenerateAtOnce, _generateAtOnce);
+      storage_set(SettingStorageKeys.GenerateAtOnce, _generateAtOnce);
     }
   };
 

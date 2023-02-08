@@ -6,6 +6,7 @@ specifiers:
   '@vitest/coverage-c8': ^0.28.4
   autoprefixer: ^10.4.13
   big-integer: ^1.6.51
+  js-file-downloader: ^1.1.24
   jsdom: ^21.1.0
   pinia: ^2.0.30
   postcss: ^8.4.21
@@ -26,6 +27,7 @@ devDependencies:
   '@vitest/coverage-c8': registry.npmmirror.com/@vitest/coverage-c8/0.28.4_jsdom@21.1.0+sass@1.58.0
   autoprefixer: registry.npmmirror.com/autoprefixer/10.4.13_postcss@8.4.21
   big-integer: registry.npmmirror.com/big-integer/1.6.51
+  js-file-downloader: registry.npmmirror.com/js-file-downloader/1.1.24
   jsdom: registry.npmmirror.com/jsdom/21.1.0
   pinia: registry.npmmirror.com/pinia/2.0.30_hmuptsblhheur2tugfgucj7gc4
   postcss: registry.npmmirror.com/postcss/8.4.21
@@ -1595,6 +1597,12 @@ packages:
     dependencies:
       html-escaper: registry.npmmirror.com/html-escaper/2.0.2
       istanbul-lib-report: registry.npmmirror.com/istanbul-lib-report/3.0.0
+    dev: true
+
+  registry.npmmirror.com/js-file-downloader/1.1.24:
+    resolution: {integrity: sha512-DbOKEtofflVV8DfdFEkkykJQW1jWXT56+G2dC6dn1tLGRHjoVsdMpYKKyxQb/jJv2CGNxuTvMTpPmqYEf+LTGA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/js-file-downloader/-/js-file-downloader-1.1.24.tgz}
+    name: js-file-downloader
+    version: 1.1.24
     dev: true
 
   registry.npmmirror.com/jsdom/21.1.0:

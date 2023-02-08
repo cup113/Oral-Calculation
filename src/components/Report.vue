@@ -2,9 +2,9 @@
 import { useRouter } from 'vue-router';
 
 import useQuestionStore from '@/store/question';
-import type { Milliseconds } from '@/assets/util';
+import type { Milliseconds } from '@/util';
 
-import Duration from './Duration.vue';
+import Duration from '../assets/components/Duration.vue';
 import QuestionDisplay from './report/QuestionDisplay.vue';
 
 const
@@ -58,13 +58,12 @@ function go_to_share() {
         <span>{{ wrongAnswerCnt }}</span>
       </div>
       <div class="report-item">
-        <span>用时</span>
-        <span>
-          <Duration class="mx-1" :duration="accumulatedDuration"></Duration>
-          (题均
-          <Duration class="mx-1" :duration="avgDuration"></Duration>
-          )
-        </span>
+        <span>总计用时</span>
+        <span><Duration class="ml-2" :duration="accumulatedDuration"></Duration></span>
+      </div>
+      <div class="report-item">
+        <span>题均用时</span>
+        <span><Duration class="ml-2" :duration="avgDuration"></Duration></span>
       </div>
     </div>
     <div

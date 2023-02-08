@@ -1,4 +1,3 @@
-import bigInt from 'big-integer';
 import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 class PowQuestionProvider implements QuestionProvider {
@@ -13,7 +12,7 @@ class PowQuestionProvider implements QuestionProvider {
   }
 
   public get_question(): Question {
-    const { Question, minmax_big_int, rand_between, rand_between_big_int } = this.context;
+    const { Question, minmax_big_int, rand_between, rand_between_big_int, bigInt } = this.context;
     while (true) {
       let
         exponent = rand_between(2, this.maxExponent),

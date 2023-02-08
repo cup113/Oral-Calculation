@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ParamConfig } from '@/assets/question';
+import type { ParamConfig } from '@/question';
 import { computed } from 'vue';
 
 const props = defineProps<{

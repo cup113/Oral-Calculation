@@ -4,16 +4,17 @@
 [![GitHub repo size](https://img.shields.io/github/languages/code-size/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
 [![Version](https://img.shields.io/github/package-json/v/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
 [![MIT License](https://img.shields.io/github/license/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
-![Code Coverage](https://img.shields.io/badge/coverage-82%25-yellowgreen)
+![Code Coverage](https://img.shields.io/badge/coverage-90%25-yellowgreen)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7c1fcffe-fbe5-42a6-a8ac-bbd05641bc58/deploy-status)](https://app.netlify.com/sites/oral-calculation/deploys)
 
 ## 使用说明
 
-本产品由 **4** 个界面组成：
+本产品由 **5** 个界面组成：
 
 ### 开始界面 (Welcome)
 
 > 由于设置会自动保存，除初次进入外，前三步执行根据是否需要更改而定。
+> 也可点击左上角“错题本”按钮进入[错题本界面](#错题本界面-mistakes-collection)。
 
 1. 选择“类别”。
 2. 对“题数”“避免重复题”“生成题目”等项进行配置。
@@ -41,6 +42,13 @@
 ### 报告分享界面 (Report Share)
 
 可截屏保存，然后点击“返回主页”回到[开始界面](#开始界面-welcome)。
+
+### 错题本界面 (Mistakes Collection)
+
+1. 在此处可看到所有历史错题。**此功能暂不完善**，在题数多时可能有性能问题，并没有单独删除错题的功能。
+2. 可点击“返回主页”回到[开始界面](#开始界面-welcome)。
+3. 点击“导出记录”可将错题以 `.json` 文件格式导出。（可能需要等待一段时间）
+4. 遇到性能问题或导出完毕后，可点击“清空错题本”清空所有历史错题。
 
 ## 产品特色
 

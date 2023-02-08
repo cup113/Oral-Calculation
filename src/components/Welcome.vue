@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
-import { CATEGORIES } from '@/assets/question/index';
+import { CATEGORIES } from '@/question';
 import useQuestionStore from '@/store/question';
 import useSettingStore from '@/store/setting';
 
@@ -19,6 +19,10 @@ const
   paramsConfig = computed(() => {
     return questionModule.value.paramsConfig;
   });
+
+function go_to_mistakes_collection() {
+  router.push("/mistakes-collection");
+}
 
 function submit_form(ev: Event): void {
   const data = new FormData(ev.target as HTMLFormElement);
@@ -49,8 +53,11 @@ function change_generate_at_once(ev: Event) {
 </script>
 
 <template>
-  <div class="welcome">
-    <h2 class="text-3xl font-bold py-4">欢迎来到口算练习</h2>
+  <div class="welcome pt-8 sm:pt-0">
+    <button type="button"
+      class="btn bg-yellow-700 absolute left-4 top-4"
+      @click="go_to_mistakes_collection">错题本</button>
+    <h2 class="text-2xl font-bold py-4">欢迎来到口算练习</h2>
     <form class="w-max mx-auto text-lg" @submit.prevent="submit_form">
       <div class="param-item">
         <label for="category">类别</label>
@@ -103,7 +110,7 @@ function change_generate_at_once(ev: Event) {
         :i="i" :config="config" :default="params.length > i ? params[i] : undefined">
       </ParamItem>
       <div class="text-right relative left-4 top-4">
-        <button class="btn bg-blue-500" type="submit">提交</button>
+        <button class="btn bg-blue-500" type="submit">开始练习</button>
       </div>
     </form>
   </div>

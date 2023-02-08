@@ -1,4 +1,3 @@
-import type bigInt from 'big-integer';
 import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 class PffQuestionProvider implements QuestionProvider {

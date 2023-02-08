@@ -6,6 +6,7 @@ import { createPinia } from 'pinia';
 
 import useSettingStore from '@/store/setting';
 import useQuestionStore from '@/store/question';
+import useMistakesStore from '@/store/mistakes';
 
 import App from '@/App.vue';
 
@@ -31,3 +32,9 @@ describe("store-question", () => {
   it.todo("update-question", () => {});
   it.todo("answer-current-question", () => {});
 });
+
+describe("store-mistakes", () => {
+  const store = useMistakesStore();
+
+  it.todo("");
+})

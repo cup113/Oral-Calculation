@@ -1,16 +1,16 @@
 import { describe, it, expect, assert } from 'vitest';
 
-import * as question from '@/assets/question';
-import loading from '@/assets/question/loading';
-import add from '@/assets/question/add';
-import sub from '@/assets/question/sub';
-import add_sub from '@/assets/question/add-sub';
-import mul from '@/assets/question/mul';
-import div from '@/assets/question/div';
-import pow from '@/assets/question/pow';
-import pff from '@/assets/question/pff';
-import disc2 from '@/assets/question/disc-2';
-import sqrt from '@/assets/question/sqrt';
+import * as question from '@/question';
+import loading from '@/question/loading';
+import add from '@/question/add';
+import sub from '@/question/sub';
+import add_sub from '@/question/add-sub';
+import mul from '@/question/mul';
+import div from '@/question/div';
+import pow from '@/question/pow';
+import pff from '@/question/pff';
+import disc2 from '@/question/disc-2';
+import sqrt from '@/question/sqrt';
 
 const { QUESTION_CONTEXT: context } = question;
 const { bigInt } = context;

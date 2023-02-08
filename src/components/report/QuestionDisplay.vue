@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import type { Question } from '@/assets/question';
+import type { Question } from '@/question';
 
-import Duration from '../Duration.vue';
+import Duration from '../../assets/components/Duration.vue';
 
 const props = defineProps<{
   question: Question,

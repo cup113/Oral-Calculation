@@ -2,8 +2,8 @@
 
 import bigInt from 'big-integer';
 
-import type { Milliseconds } from '@/assets/util';
-import { empty_array } from '@/assets/util';
+import type { Milliseconds } from '@/util';
+import { empty_array } from '@/util';
 import LoadingQuestion from './loading';
 
 /** Ids of categories. Used in select value, module getting, etc. */

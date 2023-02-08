@@ -4,11 +4,11 @@ import { computed, ref, watch, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import Message from 'vue-m-message';
 
-import { QUESTION_CONTEXT } from '@/assets/question';
+import { QUESTION_CONTEXT } from '@/question';
 import useQuestionStore from '@/store/question';
 import useSettingStore from '@/store/setting';
 
-import Duration from './Duration.vue';
+import Duration from '../assets/components/Duration.vue';
 
 onMounted(() => {
   answerInput.value!.focus();
@@ -93,6 +93,11 @@ function end(): void {
 
 function go_back(): void {
   router.push("/");
+}
+
+function go_to_print_page(): void {
+  alert("此功能暂未完成");
+  // router.push("/print-question");
 }
 
 function warn_loading(): void {
@@ -180,7 +185,10 @@ function submit_question(ev: Event): void {
         <button class="btn bg-blue-500 w-max" type="submit">提交</button>
       </div>
     </form>
-    <button class="btn bg-green-700" type="button" @click="start" v-if="!started">开始</button>
+    <div v-if="!started">
+      <button class="btn bg-green-700" type="button" @click="start">开始</button>
+      <button class="btn bg-gray-500 ml-2" @click="go_to_print_page">打印</button>
+    </div>
   </div>
 </template>
 

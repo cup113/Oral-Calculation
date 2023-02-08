@@ -1,4 +1,4 @@
-import { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
+import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
 
 type Sign = '+' | '-';
 

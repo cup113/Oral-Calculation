@@ -37,12 +37,12 @@ const
       durationArray[durationArray.length - oneFifth]
     ];
   })(),
-  durationDistribution = {
+  durationDistribution = Object.freeze({
     min: durationArray[0],
     max: durationArray[durationArray.length - 1],
     fast: fastDuration,
     slow: slowDuration
-  },
+  }),
   qrImg = (() => {
     const qr = qrcode(0, 'M');
     qr.addData(location.host + location.pathname);

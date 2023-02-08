@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning].
 
 - Developing
 
+## [0.4.1] - 2023-02-08
+
+### Added
+
+- [#15] 增加了错题本功能。
+
+### Changed
+
+- 优化了文件结构。
+- 更改了报告界面的用时展示。
+- 取消了报告分享界面数据的响应式以改善性能。
+- 更改了报告界面的颜色设计。
+
 ## [0.4.0] - 2023-02-08
 
 ### Added
@@ -67,18 +80,19 @@ and this project adheres to [Semantic Versioning].
 - 重构练习数据存储，将逻辑从 Vue 组件中提取到 Pinia store 中。
 - 优化按钮 UI 界面。
 - 优化提示信息。
-- 改变`localStorage`中存储数据的方式。
+- 改变了 `localStorage` 中存储数据的方式。
 
 ## [0.2.0] - 2023-02-02
 
-第一版发行版本。
+第一版正式发行版本。
 
 <!-- Links -->
 [keep a changelog]: https://keepachangelog.com/en/1.0.0/
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.4.0..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.4.1..HEAD
+[0.4.1]: https://github.com/cup113/Oral-Calculation/compare/v0.4.0..v0.4.1
 [0.4.0]: https://github.com/cup113/Oral-Calculation/compare/v0.3.1..v0.4.0
 [0.3.1]: https://github.com/cup113/Oral-Calculation/compare/v0.3.0..v0.3.1
 [0.3.0]: https://github.com/cup113/Oral-Calculation/compare/v0.2.1..v0.3.0
@@ -94,3 +108,4 @@ and this project adheres to [Semantic Versioning].
 [#10]: https://github.com/cup113/Oral-Calculation/issues/10
 [#11]: https://github.com/cup113/Oral-Calculation/issues/11
 [#12]: https://github.com/cup113/Oral-Calculation/issues/12
+[#15]: https://github.com/cup113/Oral-Calculation/issues/12

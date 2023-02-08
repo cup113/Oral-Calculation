@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import type { Milliseconds } from '@/assets/util';
-import { empty_array } from '@/assets/util';
+import type { Milliseconds } from '@/util';
+import { empty_array } from '@/util';
 
 const props = defineProps<{
   duration: Milliseconds
@@ -13,10 +13,8 @@ const
   milliseconds = computed(() => props.duration % 1000),
   millisecondsDisplay = computed(() => {
     let res = milliseconds.value.toFixed(0);
-    if (seconds.value > 0) {
-      let l = 3 - res.length;
-      res = empty_array(Math.max(l, 0)).join("") + res;
-    }
+    if (seconds.value > 0)
+      res = res.padStart(3, '0');
     return res;
   });
 

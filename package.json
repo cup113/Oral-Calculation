@@ -1,6 +1,6 @@
 {
   "name": "oral-calculation",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "scripts": {
     "dev": "vite",
     "ts-check": "vue-tsc --noEmit",
@@ -16,6 +16,7 @@
     "@vitest/coverage-c8": "^0.28.4",
     "autoprefixer": "^10.4.13",
     "big-integer": "^1.6.51",
+    "js-file-downloader": "^1.1.24",
     "jsdom": "^21.1.0",
     "pinia": "^2.0.30",
     "postcss": "^8.4.21",

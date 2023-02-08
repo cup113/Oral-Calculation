@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { Question } from '@/assets/question';
-import type { Milliseconds } from '@/assets/util';
+import type { Question } from '@/question';
+import type { Milliseconds } from '@/util';
 
 const props = defineProps<{
   question: Question,
@@ -31,7 +31,7 @@ const
   <div class="question-share-item rounded-xl my-1 flex relative">
     <div
       class="bar absolute rounded-xl h-full"
-      :class="['bg-cyan-500', 'bg-green-500', 'bg-orange-500', 'bg-red-500'][progressColorIndex]"
+      :class="['bg-cyan-400', 'bg-green-600', 'bg-orange-600', 'bg-red-500'][progressColorIndex]"
       :style="{ '--ratio': ratio }">
     </div>
     <span class="w-8 text-center text-white z-0">{{ serialNum }}</span>

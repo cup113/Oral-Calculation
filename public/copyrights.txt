@@ -60,6 +60,20 @@ Copyright (c) 2018 lanyueos@qq.com
 License under MIT: https://github.com/mengdu/m-message/blob/master/LICENSE
 
 
+------------------
+js-file-downloader
+------------------
+https://github.com/AleeeKoi/js-file-downloader
+Copyright (c) 2019 Alessandro Pellizzari
+License under MIT: https://github.com/AleeeKoi/js-file-downloader/blob/master/LICENSE
+
+----------------
+qrcode-generator
+----------------
+https://github.com/kazuhikoarase/qrcode-generator
+Copyright (c) 2009 Kazuhiko Arase
+License under MIT: https://github.com/kazuhikoarase/qrcode-generator/blob/master/LICENSE
+
 ------------
 Tailwind CSS
 ------------
@@ -116,10 +130,3 @@ dart-sass
 https://github.com/sass/dart-sass
 Copyright (c) 2016, Google Inc.
 License under MIT: https://github.com/sass/dart-sass/blob/main/LICENSE
-
-----------------
-qrcode-generator
-----------------
-https://github.com/kazuhikoarase/qrcode-generator
-Copyright (c) 2009 Kazuhiko Arase
-License under MIT: https://github.com/kazuhikoarase/qrcode-generator/blob/master/LICENSE

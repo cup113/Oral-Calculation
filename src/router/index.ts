@@ -33,6 +33,10 @@ export default createRouter({
       component: () => import('@/components/QuestionsPrint.vue'),
     },
     {
+      path: "/mistakes-collection",
+      component: () => import('@/components/MistakesCollection.vue'),
+    },
+    {
       path: "/:PathMatch(.*)", // 404
       redirect: "/"
     }

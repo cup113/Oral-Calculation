@@ -1,12 +1,13 @@
 import Message from 'vue-m-message';
 
 import { defineStore, storeToRefs } from "pinia";
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, reactive } from 'vue';
 
-import type { Milliseconds } from '@/assets/util';
-import { QUESTION_CONTEXT, Question, QuestionModule, get_module, AnswerResult } from '@/assets/question/index';
-import LoadingQuestion from '@/assets/question/loading';
+import type { Milliseconds } from '@/util';
+import { QUESTION_CONTEXT, Question, QuestionModule, get_module, AnswerResult } from '@/question';
+import LoadingQuestion from '@/question/loading';
 import useSettingStore from './setting';
+import useMistakesStore from './mistakes';
 
 export default defineStore("question", () => {
   const {
@@ -16,9 +17,10 @@ export default defineStore("question", () => {
     avoidRepeat,
     generateAtOnce
   } = storeToRefs(useSettingStore());
+  const { append_mistake } = useMistakesStore();
 
   const
-    questions = ref([] as Question[]),
+    questions = reactive([] as Question[]),
     existProblems = ref(new Set() as Set<string>),
     questionModule = ref(LoadingQuestion as QuestionModule),
     loaded = computed(() => questionModule.value.id !== 'loading'),
@@ -83,7 +85,7 @@ export default defineStore("question", () => {
   }
 
   function reset_questions() {
-    questions.value.splice(0, questions.value.length);
+    questions.splice(0, questions.length);
     existProblems.value.clear();
     passedCnt.value = 0;
     correctCnt.value = 0;
@@ -112,13 +114,13 @@ export default defineStore("question", () => {
   }
 
   function add_question() {
-    questions.value.push(get_question());
+    questions.push(get_question());
   }
 
   function update_question() {
     if (!generateAtOnce.value)
       add_question();
-    currentQuestion.value = questions.value[passedCnt.value];
+    currentQuestion.value = questions[passedCnt.value];
   }
 
   /**
@@ -135,6 +137,10 @@ export default defineStore("question", () => {
         passedCnt.value += 1;
         if (currentQuestion.value.is_first_time_correct())
           correctCnt.value += 1;
+        else {
+          for (let i = 0; i < 30; ++i) // TODO remove
+            append_mistake(currentQuestion.value);
+        }
         return true;
       case AnswerResult.WrongEmpty:
         currentQuestionDuration.value = currentQuestion.value.get_elapsed();
