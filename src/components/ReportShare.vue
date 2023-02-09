@@ -45,7 +45,7 @@ const
   }),
   qrImg = (() => {
     const qr = qrcode(0, 'M');
-    qr.addData(location.host + location.pathname);
+    qr.addData(`${location.protocol}//${location.host}${location.pathname}`);
     qr.make();
     return qr.createImgTag();
   })();

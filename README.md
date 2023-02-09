@@ -4,12 +4,12 @@
 [![GitHub repo size](https://img.shields.io/github/languages/code-size/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
 [![Version](https://img.shields.io/github/package-json/v/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
 [![MIT License](https://img.shields.io/github/license/cup113/Oral-Calculation)](https://github.com/cup113/Oral-Calculation)
-![Code Coverage](https://img.shields.io/badge/coverage-90%25-yellowgreen)
+![Code Coverage](https://img.shields.io/badge/coverage-90%25-green)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7c1fcffe-fbe5-42a6-a8ac-bbd05641bc58/deploy-status)](https://app.netlify.com/sites/oral-calculation/deploys)
 
 ## 使用说明
 
-本产品由 **5** 个界面组成：
+本产品由 **6** 个界面组成：
 
 ### 开始界面 (Welcome)
 
@@ -27,7 +27,7 @@
 >
 > 为了防止多次重复，以下所有`Enter`均指在键盘上敲击回车键，或在手机/平板屏幕上点击输入法的“开始”“发送”等键。
 
-1. 点击“开始”按钮或敲击`Enter`以开始答题。
+1. 点击“开始”按钮或敲击`Enter`以开始答题，或点击“打印”进入[打印界面](#打印界面-print-questions)。
 2. 根据题目输入答案，并点击“提交”或敲击`Enter`
 3. 接下来的操作根据是否回答正确而定：
    - **若回答正确**，右下角会弹出提示窗口（手机/平板不一定看得到，可观察最上方进度条是否移动，移动说明答对），进入下一步。
@@ -49,6 +49,12 @@
 2. 可点击“返回主页”回到[开始界面](#开始界面-welcome)。
 3. 点击“导出记录”可将错题以 `.json` 文件格式导出。（可能需要等待一段时间）
 4. 遇到性能问题或导出完毕后，可点击“清空错题本”清空所有历史错题。
+
+## 打印界面 (Print Questions)
+
+> 注：Windows 10/11 系统自带 `Microsoft Print to PDF` 打印驱动，在这里可将答案打印到 PDF 文件中。
+
+**此功能暂不完善**，点击“打印题目”可打印问题，“打印答案”可打印标准答案。
 
 ## 产品特色
 

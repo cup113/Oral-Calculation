@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import Message from 'vue-m-message';
 
-import { CATEGORIES } from '@/question';
+import { CATEGORIES, CategoryId } from '@/question';
 import useQuestionStore from '@/store/question';
 import useSettingStore from '@/store/setting';
 
@@ -26,6 +27,10 @@ function go_to_mistakes_collection() {
 
 function submit_form(ev: Event): void {
   const data = new FormData(ev.target as HTMLFormElement);
+  if (data.get("category") === CategoryId.Null) {
+    Message.warning("请选择类别");
+    return;
+  }
   let params: string[] = new Array(paramsConfig.value.length);
   data.forEach((value, key) => {
     if (key.startsWith("param-"))

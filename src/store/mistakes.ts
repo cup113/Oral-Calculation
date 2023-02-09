@@ -47,8 +47,11 @@ export default defineStore("mistakes", () => {
       let mistakeQuestions = JSON.parse(storage_get(
         key, "[]"
       )) as MistakeQuestion[];
-      if (localStorage.getItem(key) === null)
+      if (localStorage.getItem(key) === null) {
         ++itemsCount;
+        key = `${MistakesStorageKeys.Questions}_${itemsCount}`;
+        storage_set(MistakesStorageKeys.Count, itemsCount.toString());
+      }
       let q: MistakeQuestion = {
         problem: mistake.problem,
         correctAnswer: mistake.correctAnswer,
@@ -57,10 +60,10 @@ export default defineStore("mistakes", () => {
         wrongAnswers: [...mistake.wrongAnswers],
       }
       if (mistakeQuestions.length >= MISTAKE_BUCKET) {
-        // key changed
         ++itemsCount;
+        key = `${MistakesStorageKeys.Questions}_${itemsCount}`;
         storage_set(MistakesStorageKeys.Count, itemsCount.toString());
-        storage_set(`${MistakesStorageKeys.Questions}_${itemsCount}`, JSON.stringify([q]));
+        storage_set(key, JSON.stringify([q]));
       } else {
         mistakeQuestions.push(q);
         storage_set(key, JSON.stringify(mistakeQuestions));

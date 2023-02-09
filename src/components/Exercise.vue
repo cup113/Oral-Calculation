@@ -96,8 +96,7 @@ function go_back(): void {
 }
 
 function go_to_print_page(): void {
-  alert("此功能暂未完成");
-  // router.push("/print-question");
+  router.push("/print-question");
 }
 
 function warn_loading(): void {

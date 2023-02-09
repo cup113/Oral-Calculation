@@ -84,7 +84,7 @@ export default defineStore("question", () => {
     return "";
   }
 
-  function reset_questions() {
+  function reset_questions(fillAll?: boolean) {
     questions.splice(0, questions.length);
     existProblems.value.clear();
     passedCnt.value = 0;
@@ -92,7 +92,7 @@ export default defineStore("question", () => {
     wrongAnswerCnt.value = 0;
     currentQuestionDuration.value = 0;
     passedQuestionsDuration.value = 0;
-    if (generateAtOnce.value) {
+    if (fillAll ?? generateAtOnce.value) {
       for (let i = 0; i < quantity.value; ++i)
         add_question();
     }
@@ -138,8 +138,7 @@ export default defineStore("question", () => {
         if (currentQuestion.value.is_first_time_correct())
           correctCnt.value += 1;
         else {
-          for (let i = 0; i < 30; ++i) // TODO remove
-            append_mistake(currentQuestion.value);
+          append_mistake(currentQuestion.value);
         }
         return true;
       case AnswerResult.WrongEmpty:
@@ -172,7 +171,6 @@ export default defineStore("question", () => {
     validate_params,
     reset_questions,
     get_question,
-    add_question,
     update_question,
     answer_current_question,
   }

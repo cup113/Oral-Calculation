@@ -12,12 +12,12 @@ specifiers:
   postcss: ^8.4.21
   qrcode-generator: ^1.4.4
   sass: ^1.58.0
-  tailwindcss: ^3.2.4
+  tailwindcss: ^3.2.6
   typescript: ^4.9.5
   vite: ^4.1.1
   vitest: ^0.28.4
   vue: ^3.2.47
-  vue-m-message: ^4.0.1
+  vue-m-message: ^4.0.2
   vue-router: ^4.1.6
   vue-tsc: ^1.0.24
 
@@ -33,12 +33,12 @@ devDependencies:
   postcss: registry.npmmirror.com/postcss/8.4.21
   qrcode-generator: registry.npmmirror.com/qrcode-generator/1.4.4
   sass: registry.npmmirror.com/sass/1.58.0
-  tailwindcss: registry.npmmirror.com/tailwindcss/3.2.4_postcss@8.4.21
+  tailwindcss: registry.npmmirror.com/tailwindcss/3.2.6_postcss@8.4.21
   typescript: registry.npmmirror.com/typescript/4.9.5
   vite: registry.npmmirror.com/vite/4.1.1_sass@1.58.0
   vitest: registry.npmmirror.com/vitest/0.28.4_jsdom@21.1.0+sass@1.58.0
   vue: registry.npmmirror.com/vue/3.2.47
-  vue-m-message: registry.npmmirror.com/vue-m-message/4.0.1
+  vue-m-message: registry.npmmirror.com/vue-m-message/4.0.2
   vue-router: registry.npmmirror.com/vue-router/4.1.6_vue@3.2.47
   vue-tsc: registry.npmmirror.com/vue-tsc/1.0.24_typescript@4.9.5
 
@@ -863,7 +863,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: registry.npmmirror.com/caniuse-lite/1.0.30001451
-      electron-to-chromium: registry.npmmirror.com/electron-to-chromium/1.4.289
+      electron-to-chromium: registry.npmmirror.com/electron-to-chromium/1.4.290
       node-releases: registry.npmmirror.com/node-releases/2.0.10
       update-browserslist-db: registry.npmmirror.com/update-browserslist-db/1.0.10_browserslist@4.21.5
     dev: true
@@ -1166,10 +1166,10 @@ packages:
     version: 0.2.0
     dev: true
 
-  registry.npmmirror.com/electron-to-chromium/1.4.289:
-    resolution: {integrity: sha512-relLdMfPBxqGCxy7Gyfm1HcbRPcFUJdlgnCPVgQ23sr1TvUrRJz0/QPoGP0+x41wOVSTN/Wi3w6YDgHiHJGOzg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.289.tgz}
+  registry.npmmirror.com/electron-to-chromium/1.4.290:
+    resolution: {integrity: sha512-3uIkNYprKqAixFqANvs7K3zacGz6iVIMcGG1M/7hMn6Gvzxe52Xg//wRUds7GPv2uouF7EZ4Sh51fLDw+aBkHw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.290.tgz}
     name: electron-to-chromium
-    version: 1.4.289
+    version: 1.4.290
     dev: true
 
   registry.npmmirror.com/emoji-regex/8.0.0:
@@ -1994,14 +1994,14 @@ packages:
       resolve: registry.npmmirror.com/resolve/1.22.1
     dev: true
 
-  registry.npmmirror.com/postcss-js/4.0.0_postcss@8.4.21:
-    resolution: {integrity: sha512-77QESFBwgX4irogGVPgQ5s07vLvFqWr228qZY+w6lW599cRlK/HmnlivnnVUxkjHnCu4J16PDMHcH+e+2HbvTQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/postcss-js/-/postcss-js-4.0.0.tgz}
-    id: registry.npmmirror.com/postcss-js/4.0.0
+  registry.npmmirror.com/postcss-js/4.0.1_postcss@8.4.21:
+    resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/postcss-js/-/postcss-js-4.0.1.tgz}
+    id: registry.npmmirror.com/postcss-js/4.0.1
     name: postcss-js
-    version: 4.0.0
+    version: 4.0.1
     engines: {node: ^12 || ^14 || >= 16}
     peerDependencies:
-      postcss: ^8.3.3
+      postcss: ^8.4.21
     dependencies:
       camelcase-css: registry.npmmirror.com/camelcase-css/2.0.1
       postcss: registry.npmmirror.com/postcss/8.4.21
@@ -2388,11 +2388,11 @@ packages:
     version: 3.2.4
     dev: true
 
-  registry.npmmirror.com/tailwindcss/3.2.4_postcss@8.4.21:
-    resolution: {integrity: sha512-AhwtHCKMtR71JgeYDaswmZXhPcW9iuI9Sp2LvZPo9upDZ7231ZJ7eA9RaURbhpXGVlrjX4cFNlB4ieTetEb7hQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tailwindcss/-/tailwindcss-3.2.4.tgz}
-    id: registry.npmmirror.com/tailwindcss/3.2.4
+  registry.npmmirror.com/tailwindcss/3.2.6_postcss@8.4.21:
+    resolution: {integrity: sha512-BfgQWZrtqowOQMC2bwaSNe7xcIjdDEgixWGYOd6AL0CbKHJlvhfdbINeAW76l1sO+1ov/MJ93ODJ9yluRituIw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/tailwindcss/-/tailwindcss-3.2.6.tgz}
+    id: registry.npmmirror.com/tailwindcss/3.2.6
     name: tailwindcss
-    version: 3.2.4
+    version: 3.2.6
     engines: {node: '>=12.13.0'}
     hasBin: true
     peerDependencies:
@@ -2414,7 +2414,7 @@ packages:
       picocolors: registry.npmmirror.com/picocolors/1.0.0
       postcss: registry.npmmirror.com/postcss/8.4.21
       postcss-import: registry.npmmirror.com/postcss-import/14.1.0_postcss@8.4.21
-      postcss-js: registry.npmmirror.com/postcss-js/4.0.0_postcss@8.4.21
+      postcss-js: registry.npmmirror.com/postcss-js/4.0.1_postcss@8.4.21
       postcss-load-config: registry.npmmirror.com/postcss-load-config/3.1.4_postcss@8.4.21
       postcss-nested: registry.npmmirror.com/postcss-nested/6.0.0_postcss@8.4.21
       postcss-selector-parser: registry.npmmirror.com/postcss-selector-parser/6.0.11
@@ -2748,10 +2748,10 @@ packages:
       vue: registry.npmmirror.com/vue/3.2.47
     dev: true
 
-  registry.npmmirror.com/vue-m-message/4.0.1:
-    resolution: {integrity: sha512-c+vj8UlIqhxRZsmGmKIHYiHhoZ5lNxZFugOvdXfWUe0fnFMOXaVwL8Q7MUa4hXih/cbcj+97Aux6QvdK/MOgHQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vue-m-message/-/vue-m-message-4.0.1.tgz}
+  registry.npmmirror.com/vue-m-message/4.0.2:
+    resolution: {integrity: sha512-6rTKtIzj2vXyyY6YIcSHDmJNz4R1HuxATgr8gf0c+DjcknwCkmfBggKNDIgshnCyqgL70TWsVrgcqQzl4xsYfQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vue-m-message/-/vue-m-message-4.0.2.tgz}
     name: vue-m-message
-    version: 4.0.1
+    version: 4.0.2
     dev: true
 
   registry.npmmirror.com/vue-router/4.1.6_vue@3.2.47:

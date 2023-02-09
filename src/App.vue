@@ -6,7 +6,7 @@ import CustomizedFooter from './assets/components/CustomizedFooter.vue';
 <template>
   <div class="text-center" id="root">
     <RouterView></RouterView>
-    <CustomizedFooter remote-url="https://github.com/cup113/Oral-Calculation" version="0.4.1"
+    <CustomizedFooter remote-url="https://github.com/cup113/Oral-Calculation" version="0.4.2"
       license="MIT" years="2023" detailed></CustomizedFooter>
   </div>
 </template>

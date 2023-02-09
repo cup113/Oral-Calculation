@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning].
 
 - Developing
 
+## [0.4.2] - 2023-02-09
+
+### Added
+
+- [#14] 初步完成打印功能。
+
+### Changed
+
+- 完善了产品发布流程。
+
+### Fixed
+
+- 修复了错题本显示异常的问题。
+- 修复了只做 1 题时报告显示异常的问题。
+- 修复了二维码内容错误的问题。
+- 修复了不选择类别无提示的问题。
+- 修复了更改类别时默认参数显示异常的问题。
+
 ## [0.4.1] - 2023-02-08
 
 ### Added
@@ -91,7 +109,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.4.1..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.4.2..HEAD
+[0.4.2]: https://github.com/cup113/Oral-Calculation/compare/v0.4.1..v0.4.2
 [0.4.1]: https://github.com/cup113/Oral-Calculation/compare/v0.4.0..v0.4.1
 [0.4.0]: https://github.com/cup113/Oral-Calculation/compare/v0.3.1..v0.4.0
 [0.3.1]: https://github.com/cup113/Oral-Calculation/compare/v0.3.0..v0.3.1
@@ -108,4 +127,5 @@ and this project adheres to [Semantic Versioning].
 [#10]: https://github.com/cup113/Oral-Calculation/issues/10
 [#11]: https://github.com/cup113/Oral-Calculation/issues/11
 [#12]: https://github.com/cup113/Oral-Calculation/issues/12
-[#15]: https://github.com/cup113/Oral-Calculation/issues/12
+[#14]: https://github.com/cup113/Oral-Calculation/issues/14
+[#15]: https://github.com/cup113/Oral-Calculation/issues/15

@@ -23,7 +23,7 @@ const
   isFast = duration <= fastDur,
   isSlow = duration >= slowDur,
   progressColorIndex = isFast ? 0 : (isCorrect ? (isSlow ? 2 : 1) : 3),
-  ratio = 0.4 + 0.4 * (maxDur - duration) / (maxDur - minDur);
+  ratio = 0.4 + 0.4 * (maxDur - duration + 1) / (maxDur - minDur + 2);
 
 </script>
 

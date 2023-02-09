@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 
 import { PARAMS_SEP, bool_to_string, string_to_bool, storage_get, storage_set } from '@/util';
 import { CATEGORIES, CategoryId } from '@/question';
@@ -22,7 +22,7 @@ export default defineStore("setting", () => {
   const
     categoryId = ref(CategoryId.Null),
     quantity = ref(10),
-    params = ref([] as string[]),
+    params = reactive([] as string[]),
     avoidRepeat = ref(true),
     generateAtOnce = ref(false);
 
@@ -79,11 +79,11 @@ export default defineStore("setting", () => {
     get(): string[] {
       return this.filter_empty(storage_get(
         `${SettingStorageKeys.Params}_${categoryId.value}`,
-        params.value.join(PARAMS_SEP)
+        params.join(PARAMS_SEP)
       ).split(PARAMS_SEP));
     },
     set(_params: string): void {
-      params.value = this.filter_empty(_params.split(PARAMS_SEP));
+      params.splice(0, params.length, ...this.filter_empty(_params.split(PARAMS_SEP)));
       storage_set(`${SettingStorageKeys.Params}_${categoryId.value}`, _params);
     }
   };
@@ -118,7 +118,7 @@ export default defineStore("setting", () => {
   quantity.value = quantityManager.get();
   avoidRepeat.value = avoidRepeatManager.get();
   generateAtOnce.value = generateAtOnceManager.get();
-  params.value = paramsManager.get();
+  params.push(...paramsManager.get());
 
   return {
     categoryId,
