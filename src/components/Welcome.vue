@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
 import Message from 'vue-m-message';
 
 import { CATEGORIES, CategoryId } from '@/question';
@@ -11,14 +10,13 @@ import useSettingStore from '@/store/setting';
 import ParamItem from './ParamItem.vue';
 
 const
-  { questionModule } = storeToRefs(useQuestionStore()),
-  { categoryIdManager, quantityManager, avoidRepeatManager, generateAtOnceManager } = useSettingStore(),
-  { categoryId, quantity, params, avoidRepeat, generateAtOnce } = storeToRefs(useSettingStore());
+  question = useQuestionStore(),
+  setting = useSettingStore();
 
 const
   router = useRouter(),
   paramsConfig = computed(() => {
-    return questionModule.value.paramsConfig;
+    return question.questionModule.paramsConfig;
   });
 
 function go_to_mistakes_collection() {
@@ -36,23 +34,23 @@ function submit_form(ev: Event): void {
     if (key.startsWith("param-"))
       params[parseInt(key.substring("param-".length))] = value as string;
   });
-  router.push(`/exercise/${categoryId.value}/${params.join(',')}/${quantity.value}`);
+  router.push(`/exercise/${setting.categoryId}/${params.join(',')}/${setting.quantity}`);
 }
 
 function change_category(ev: Event) {
-  categoryIdManager.set((ev.target as HTMLSelectElement).value);
+  setting.categoryIdManager.set((ev.target as HTMLSelectElement).value);
 }
 
 function change_quantity(ev: Event) {
-  quantityManager.set((ev.target as HTMLInputElement).value);
+  setting.quantityManager.set((ev.target as HTMLInputElement).value);
 }
 
 function change_avoid_repeat(ev: Event) {
-  avoidRepeatManager.set((ev.target as HTMLSelectElement).value);
+  setting.avoidRepeatManager.set((ev.target as HTMLSelectElement).value);
 }
 
 function change_generate_at_once(ev: Event) {
-  generateAtOnceManager.set((ev.target as HTMLSelectElement).value);
+  setting.generateAtOnceManager.set((ev.target as HTMLSelectElement).value);
 }
 
 </script>
@@ -67,7 +65,7 @@ function change_generate_at_once(ev: Event) {
       <div class="param-item">
         <label for="category">类别</label>
         <span>
-          <select id="category" name="category" title="类别" :value="categoryId"
+          <select id="category" name="category" title="类别" :value="setting.categoryId"
             @change="change_category">
             <option v-for="category in CATEGORIES" :value="category.id" :key="category.id">
               {{ category.desc }}
@@ -83,7 +81,7 @@ function change_generate_at_once(ev: Event) {
             type="number" required="true"
             min="1" step="1"
             placeholder="练习题数..."
-            :value="quantity" @change="change_quantity">
+            :value="setting.quantity" @change="change_quantity">
         </span>
       </div>
       <div class="param-item">
@@ -91,7 +89,7 @@ function change_generate_at_once(ev: Event) {
         <span>
           <select
             id="avoid-repeat" name="avoid-repeat"
-            title="避免重复题" :value="avoidRepeat" @change="change_avoid_repeat">
+            title="避免重复题" :value="setting.avoidRepeat" @change="change_avoid_repeat">
             <option value="true">尽量避免</option>
             <option value="false">不避免</option>
           </select>
@@ -103,7 +101,7 @@ function change_generate_at_once(ev: Event) {
           <select
             id="generate-at-once" name="generate-at-once"
             title="生成题目"
-            :value="generateAtOnce" @change="change_generate_at_once">
+            :value="setting.generateAtOnce" @change="change_generate_at_once">
             <option value="false">答题时生成</option>
             <option value="true">开始时立即生成</option>
           </select>
@@ -111,8 +109,9 @@ function change_generate_at_once(ev: Event) {
       </div>
       <hr class="my-2 h-1">
       <ParamItem
-        v-for="(config, i) in paramsConfig" :key="`${categoryId}-${i}`"
-        :i="i" :config="config" :default="params.length > i ? params[i] : undefined">
+        v-for="(config, i) in paramsConfig" :key="`${setting.categoryId}-${i}`"
+        :i="i" :config="config"
+        :default="setting.params.length > i ? setting.params[i] : undefined">
       </ParamItem>
       <div class="text-right relative left-4 top-4">
         <button class="btn bg-blue-500" type="submit">开始练习</button>

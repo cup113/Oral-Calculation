@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning].
 
 - Developing
 
+## [0.4.3] - 2023-02-10
+
+### Added
+
+- 添加打印自动分页和自定义分列功能。
+
+### Changed
+
+- 更改了 Pinia 的代码逻辑。
+
 ## [0.4.2] - 2023-02-09
 
 ### Added
@@ -109,7 +119,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.4.2..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.4.3..HEAD
+[0.4.3]: https://github.com/cup113/Oral-Calculation/compare/v0.4.2..v0.4.3
 [0.4.2]: https://github.com/cup113/Oral-Calculation/compare/v0.4.1..v0.4.2
 [0.4.1]: https://github.com/cup113/Oral-Calculation/compare/v0.4.0..v0.4.1
 [0.4.0]: https://github.com/cup113/Oral-Calculation/compare/v0.3.1..v0.4.0

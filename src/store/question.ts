@@ -1,6 +1,6 @@
 import Message from 'vue-m-message';
 
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore } from "pinia";
 import { ref, computed, watch, reactive } from 'vue';
 
 import type { Milliseconds } from '@/util';
@@ -10,13 +10,7 @@ import useSettingStore from './setting';
 import useMistakesStore from './mistakes';
 
 export default defineStore("question", () => {
-  const {
-    categoryId,
-    params,
-    quantity,
-    avoidRepeat,
-    generateAtOnce
-  } = storeToRefs(useSettingStore());
+  const setting = useSettingStore();
   const { append_mistake } = useMistakesStore();
 
   const
@@ -24,7 +18,7 @@ export default defineStore("question", () => {
     existProblems = ref(new Set() as Set<string>),
     questionModule = ref(LoadingQuestion as QuestionModule),
     loaded = computed(() => questionModule.value.id !== 'loading'),
-    questionProvider = computed(() => questionModule.value.get_provider(QUESTION_CONTEXT, params.value)),
+    questionProvider = computed(() => questionModule.value.get_provider(QUESTION_CONTEXT, setting.params)),
     currentQuestion = ref(questionProvider.value.get_question()),
     passedCnt = ref(0),
     correctCnt = ref(0),
@@ -34,9 +28,9 @@ export default defineStore("question", () => {
     accumulatedDuration = computed(() => {
       return passedQuestionsDuration.value + currentQuestionDuration.value;
     }),
-    passedRatio = computed(() => passedCnt.value / quantity.value);
+    passedRatio = computed(() => passedCnt.value / setting.quantity);
 
-  watch(categoryId, newCategoryId => {
+  watch(() => setting.categoryId, newCategoryId => {
     // CategoryId is set through `categoryManager` and is safe now.
     get_module(newCategoryId).then(
       m => questionModule.value = m.default,
@@ -49,10 +43,10 @@ export default defineStore("question", () => {
    */
   function validate_params(): string {
     const paramsConfig = questionModule.value.paramsConfig;
-    if (paramsConfig.length !== params.value.length)
-      return `应有${paramsConfig.length}个配置项，只得到了${params.value.length}个。`;
+    if (paramsConfig.length !== setting.params.length)
+      return `应有${paramsConfig.length}个配置项，只得到了${setting.params.length}个。`;
     for (let i = 0; i < paramsConfig.length; ++i) {
-      const param = params.value[i], paramConfig = paramsConfig[i];
+      const param = setting.params[i], paramConfig = paramsConfig[i];
       switch (paramConfig.type) {
         case 'integer': {
           let paramNum = parseInt(param);
@@ -77,7 +71,7 @@ export default defineStore("question", () => {
       }
     }
     if (questionModule.value.validate !== undefined) {
-      let validate_result = questionModule.value.validate(params.value);
+      let validate_result = questionModule.value.validate(setting.params);
       if (validate_result.length > 0)
         return validate_result;
     }
@@ -92,15 +86,15 @@ export default defineStore("question", () => {
     wrongAnswerCnt.value = 0;
     currentQuestionDuration.value = 0;
     passedQuestionsDuration.value = 0;
-    if (fillAll ?? generateAtOnce.value) {
-      for (let i = 0; i < quantity.value; ++i)
+    if (fillAll ?? setting.generateAtOnce) {
+      for (let i = 0; i < setting.quantity; ++i)
         add_question();
     }
   }
 
   function get_question(): Question {
     let question = questionProvider.value.get_question();
-    if (avoidRepeat.value) {
+    if (setting.avoidRepeat) {
       const MAX_AVOID_REPEAT_TRIES = 100;
       for (let i = 0; i < MAX_AVOID_REPEAT_TRIES; ++i) {
         if (!existProblems.value.has(question.problem)) {
@@ -118,7 +112,7 @@ export default defineStore("question", () => {
   }
 
   function update_question() {
-    if (!generateAtOnce.value)
+    if (!(setting.generateAtOnce))
       add_question();
     currentQuestion.value = questions[passedCnt.value];
   }

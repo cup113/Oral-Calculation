@@ -11,14 +11,14 @@ interface MistakeQuestion {
   wrongAnswers: string[],
 }
 
+const MISTAKE_BUCKET = 50;
+
+const enum MistakesStorageKeys {
+  Count = "OC_MistakesCount",
+  Questions = "OC_MistakesQuestions",
+}
+
 export default defineStore("mistakes", () => {
-  const MISTAKE_BUCKET = 50;
-
-  const enum MistakesStorageKeys {
-    Count = "OC_MistakesCount",
-    Questions = "OC_MistakesQuestions",
-  }
-
   function get_items_count(): number {
     let itemsCount = parseInt(storage_get(MistakesStorageKeys.Count, "0"));
     return itemsCount;

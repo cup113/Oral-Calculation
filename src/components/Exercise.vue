@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router';
 import { computed, ref, watch, onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
 import Message from 'vue-m-message';
 
 import { QUESTION_CONTEXT } from '@/question';
@@ -19,39 +18,20 @@ const
   route = useRoute();
 
 const
-  {
-    reset_questions,
-    update_question,
-    answer_current_question,
-    validate_params,
-  } = useQuestionStore(),
-  {
-    currentQuestion,
-    loaded,
-    passedCnt,
-    correctCnt,
-    wrongAnswerCnt,
-    passedRatio,
-    accumulatedDuration,
-  } = storeToRefs(useQuestionStore()),
-  {
-    categoryIdManager,
-    quantityManager,
-    paramsManager,
-  } = useSettingStore(),
-  { quantity } = storeToRefs(useSettingStore());
+  question = useQuestionStore(),
+  setting = useSettingStore();
 
 function manage_route_params() {
   let category = Reflect.get(route.params, "category") as string;
   let params = Reflect.get(route.params, "params") as string;
   let quantity = Reflect.get(route.params, "quantity") as string;
-  categoryIdManager.set(category);
-  paramsManager.set(params);
-  quantityManager.set(quantity);
-  if (loaded.value) {
+  setting.categoryIdManager.set(category);
+  setting.paramsManager.set(params);
+  setting.quantityManager.set(quantity);
+  if (question.loaded) {
     question_module_onload();
   } else {
-    watch(loaded, newLoaded => {
+    watch(() => question.loaded, newLoaded => {
       if (newLoaded)
         question_module_onload();
     });
@@ -71,11 +51,11 @@ const
   started = computed(() => status.value !== Status.Loaded && status.value !== Status.Loading),
   answerInput = ref(null as HTMLInputElement | null);
 
-reset_questions();
+question.reset_questions();
 manage_route_params();
 
 function start(): void {
-  if (!loaded.value) {
+  if (!question.loaded) {
     warn_loading();
     return;
   }
@@ -104,19 +84,19 @@ function warn_loading(): void {
 }
 
 function question_module_onload() {
-  let validate_result = validate_params();
+  let validate_result = question.validate_params();
   if (validate_result.length > 0) {
     Message.error(`验证参数时出错: 当前模块${validate_result}`);
     go_back();
   } else {
     status.value = Status.Loaded;
-    currentQuestion.value = QUESTION_CONTEXT.Question.new_loaded();
+    question.currentQuestion = QUESTION_CONTEXT.Question.new_loaded();
     Message.info("加载完成。点击“开始”答题。");
   }
 }
 
 function next_question(): void {
-  update_question();
+  question.update_question();
   answerInput.value!.focus();
   status.value = Status.Answering;
   answerInput.value!.value = "";
@@ -142,10 +122,10 @@ function submit_question(ev: Event): void {
   const
     formData = new FormData(ev.target as HTMLFormElement),
     answer = (formData.get("answer") as string).trim(),
-    isCorrect = answer_current_question(answer);
+    isCorrect = question.answer_current_question(answer);
   if (isCorrect) {
     status.value = Status.Ready;
-    if (passedCnt.value === quantity.value)
+    if (question.passedCnt === setting.quantity)
       end();
   }
 }
@@ -156,28 +136,28 @@ function submit_question(ev: Event): void {
   <div class="exercise pt-12">
     <button class="btn bg-gray-700 absolute left-6 top-4" type="button" @click="go_back">返回</button>
     <div class="progress mx-24 text-2xl">
-      <div class="progress-bar text-green-400 bg-blue-600" :style="{ '--ratio': passedRatio }">
-        {{ passedCnt }} / {{ quantity }}
+      <div class="progress-bar text-green-400 bg-blue-600" :style="{ '--ratio': question.passedRatio }">
+        {{ question.passedCnt }} / {{ setting.quantity }}
       </div>
     </div>
     <div class="bg-gray-100 w-max mx-auto py-1 my-4">
       <div class="board-item">
         <span>正确题数 / 已答题目</span>
-        <span>{{ correctCnt }} / {{ passedCnt }}</span>
+        <span>{{ question.correctCnt }} / {{ question.passedCnt }}</span>
       </div>
       <div class="board-item">
         <span>错误回答数</span>
-        <span>{{ wrongAnswerCnt }}</span>
+        <span>{{ question.wrongAnswerCnt }}</span>
       </div>
       <div class="board-item">
         <span>累计用时</span>
         <span>
-          <Duration :duration="accumulatedDuration"></Duration>
+          <Duration :duration="question.accumulatedDuration"></Duration>
         </span>
       </div>
     </div>
     <form class="text-2xl" @submit.prevent="submit_question">
-      <div>{{ currentQuestion.problem }}</div>
+      <div>{{ question.currentQuestion.problem }}</div>
       <div class="px-2 py-2 flex flex-nowrap gap-1 lg:ml-24 lg:mr-12 sm:ml-12 sm:mr-2">
         <input class="answer text-center grow border break-keep" type="text" name="answer"
           autocomplete="off" placeholder="请在此处输入答案..." ref="answerInput">
