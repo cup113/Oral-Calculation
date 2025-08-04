@@ -57,16 +57,14 @@ function change_generate_at_once(ev: Event) {
 
 <template>
   <div class="welcome pt-8 sm:pt-0">
-    <button type="button"
-      class="btn bg-yellow-700 absolute left-4 top-4"
+    <button type="button" class="btn bg-yellow-700 absolute left-4 top-4"
       @click="go_to_mistakes_collection">错题本</button>
     <h2 class="text-2xl font-bold py-4">欢迎来到口算练习</h2>
     <form class="w-max mx-auto text-lg" @submit.prevent="submit_form">
       <div class="param-item">
         <label for="category">类别</label>
         <span>
-          <select id="category" name="category" title="类别" :value="setting.categoryId"
-            @change="change_category">
+          <select id="category" name="category" title="类别" :value="setting.categoryId" @change="change_category">
             <option v-for="category in CATEGORIES" :value="category.id" :key="category.id">
               {{ category.desc }}
             </option>
@@ -76,20 +74,15 @@ function change_generate_at_once(ev: Event) {
       <div class="param-item">
         <label for="quantity">题数</label>
         <span>
-          <input
-            id="quantity" name="quantity"
-            type="number" required="true"
-            min="1" step="1"
-            placeholder="练习题数..."
+          <input id="quantity" name="quantity" type="number" required="true" min="1" step="1" placeholder="练习题数..."
             :value="setting.quantity" @change="change_quantity">
         </span>
       </div>
       <div class="param-item">
         <label for="avoid-repeat">避免重复题</label>
         <span>
-          <select
-            id="avoid-repeat" name="avoid-repeat"
-            title="避免重复题" :value="setting.avoidRepeat" @change="change_avoid_repeat">
+          <select id="avoid-repeat" name="avoid-repeat" title="避免重复题" :value="setting.avoidRepeat"
+            @change="change_avoid_repeat">
             <option value="true">尽量避免</option>
             <option value="false">不避免</option>
           </select>
@@ -98,19 +91,15 @@ function change_generate_at_once(ev: Event) {
       <div class="param-item">
         <label for="generate-at-once">生成题目</label>
         <span>
-          <select
-            id="generate-at-once" name="generate-at-once"
-            title="生成题目"
-            :value="setting.generateAtOnce" @change="change_generate_at_once">
+          <select id="generate-at-once" name="generate-at-once" title="生成题目" :value="setting.generateAtOnce"
+            @change="change_generate_at_once">
             <option value="false">答题时生成</option>
             <option value="true">开始时立即生成</option>
           </select>
         </span>
       </div>
       <hr class="my-2 h-1">
-      <ParamItem
-        v-for="(config, i) in paramsConfig" :key="`${setting.categoryId}-${i}`"
-        :i="i" :config="config"
+      <ParamItem v-for="(config, i) in paramsConfig" :key="`${setting.categoryId}-${i}`" :i="i" :config="config"
         :default="setting.params.length > i ? setting.params[i] : undefined">
       </ParamItem>
       <div class="text-right relative left-4 top-4">

@@ -1,6 +1,6 @@
 {
   "name": "oral-calculation",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "scripts": {
     "dev": "vite",
     "ts-check": "vue-tsc --noEmit",
@@ -10,25 +10,28 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage"
   },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "big-integer": "^1.6.52",
+    "js-file-downloader": "^1.1.25",
+    "jsdom": "^21.1.2",
+    "pinia": "^3.0.3",
+    "qrcode-generator": "^1.4.4",
+    "vue": "^3.5.18",
+    "vue-m-message": "^4.0.2",
+    "vue-router": "^4.3.0"
+  },
   "devDependencies": {
-    "@popperjs/core": "^2.11.6",
-    "@vitejs/plugin-vue": "^4.0.0",
+    "@types/node": "^24.2.0",
+    "@vitejs/plugin-vue": "^6.0.1",
     "@vitest/coverage-c8": "^0.28.4",
     "autoprefixer": "^10.4.13",
-    "big-integer": "^1.6.51",
-    "js-file-downloader": "^1.1.24",
-    "jsdom": "^21.1.0",
-    "pinia": "^2.0.30",
     "postcss": "^8.4.21",
-    "qrcode-generator": "^1.4.4",
-    "sass": "^1.58.0",
+    "sass": "^1.89.2",
     "tailwindcss": "^3.2.6",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.1",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.6",
     "vitest": "^0.28.4",
-    "vue": "^3.2.47",
-    "vue-m-message": "^4.0.2",
-    "vue-router": "^4.1.6",
-    "vue-tsc": "^1.0.24"
+    "vue-tsc": "^2.2.12"
   }
 }

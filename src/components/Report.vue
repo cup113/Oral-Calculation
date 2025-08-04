@@ -59,21 +59,26 @@ function go_to_share() {
       </div>
       <div class="report-item">
         <span>总计用时</span>
-        <span><Duration class="ml-2" :duration="accumulatedDuration"></Duration></span>
+        <span>
+          <Duration class="ml-2" :duration="accumulatedDuration"></Duration>
+        </span>
       </div>
       <div class="report-item">
         <span>题均用时</span>
-        <span><Duration class="ml-2" :duration="avgDuration"></Duration></span>
+        <span>
+          <Duration class="ml-2" :duration="avgDuration"></Duration>
+        </span>
       </div>
     </div>
-    <div
-      class="mt-4 mx-12 flex flex-wrap content-center justify-center items-center gap-x-6 gap-y-2">
+    <div class="mt-4 mx-12 flex flex-wrap content-center justify-center items-center gap-x-6 gap-y-2">
       <QuestionDisplay v-for="(question, i) in questions" :key="i" :question="question" :i="i">
       </QuestionDisplay>
     </div>
     <div class="mt-8">
-      <button class="btn bg-gray-700 mr-4" type="button" @click="go_to_main_page">返回主页</button>
-      <button class="btn bg-green-500" type="button" @click="go_to_share">分享</button>
+      <button class="btn bg-gray-700 mr-4" type="button" @click="go_to_main_page"
+        v-bind="{ 'data-umami-event': 'end-return' }">返回主页</button>
+      <button class="btn bg-green-500" type="button" @click="go_to_share"
+        v-bind="{ 'data-umami-event': 'end-share' }">分享</button>
     </div>
   </div>
 </template>

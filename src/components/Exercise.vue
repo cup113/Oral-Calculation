@@ -159,14 +159,16 @@ function submit_question(ev: Event): void {
     <form class="text-2xl" @submit.prevent="submit_question">
       <div>{{ question.currentQuestion.problem }}</div>
       <div class="px-2 py-2 flex flex-nowrap gap-1 lg:ml-24 lg:mr-12 sm:ml-12 sm:mr-2">
-        <input class="answer text-center grow border break-keep" type="text" name="answer"
-          autocomplete="off" placeholder="请在此处输入答案..." ref="answerInput">
-        <button class="btn bg-blue-500 w-max" type="submit">提交</button>
+        <input class="answer text-center grow border break-keep" type="text" name="answer" autocomplete="off"
+          placeholder="请在此处输入答案..." ref="answerInput">
+        <button class="btn bg-blue-500 w-max" type="submit" v-bind="{ 'data-umami-event': 'answer-submit' }">提交</button>
       </div>
     </form>
     <div v-if="!started">
-      <button class="btn bg-green-700" type="button" @click="start">开始</button>
-      <button class="btn bg-gray-500 ml-2" @click="go_to_print_page">打印</button>
+      <button class="btn bg-green-700" type="button" @click="start"
+        v-bind="{ 'data-umami-event': 'start-exercise' }">开始</button>
+      <button class="btn bg-gray-500 ml-2" @click="go_to_print_page"
+        v-bind="{ 'data-umami-event': 'start-print' }">打印</button>
     </div>
   </div>
 </template>
