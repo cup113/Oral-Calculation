@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning].
 
 - Developing
 
+## [0.5.1] - 2026-05-02
+
+### Fixed
+
+- 修复直接进入 `exercise/...` 路径时题目全部为 "Loading..." 的问题：将 `reset_questions()` 的调用时机从模块加载前移至加载后，确保生成题目时使用正确的题型模块和参数。
+
 ## [0.5.0] - 2026-05-02
 
 ### Added
@@ -154,7 +160,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.5.0..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.5.1..HEAD
+[0.5.1]: https://github.com/cup113/Oral-Calculation/compare/v0.5.0..v0.5.1
 [0.5.0]: https://github.com/cup113/Oral-Calculation/compare/v0.4.4..v0.5.0
 [0.4.4]: https://github.com/cup113/Oral-Calculation/compare/v0.4.3..v0.4.4
 [0.4.3]: https://github.com/cup113/Oral-Calculation/compare/v0.4.2..v0.4.3

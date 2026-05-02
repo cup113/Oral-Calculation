@@ -54,7 +54,6 @@ watch(() => question.loaded, loaded => {
     document.title = `口算练习 | ${question.questionProvider.get_title()}`;
 }, { immediate: true });
 
-question.reset_questions();
 manage_route_params();
 
 function start(): void {
@@ -92,6 +91,7 @@ function question_module_onload() {
     Message.error(`验证参数时出错: 当前模块${validate_result}`);
     go_back();
   } else {
+    question.reset_questions();
     status.value = Status.Loaded;
     question.currentQuestion = QUESTION_CONTEXT.Question.new_loaded();
     Message.info("加载完成。点击“开始”答题。");
