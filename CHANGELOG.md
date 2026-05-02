@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning].
 
 ## [[Unreleased]]
 
-- Developing
+### Added
+
+- 添加 `netlify.toml` 配置，构建时自动将 `README.md` / `CHANGELOG.md` 转换为 HTML。
+
+### Fixed
+
+- 修复单题用时计时错误的问题。此前所有题目在页面加载时即被预创建并打上时间戳，导致单题用时包含了从页面加载到作答的全部等待时间。现改为在题目展示给用户时开始计时。
 
 ## [0.4.4] - 2025-08-04
 

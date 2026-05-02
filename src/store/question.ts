@@ -116,6 +116,8 @@ export default defineStore("question", () => {
 
   function update_question() {
     currentQuestion.value = questions[passedCnt.value];
+    currentQuestion.value.start = new Date();
+    currentQuestion.value.end = new Date();
   }
 
   /**

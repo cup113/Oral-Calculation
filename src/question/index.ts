@@ -218,7 +218,7 @@ export class Question {
   /** The correct answer expressed by string. */
   public readonly correctAnswer: string;
   /** The time when it is started to be answered. */
-  public readonly start: Date;
+  public start: Date;
   /** The time when it is answered correctly, or it would be the same as `start`. */
   public end: Date;
   /** If the question is passed. */

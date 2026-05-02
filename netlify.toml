@@ -1,0 +1,3 @@
+[build]
+  command = "pnpx markdown-to-html-cli --source README.md -o \"public/README.html\" && pnpx markdown-to-html-cli --source CHANGELOG.md -o \"public/CHANGELOG.html\" && vite build"
+  publish = "dist"
