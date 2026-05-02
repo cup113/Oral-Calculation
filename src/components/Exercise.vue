@@ -300,6 +300,7 @@ function submit_question(ev: Event): void {
 
 .answer-input {
   flex: 1;
+  min-width: 0;
   padding: 0.75rem 1rem;
   font-size: 1.125rem;
   border: 1px solid var(--c-border);
