@@ -4,9 +4,27 @@ import CustomizedFooter from './assets/components/CustomizedFooter.vue';
 </script>
 
 <template>
-  <div class="text-center" id="root">
-    <RouterView></RouterView>
-    <CustomizedFooter remote-url="https://github.com/cup113/Oral-Calculation" version="0.4.3"
-      license="MIT" years="2023" detailed></CustomizedFooter>
+  <div class="app-shell">
+    <main class="app-main">
+      <RouterView />
+    </main>
+    <CustomizedFooter remote-url="https://github.com/cup113/Oral-Calculation" version="0.5.0"
+      license="MIT" years="2023-2026" detailed />
   </div>
 </template>
+
+<style lang="scss">
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+</style>

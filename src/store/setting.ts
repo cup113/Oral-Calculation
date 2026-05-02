@@ -15,16 +15,13 @@ export default defineStore("setting", () => {
     Params = "OC_Params",
     /** Avoid repeated questions as possible. */
     AvoidRepeat = "OC_AvoidRepeat",
-    /** If generate the questions as soon as the provider loaded. */
-    GenerateAtOnce = "OC_GenerateAtOnce",
   }
 
   const
     categoryId = ref(CategoryId.Null),
     quantity = ref(10),
     params = reactive([] as string[]),
-    avoidRepeat = ref(true),
-    generateAtOnce = ref(false);
+    avoidRepeat = ref(true);
 
   const categoryIdManager = {
     validate(_category: string): _category is CategoryId {
@@ -101,23 +98,9 @@ export default defineStore("setting", () => {
     }
   };
 
-  const generateAtOnceManager = {
-    get(): boolean {
-      return string_to_bool(storage_get(
-        SettingStorageKeys.GenerateAtOnce, bool_to_string(generateAtOnce.value)
-      ));
-    },
-    set(_generateAtOnce: string): void {
-      let value = string_to_bool(_generateAtOnce);
-      generateAtOnce.value = value;
-      storage_set(SettingStorageKeys.GenerateAtOnce, _generateAtOnce);
-    }
-  };
-
   categoryId.value = categoryIdManager.get();
   quantity.value = quantityManager.get();
   avoidRepeat.value = avoidRepeatManager.get();
-  generateAtOnce.value = generateAtOnceManager.get();
   params.push(...paramsManager.get());
 
   return {
@@ -127,8 +110,6 @@ export default defineStore("setting", () => {
     quantityManager,
     avoidRepeat,
     avoidRepeatManager,
-    generateAtOnce,
-    generateAtOnceManager,
     params,
     paramsManager,
     PARAMS_SEP,

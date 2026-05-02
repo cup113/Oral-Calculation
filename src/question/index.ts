@@ -335,6 +335,10 @@ export type ParamConfig = {
   max?: number,
 } | {
   name: string,
+  type: 'boolean',
+  default: number,
+} | {
+  name: string,
   type: 'select',
   choices: string[],
   /** The default choice. Start from 0 index */

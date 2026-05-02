@@ -11,45 +11,54 @@ const HOMEPAGE: string = "https://github.com/cup113";
 </script>
 
 <template>
-  <div class="customized-footer absolute bg-gray-50 w-full leading-6 py-4 bottom-0">
-    <div v-if="license.length > 0">
-      <span>&copy; {{ years }}&nbsp;</span>
-      <template v-if="detailed">
-        <span>Jason Li</span>
-        <a class="badge bg-gray-600" target="_blank"
-          :href="`https://spdx.org/licenses/${license}.html`">
-          {{ license }} licensed
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-line">
+        <span v-if="license">&copy; {{ years }} Jason Li</span>
+        <span class="footer-dot">&middot;</span>
+        <span>v{{ version }}</span>
+      </div>
+      <div v-if="detailed" class="footer-links">
+        <a class="badge" target="_blank" :href="HOMEPAGE">关于</a>
+        <a class="badge" target="_blank" href="https://f.kdocs.cn/g/iuGauWIo/">反馈</a>
+        <a class="badge" target="_blank" :href="remoteUrl">源码</a>
+        <a class="badge" target="_blank" href="README.html">说明</a>
+        <a class="badge" target="_blank" href="CHANGELOG.html">更新</a>
+        <a class="badge" target="_blank" :href="`https://spdx.org/licenses/${license}.html`">
+          {{ license }}
         </a>
-      </template>
-      <template v-else>
-        <span>&copy; {{ years }} Jason Li. All Rights Reserved.</span>
-      </template>
+      </div>
     </div>
-    <div>Version:&nbsp;<span>{{ version }}</span></div>
-    <div v-if="detailed">
-      <a class="badge bg-blue-500" target="_blank" :href="HOMEPAGE">关于开发者</a>
-      <a class="badge bg-blue-500" target="_blank" :href="remoteUrl + '/issues'">问题报告</a>
-      <a class="badge bg-blue-500" target="_blank" :href="remoteUrl">开源</a>
-    </div>
-    <div>
-      <a class="badge bg-blue-500" target="_blank" href="README.html">使用说明</a>
-      <a class="badge bg-blue-500" target="_blank" href="copyrights.txt">版权声明</a>
-      <a class="badge bg-blue-500" target="_blank" href="CHANGELOG.html">更新日志</a>
-    </div>
-  </div>
+  </footer>
 </template>
 
 <style lang="scss">
-$height: 8rem;
-$gap: 2rem;
-
-#root {
-  position: relative;
-  min-height: 100vh;
-  padding-bottom: $height + $gap;
+.footer {
+  margin-top: auto;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border-top: 1px solid var(--c-border);
 }
 
-.customized-footer {
-  height: $height;
+.footer-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.footer-line {
+  font-size: 0.8125rem;
+  color: var(--c-text-muted);
+}
+
+.footer-dot {
+  margin: 0 0.375rem;
+}
+
+.footer-links {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.375rem;
 }
 </style>

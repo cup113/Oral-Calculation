@@ -58,6 +58,11 @@ export default defineStore("question", () => {
             return `配置项”${paramConfig.name}“传入参数时应为不大于${paramConfig.max}的数，但接受到“${param}”`;
           break;
         }
+        case 'boolean': {
+          if (param !== '0' && param !== '1')
+            return `配置项”${paramConfig.name}“应为 0 或 1，但接受到“${param}”`;
+          break;
+        }
         case 'select': {
           let paramNum = parseInt(param);
           if (!Number.isInteger(paramNum))
@@ -78,7 +83,7 @@ export default defineStore("question", () => {
     return "";
   }
 
-  function reset_questions(fillAll?: boolean) {
+  function reset_questions() {
     questions.splice(0, questions.length);
     existProblems.value.clear();
     passedCnt.value = 0;
@@ -86,10 +91,8 @@ export default defineStore("question", () => {
     wrongAnswerCnt.value = 0;
     currentQuestionDuration.value = 0;
     passedQuestionsDuration.value = 0;
-    if (fillAll ?? setting.generateAtOnce) {
-      for (let i = 0; i < setting.quantity; ++i)
-        add_question();
-    }
+    for (let i = 0; i < setting.quantity; ++i)
+      add_question();
   }
 
   function get_question(): Question {
@@ -112,8 +115,6 @@ export default defineStore("question", () => {
   }
 
   function update_question() {
-    if (!(setting.generateAtOnce))
-      add_question();
     currentQuestion.value = questions[passedCnt.value];
   }
 

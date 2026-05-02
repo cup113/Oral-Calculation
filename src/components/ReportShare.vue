@@ -53,71 +53,157 @@ const
 </script>
 
 <template>
-  <div class="report-share absolute w-full h-full bg-white overflow-y-auto">
-    <div class="w-80 bg-gray-100 mx-auto px-2 py-1 my-2">
-      <div class="report-card">
-        <div class="text-gray-500 font-bold">口算练习 · {{ title }}</div>
-        <div class="text-gray-400 text-sm">{{ generatedDisplay }}</div>
-        <hr class="my-2">
-        <div class="overview-line flex justify-between">
-          <div class="text-left">
-            <div :class="correctRatio > 0.84 ? 'text-green-800' : 'text-blue-700'">
-              {{ correctRatioDisplay }}
-            </div>
-            <div>正确率</div>
-          </div>
-          <div class="text-center">
-            <div>{{ questions.length }}</div>
-            <div>题数</div>
-          </div>
-          <div class="text-right">
-            <div>{{ avgDuration }}</div>
-            <div>题均时长</div>
-          </div>
-        </div>
+  <div class="share-page">
+    <div class="share-card">
+      <div class="share-header">
+        <div class="share-title">口算练习 · {{ title }}</div>
+        <div class="share-date">{{ generatedDisplay }}</div>
       </div>
-      <div class="report-card">
-        <div class="text-lg">题目详情</div>
-        <div class="text-gray-500 flex gap-2 text-sm">
-          <span class="w-8 text-center">编号</span>
-          <span class="grow">用时</span>
-          <span class="w-8 text-center">结果</span>
+
+      <div class="share-overview">
+        <div class="share-overview-item">
+          <div class="share-ov-value" :class="correctRatio > 0.84 ? 'text-green-600' : 'text-amber-600'">
+            {{ correctRatioDisplay }}
+          </div>
+          <div class="share-ov-label">正确率</div>
         </div>
-        <QuestionNew v-for="(question, i) in questions" :key="`${i}-${question.problem}`"
-          :question="question" :num="i + 1" :duration-distribution="durationDistribution">
-        </QuestionNew>
-      </div>
-      <div class="report-card flex items-center justify-between">
-        <div class="text-center text-gray-500">
-          <div>速算练习</div>
-          <div>Oral Calculation</div>
+        <div class="share-overview-item">
+          <div class="share-ov-value">{{ questions.length }}</div>
+          <div class="share-ov-label">题数</div>
         </div>
-        <div v-html="qrImg"></div>
+        <div class="share-overview-item">
+          <div class="share-ov-value">{{ avgDuration }}</div>
+          <div class="share-ov-label">题均时长</div>
+        </div>
       </div>
     </div>
-    <div>
-      <button class="btn bg-gray-600 my-4" type="button" @click="go_to_main_page">返回主页</button>
+
+    <div class="share-card">
+      <div class="share-section-title">题目详情</div>
+      <div class="share-list-header">
+        <span class="w-8 text-center">#</span>
+        <span class="flex-1">用时</span>
+        <span class="w-8 text-center">结果</span>
+      </div>
+      <QuestionNew v-for="(question, i) in questions" :key="`${i}-${question.problem}`"
+        :question="question" :num="i + 1" :duration-distribution="durationDistribution" />
+    </div>
+
+    <div class="share-card share-footer-card">
+      <div class="share-brand">
+        <div>速算练习</div>
+        <div class="share-brand-en">Oral Calculation</div>
+      </div>
+      <div v-html="qrImg" class="share-qr"></div>
+    </div>
+
+    <div class="share-back">
+      <button class="btn-secondary" type="button" @click="go_to_main_page">返回主页</button>
     </div>
   </div>
 </template>
 
 <style lang="scss">
-.report-share {
-  z-index: 1;
+.share-page {
+  width: 100%;
+  max-width: 400px;
+}
 
-  .overview-line>div {
-    >div:nth-child(1) {
-      @apply text-2xl;
-      font-family: fantasy, sans-serif;
-    }
+.share-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+}
 
-    >div:nth-child(2) {
-      @apply text-sm text-gray-600;
-    }
+.share-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.share-title {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--c-text);
+}
+
+.share-date {
+  font-size: 0.8125rem;
+  color: var(--c-text-muted);
+  margin-top: 0.25rem;
+}
+
+.share-overview {
+  display: flex;
+  justify-content: space-between;
+}
+
+.share-overview-item {
+  text-align: center;
+  flex: 1;
+}
+
+.share-ov-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: fantasy, sans-serif;
+  color: var(--c-text);
+}
+
+.share-ov-label {
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+  margin-top: 0.125rem;
+}
+
+.share-section-title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--c-text);
+}
+
+.share-list-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0;
+  font-size: 0.8125rem;
+  color: var(--c-text-muted);
+  border-bottom: 1px solid var(--c-border);
+  margin-bottom: 0.25rem;
+}
+
+.share-footer-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.share-brand {
+  text-align: center;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+}
+
+.share-brand-en {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--c-text-muted);
+}
+
+.share-qr {
+  :deep(img) {
+    width: 64px;
+    height: 64px;
   }
+}
 
-  .report-card {
-    @apply bg-white my-2 text-left px-2 py-2;
-  }
+.share-back {
+  text-align: center;
+  margin-top: 0.5rem;
 }
 </style>

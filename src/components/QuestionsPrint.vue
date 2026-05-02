@@ -7,11 +7,13 @@ import { empty_array } from '@/util';
 
 const router = useRouter();
 
+document.title = '口算练习 | 打印';
+
 const { reset_questions, loaded, questionProvider } = useQuestionStore();
 const questions = (() => {
   if (!loaded)
     router.back();
-  reset_questions(true);
+  reset_questions();
   return useQuestionStore().questions;
 })();
 
@@ -23,13 +25,19 @@ const enum PrintStatus {
 
 const
   title = questionProvider.get_title(),
+  today = new Date().toLocaleDateString(),
+  printId = String.fromCharCode(
+    65 + Math.floor(Math.random() * 26),
+    65 + Math.floor(Math.random() * 26),
+    65 + Math.floor(Math.random() * 26)
+  ),
+  showPrintId = ref(true),
   problems = questions.map((q, index) => {
-    let dashes = "_".repeat(Math.floor(q.correctAnswer.length * 2.5));
     let problemBase: string = `(${index + 1}) ${q.problem}`;
     if (q.problem.includes('?'))
-      return problemBase.replace("?", dashes);
+      return problemBase.replace("?", "__________");
     else
-      return problemBase + dashes;
+      return problemBase + "__________";
   }),
   answers = questions.map((q, index) => {
     return `(${index + 1}) ${q.correctAnswer}`;
@@ -38,15 +46,19 @@ const
   printStatus = ref(PrintStatus.Ready),
   displaySource = computed(() => [problems, problems, answers][printStatus.value]),
   rows = computed(() => {
-    let rows = empty_array(Math.floor(displaySource.value.length / colCnt.value)).map((_, index) => {
+    let rows = empty_array(Math.ceil(displaySource.value.length / colCnt.value)).map((_, index) => {
       return displaySource.value.slice(index * colCnt.value, (index + 1) * colCnt.value);
     });
     return rows;
   });
 
+function go_back() {
+  router.push("/");
+}
+
 function print_problems() {
   printStatus.value = PrintStatus.OnPrintProblems;
-  nextTick(() => window.print()); // to make sure template has been loaded.
+  nextTick(() => window.print());
 }
 
 function print_answers() {
@@ -54,46 +66,59 @@ function print_answers() {
   nextTick(() => window.print());
 }
 
-function change_cols(ev: Event) {
-  let value = parseInt((ev.target as HTMLInputElement).value);
-  if (Number.isInteger(value) || value >= 1)
-    colCnt.value = value;
+function set_cols(val: number) {
+  colCnt.value = val;
 }
 
 </script>
 
 <template>
-  <div class="questions-print">
-    <div class="print-setting mt-4">
-      <button class="btn bg-green-500 mr-2" @click="print_problems">打印题目</button>
-      <button class="btn bg-green-500" @click="print_answers">打印答案</button>
-      <span>
-        <span>列数</span>
-        <input
-          type="number" min="1" step="1" placeholder="列数"
-          class="border-black border-2 w-12"
-          :value="colCnt" @change="change_cols">
-      </span>
+  <div class="print-page">
+    <div class="print-toolbar">
+      <div class="print-toolbar-group">
+        <button class="btn-ghost" @click="go_back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          返回
+        </button>
+        <button class="btn-primary" @click="print_problems">打印题目</button>
+        <button class="btn-primary" @click="print_answers">打印答案</button>
+      </div>
+      <div class="print-toolbar-group">
+        <div class="print-cols-setting">
+          <label class="print-cols-label">列数</label>
+          <div class="quick-btns">
+            <button type="button" class="quick-btn" :class="{ active: colCnt === 1 }" @click="set_cols(1)">1</button>
+            <button type="button" class="quick-btn" :class="{ active: colCnt === 2 }" @click="set_cols(2)">2</button>
+            <button type="button" class="quick-btn" :class="{ active: colCnt === 3 }" @click="set_cols(3)">3</button>
+            <button type="button" class="quick-btn" :class="{ active: colCnt === 4 }" @click="set_cols(4)">4</button>
+          </div>
+        </div>
+        <label class="toggle-switch print-id-toggle" :class="{ on: showPrintId }" @click="showPrintId = !showPrintId">
+          <div class="toggle-track">
+            <div class="toggle-thumb"></div>
+          </div>
+          <span class="toggle-label">编号</span>
+        </label>
+      </div>
     </div>
-    <div class="text-gray-400 text-sm mt-2 print-tips">
-      <div>提示：Windows 可用 Microsoft Print to PDF 打印。若表格异常扩大请缩小列数。</div>
-      <div>打印题目和答案可设置不同列数。</div>
+    <div class="print-tips">
+      <p>Windows 可用 Microsoft Print to PDF 打印。若表格异常扩大请缩小列数。</p>
+      <p>打印题目和答案可设置不同列数。</p>
     </div>
-    <table class="print-main">
+    <table class="print-table">
       <thead>
         <tr>
-          <th class="text-center text-2xl" :colspan="colCnt">
+          <th class="print-table-title" :colspan="colCnt">
             <span>{{ title }}</span>
-            <span v-if="printStatus === PrintStatus.OnPrintAnswers">
-              &nbsp;- 答案
-            </span>
+            <span v-if="printStatus === PrintStatus.OnPrintAnswers">&nbsp;- 答案</span>
+            <div v-if="showPrintId" class="print-table-id">{{ today }} · {{ printId }}</div>
           </th>
         </tr>
-        <tr class="h-4"></tr>
+        <tr class="print-table-spacer"></tr>
       </thead>
       <tbody>
-        <tr class="row" v-for="(row, i) in rows" :key="i">
-          <td v-for="(problem, j) in row" :key="`${i}-${j}`">{{ problem }}</td>
+        <tr v-for="(row, i) in rows" :key="i">
+          <td v-for="(item, j) in row" :key="`${i}-${j}`" class="print-cell">{{ item }}</td>
         </tr>
       </tbody>
     </table>
@@ -101,21 +126,151 @@ function change_cols(ev: Event) {
 </template>
 
 <style lang="scss">
-.questions-print {
-  @apply absolute w-full min-h-full bg-white overflow-auto;
-  z-index: 1;
-
-  .print-main {
-    @apply mx-auto text-left overflow-hidden border-black border-2 print:border-0;
-    width: 180mm;
-    font-size: 5mm;
-  }
-
-  .row>td {
-    @apply break-keep whitespace-nowrap overflow-visible px-4;
-  }
+.print-page {
+  width: 100%;
+  background: white;
 }
 
+.print-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.print-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.print-toolbar-group .btn-ghost {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.print-cols-setting {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.print-cols-label {
+  font-size: 0.875rem;
+  color: var(--c-text-secondary);
+}
+
+.quick-btns {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.quick-btn {
+  padding: 0.375rem 0.625rem;
+  font-size: 0.8125rem;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1;
+}
+
+.quick-btn:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+.quick-btn.active {
+  border-color: var(--c-primary);
+  background: var(--c-primary);
+  color: #fff;
+}
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-track {
+  position: relative;
+  width: 2.25rem;
+  height: 1.25rem;
+  background: var(--c-border);
+  border-radius: 0.625rem;
+  transition: background 0.2s;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.on .toggle-track {
+  background: var(--c-primary);
+}
+
+.toggle-switch.on .toggle-track .toggle-thumb {
+  transform: translateX(1rem);
+}
+
+.toggle-label {
+  font-size: 0.8125rem;
+  color: var(--c-text-secondary);
+}
+
+.print-tips {
+  font-size: 0.8125rem;
+  color: var(--c-text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.print-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 180mm;
+  font-size: 5mm;
+}
+
+.print-table-title {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding-bottom: 0.5rem;
+}
+
+.print-table-id {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--c-text-muted);
+  margin-top: 0.125rem;
+}
+
+.print-table-spacer {
+  height: 0.5rem;
+}
+
+.print-cell {
+  padding: 0.125rem 0.5rem;
+  white-space: nowrap;
+  overflow: visible;
+}
 
 @media print {
   @page {
@@ -123,9 +278,17 @@ function change_cols(ev: Event) {
     margin: 15mm;
   }
 
-  .print-setting,
+  .print-toolbar,
   .print-tips {
     display: none;
+  }
+
+  .print-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
   }
 }
 </style>

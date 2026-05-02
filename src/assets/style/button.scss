@@ -1,14 +1,82 @@
 @layer components {
-  .badge {
-    @apply
-      rounded px-2 py-0.5 text-white font-bold
-      text-sm select-none mx-1 no-underline
-      hover:shadow-lg active:text-gray-200;
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 select-none whitespace-nowrap;
+    @apply text-sm font-medium leading-none;
+    @apply transition-all duration-200;
+    @apply rounded-xl px-5 py-2.5;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
   }
 
-  .btn {
-    @apply
-      rounded-lg px-3 py-1 text-white
-      hover:shadow-xl active:font-bold;
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn-primary {
+    @apply btn;
+    background-color: var(--c-primary);
+    color: white;
+  }
+  .btn-primary:hover {
+    background-color: var(--c-primary-hover);
+    box-shadow: var(--shadow);
+  }
+  .btn-primary:focus-visible {
+    --tw-ring-color: var(--c-primary);
+  }
+
+  .btn-secondary {
+    @apply btn;
+    background-color: transparent;
+    color: var(--c-text-secondary);
+    border: 1px solid var(--c-border);
+  }
+  .btn-secondary:hover {
+    background-color: var(--c-bg);
+    border-color: var(--c-text-muted);
+  }
+  .btn-secondary:focus-visible {
+    --tw-ring-color: var(--c-text-muted);
+  }
+
+  .btn-ghost {
+    @apply btn;
+    background-color: transparent;
+    color: var(--c-text-secondary);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .btn-ghost:hover {
+    background-color: var(--c-bg);
+    color: var(--c-text);
+  }
+  .btn-ghost:focus-visible {
+    --tw-ring-color: var(--c-text-muted);
+  }
+
+  .btn-danger {
+    @apply btn;
+    background-color: var(--c-error);
+    color: white;
+  }
+  .btn-danger:hover {
+    background-color: #dc2626;
+    box-shadow: var(--shadow);
+  }
+  .btn-danger:focus-visible {
+    --tw-ring-color: var(--c-error);
+  }
+
+  .badge {
+    @apply inline-flex items-center select-none no-underline;
+    @apply text-xs font-medium leading-none;
+    @apply rounded-full px-3 py-1;
+    @apply transition-colors duration-200;
+    background-color: var(--c-bg);
+    color: var(--c-text-secondary);
+    border: 1px solid var(--c-border);
+  }
+  .badge:hover {
+    background-color: var(--c-border);
+    color: var(--c-text);
   }
 }

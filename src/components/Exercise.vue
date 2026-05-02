@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router';
-import { computed, ref, watch, onMounted } from 'vue';
+import { computed, ref, watch, nextTick } from 'vue';
 import Message from 'vue-m-message';
 
 import { QUESTION_CONTEXT } from '@/question';
@@ -8,10 +8,6 @@ import useQuestionStore from '@/store/question';
 import useSettingStore from '@/store/setting';
 
 import Duration from '../assets/components/Duration.vue';
-
-onMounted(() => {
-  answerInput.value!.focus();
-}); // This should be in the beginning of the program.
 
 const
   router = useRouter(),
@@ -52,6 +48,11 @@ const
   answerInput = ref(null as HTMLInputElement | null);
 
 const urlParamsHint = computed(() => `当前 URL 已包含题型参数（类别: ${route.params.category}, 参数: ${route.params.params}, 题数: ${route.params.quantity}），可收藏此页快速进入`);
+
+watch(() => question.loaded, loaded => {
+  if (loaded)
+    document.title = `口算练习 | ${question.questionProvider.get_title()}`;
+}, { immediate: true });
 
 question.reset_questions();
 manage_route_params();
@@ -99,9 +100,11 @@ function question_module_onload() {
 
 function next_question(): void {
   question.update_question();
-  answerInput.value!.focus();
   status.value = Status.Answering;
-  answerInput.value!.value = "";
+  nextTick(() => {
+    answerInput.value?.focus();
+    if (answerInput.value) answerInput.value.value = "";
+  });
 }
 
 function submit_question(ev: Event): void {
@@ -135,64 +138,198 @@ function submit_question(ev: Event): void {
 </script>
 
 <template>
-  <div class="exercise pt-12">
-    <button class="btn bg-gray-700 absolute left-6 top-4" type="button" @click="go_back">返回</button>
-    <div class="progress mx-24 text-2xl">
-      <div class="progress-bar text-green-400 bg-blue-600" :style="{ '--ratio': question.passedRatio }">
-        {{ question.passedCnt }} / {{ setting.quantity }}
+  <div class="exercise-page">
+    <div class="exercise-card">
+      <div class="exercise-header">
+        <button class="btn-ghost" type="button" @click="go_back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          返回
+        </button>
+        <span class="url-hint" :title="urlParamsHint">ⓘ</span>
       </div>
-    </div>
-    <div class="flex items-center justify-center gap-1 my-4">
-      <div class="bg-gray-100 w-max mx-auto py-1">
-      <div class="board-item">
-        <span>正确题数 / 已答题目</span>
-        <span>{{ question.correctCnt }} / {{ question.passedCnt }}</span>
-      </div>
-      <div class="board-item">
-        <span>错误回答数</span>
-        <span>{{ question.wrongAnswerCnt }}</span>
-      </div>
-      <div class="board-item">
-        <span>累计用时</span>
-        <span>
-          <Duration :duration="question.accumulatedDuration"></Duration>
+
+      <div class="exercise-progress-row">
+        <div class="progress flex-1">
+          <div class="progress-bar" :style="{ '--ratio': question.passedRatio }"></div>
+        </div>
+        <span class="progress-label">
+          {{ question.passedCnt }} / {{ setting.quantity }}
         </span>
       </div>
+
+      <div class="exercise-stats">
+        <div class="stat-item">
+          <span class="stat-value stat-correct">{{ question.correctCnt }}</span>
+          <span class="stat-label">正确</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value stat-wrong">{{ question.wrongAnswerCnt }}</span>
+          <span class="stat-label">错误</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">
+            <Duration :duration="question.accumulatedDuration" />
+          </span>
+          <span class="stat-label">用时</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ question.passedCnt ? question.correctCnt + '/' + question.passedCnt : '-' }}</span>
+          <span class="stat-label">正确/已答</span>
+        </div>
       </div>
-      <span class="cursor-help text-gray-400 hover:text-gray-600 text-lg" :title="urlParamsHint">ⓘ</span>
-    </div>
-    <form class="text-2xl" @submit.prevent="submit_question">
-      <div>{{ question.currentQuestion.problem }}</div>
-      <div class="px-2 py-2 flex flex-nowrap gap-1 lg:ml-24 lg:mr-12 sm:ml-12 sm:mr-2">
-        <input class="answer text-center grow border break-keep" type="text" name="answer" autocomplete="off"
-          placeholder="请在此处输入答案..." ref="answerInput">
-        <button class="btn bg-blue-500 w-max" type="submit" v-bind="{ 'data-umami-event': 'answer-submit' }">提交</button>
+
+      <div class="exercise-question-area" v-if="started">
+        <div class="question-text">{{ question.currentQuestion.problem }}</div>
+
+        <form class="question-form" @submit.prevent="submit_question">
+          <input class="answer-input" type="text" name="answer" autocomplete="off"
+            placeholder="输入答案..." ref="answerInput">
+          <button class="btn-primary" type="submit">提交</button>
+        </form>
+
+        <p class="question-hint">按 Enter 提交并继续，全程无需离开输入框</p>
       </div>
-      <div class="text-gray-400 text-sm">提示：按 Enter 键（回车/下一步）既可提交答案，又可进入下一题，全程无需离开输入框</div>
-    </form>
-    <div v-if="!started">
-      <button class="btn bg-green-700" type="button" @click="start"
-        v-bind="{ 'data-umami-event': 'start-exercise' }">开始</button>
-      <button class="btn bg-gray-500 ml-2" @click="go_to_print_page"
-        v-bind="{ 'data-umami-event': 'start-print' }">打印</button>
+
+      <div class="exercise-start-area" v-else>
+        <div class="exercise-start-buttons">
+          <button class="btn-primary" type="button" @click="start">开始</button>
+          <button class="btn-secondary" type="button" @click="go_to_print_page">打印</button>
+        </div>
+      </div>
     </div>
+
   </div>
 </template>
 
 <style lang="scss">
-.exercise .board-item {
-  @apply text-lg w-max mx-auto mt-1 px-1;
-
-  >span {
-    @apply inline-block;
-
-    &:nth-child(1) {
-      @apply w-64;
-    }
-
-    &:nth-child(2) {
-      @apply w-32 text-blue-600 font-bold;
-    }
-  }
+.exercise-page {
+  width: 100%;
+  max-width: 560px;
 }
+
+.exercise-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.exercise-header .btn-ghost {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.exercise-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+}
+
+.exercise-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.progress-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+  white-space: nowrap;
+}
+
+.exercise-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+  background: var(--c-bg);
+  border-radius: var(--radius-sm);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--c-text);
+}
+
+.stat-value.stat-correct {
+  color: var(--c-success);
+}
+
+.stat-value.stat-wrong {
+  color: var(--c-error);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+  margin-top: 0.125rem;
+}
+
+.exercise-question-area {
+  text-align: center;
+}
+
+.question-text {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  color: var(--c-text);
+}
+
+.question-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.answer-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1.125rem;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+  color: var(--c-text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+
+.answer-input:focus {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--c-primary-light);
+}
+
+.question-hint {
+  font-size: 0.8125rem;
+  color: var(--c-text-muted);
+  margin-top: 0.75rem;
+}
+
+.exercise-start-area {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.exercise-start-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
 </style>

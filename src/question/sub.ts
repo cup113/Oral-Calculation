@@ -7,7 +7,7 @@ class SubtractQuestionProvider implements QuestionProvider {
   constructor(context: QuestionContext, params: string[]) {
     this.context = context;
     this.digits = parseInt(params[0]);
-    this.allowNegative = parseInt(params[1]) === 0 ? false : true;
+    this.allowNegative = params[1] === '1';
   }
 
   public get_question(): Question {
@@ -41,9 +41,8 @@ export default {
       default: 3,
     },
     {
-      type: 'select',
+      type: 'boolean',
       name: "允许结果为负数",
-      choices: ["不允许", "允许"],
       default: 0,
     }
   ],

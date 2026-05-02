@@ -65,3 +65,7 @@
 2. 高度可定制化的题型。
 3. 在线计时练习。
 4. 结束后提供全面报告。
+
+## 致谢
+
+- 网站图标（Favicon）由 [Magnific](https://www.magnific.com/) 生成。

@@ -11,7 +11,6 @@ const props = defineProps<{
 const
   number = props.i + 1,
   isCorrect = props.question.is_first_time_correct(),
-  correctDisplay = isCorrect ? "✅" : "❌",
   problem = props.question.problem,
   duration = props.question.get_duration(),
   correctAnswer = props.question.correctAnswer,
@@ -20,56 +19,114 @@ const
 </script>
 
 <template>
-  <div class="question-item inline-grid text-lg border-2">
-    <span class="text-2xl bg-blue-100">{{ number }}</span>
-    <span class="text-2xl" :class="isCorrect ? 'bg-green-100' : 'bg-red-100'">
-      {{ correctDisplay }}
-    </span>
-    <span class="break-keep bg-cyan-100 px-1">
-      <Duration :duration="duration"></Duration>
-    </span>
-    <span class="bg-orange-100 px-1">{{ problem }}</span>
-    <span class="text-green-700 bg-green-100 px-1">{{ correctAnswer }}</span>
-    <span class="text-xs text-red-700 bg-red-100 px-1">
-      <span class="block w-full" v-for="wrongAnswer in wrongAnswers">{{ wrongAnswer }}</span>
-    </span>
+  <div class="q-item" :class="isCorrect ? 'q-correct' : 'q-wrong'">
+    <div class="q-head">
+      <span class="q-num">{{ number }}</span>
+      <span class="q-dot" :class="isCorrect ? 'dot-correct' : 'dot-wrong'"></span>
+    </div>
+    <div class="q-body">
+      <span class="q-problem">{{ problem }}</span>
+      <div class="q-meta">
+        <span class="q-answer q-answer-correct">{{ correctAnswer }}</span>
+        <span class="q-sep">&middot;</span>
+        <Duration :duration="duration" />
+        <template v-if="wrongAnswers.length">
+          <span class="q-sep">&middot;</span>
+          <span class="q-wrong-list">
+            ✘ {{ wrongAnswers.join(', ') }}
+          </span>
+        </template>
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="scss">
-.question-item {
-  grid-template-areas:
-    "number correct duration"
-    "problem problem problem"
-    "corAns corAns wrongAnswers";
+.q-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  width: 100%;
+}
 
-  >span {
-    @apply border-2 border-black -ml-0.5 -mt-0.5;
+.q-item.q-correct {
+  border-left: 3px solid var(--c-success);
+}
 
-    &:nth-child(1) {
-      grid-area: number;
-      min-width: 1.5em;
-    }
+.q-item.q-wrong {
+  border-left: 3px solid var(--c-error);
+  background: var(--c-error-light);
+}
 
-    &:nth-child(2) {
-      grid-area: correct;
-    }
+.q-head {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 2rem;
+  padding-top: 0.125rem;
+}
 
-    &:nth-child(3) {
-      grid-area: duration;
-    }
+.q-num {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--c-text-muted);
+}
 
-    &:nth-child(4) {
-      grid-area: problem;
-    }
+.q-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
 
-    &:nth-child(5) {
-      grid-area: corAns;
-    }
+.dot-correct {
+  background: var(--c-success);
+}
 
-    &:nth-child(6) {
-      grid-area: wrongAnswers;
-    }
-  }
+.dot-wrong {
+  background: var(--c-error);
+}
+
+.q-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.q-problem {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--c-text);
+  line-height: 1.4;
+}
+
+.q-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--c-text-secondary);
+}
+
+.q-answer {
+  font-weight: 600;
+}
+
+.q-answer-correct {
+  color: var(--c-success);
+}
+
+.q-sep {
+  color: var(--c-text-muted);
+}
+
+.q-wrong-list {
+  color: var(--c-error);
 }
 </style>

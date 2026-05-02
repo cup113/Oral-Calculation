@@ -125,9 +125,8 @@ export default {
       default: 0,
     },
     {
-      type: 'select',
+      type: 'boolean',
       name: '允许负数',
-      choices: ["不允许", "允许"],
       default: 0,
     }
   ],

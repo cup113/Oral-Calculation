@@ -2,32 +2,43 @@
 import { computed } from 'vue';
 
 import type { Milliseconds } from '@/util';
-import { empty_array } from '@/util';
 
 const props = defineProps<{
   duration: Milliseconds
 }>();
 
 const
-  seconds = computed(() => Math.floor(props.duration / 1000)),
-  milliseconds = computed(() => props.duration % 1000),
-  millisecondsDisplay = computed(() => {
-    let res = milliseconds.value.toFixed(0);
-    if (seconds.value > 0)
-      res = res.padStart(3, '0');
-    return res;
-  });
+  totalSeconds = computed(() => props.duration / 1000),
+  intPart = computed(() => Math.floor(totalSeconds.value)),
+  fracPart = computed(() => '.' + String(Math.round(props.duration % 1000)).padStart(3, '0'));
 
 </script>
 
 <template>
-  <span class="duration">
-    <template v-if="seconds == 0">
-      <span class="text-sm">{{ millisecondsDisplay }}毫秒</span>
-    </template>
-    <template v-else>
-      <span>{{ seconds }}秒</span>
-      <span class="text-xs opacity-75">{{ millisecondsDisplay }}毫秒</span>
-    </template>
+  <span class="duration-text">
+    <span class="dur-int">{{ intPart }}</span>
+    <span class="dur-frac">{{ fracPart }}</span>
+    <span class="dur-unit">″</span>
   </span>
 </template>
+
+<style lang="scss">
+.duration-text {
+  font-variant-numeric: tabular-nums;
+}
+
+.dur-int {
+  font-size: 1em;
+  font-weight: 700;
+}
+
+.dur-frac {
+  font-size: 0.6em;
+  opacity: 0.5;
+}
+
+.dur-unit {
+  font-size: 1em;
+  font-weight: 400;
+}
+</style>

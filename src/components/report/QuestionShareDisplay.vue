@@ -25,26 +25,73 @@ const
   progressColorIndex = isFast ? 0 : (isCorrect ? (isSlow ? 2 : 1) : 3),
   ratio = 0.4 + 0.4 * (maxDur - duration + 1) / (maxDur - minDur + 2);
 
+const colors = ['bg-cyan-400', 'bg-green-600', 'bg-orange-600', 'bg-red-500'];
+
 </script>
 
 <template>
-  <div class="question-share-item rounded-xl my-1 flex relative">
-    <div
-      class="bar absolute rounded-xl h-full"
-      :class="['bg-cyan-400', 'bg-green-600', 'bg-orange-600', 'bg-red-500'][progressColorIndex]"
-      :style="{ '--ratio': ratio }">
-    </div>
-    <span class="w-8 text-center text-white z-0">{{ serialNum }}</span>
-    <span class="grow pl-2 text-white z-0">{{ durationDisplay }}</span>
-    <span class="w-8 text-center font-bold"
-      :class="isCorrect ? 'text-green-500' : 'text-red-700'">{{ resultDisplay }}</span>
+  <div class="qs-item">
+    <div class="qs-bar" :class="colors[progressColorIndex]" :style="{ '--ratio': ratio }"></div>
+    <span class="qs-num">{{ serialNum }}</span>
+    <span class="qs-duration">{{ durationDisplay }}</span>
+    <span class="qs-result" :class="isCorrect ? 'qs-result-ok' : 'qs-result-ko'">{{ resultDisplay }}</span>
   </div>
 </template>
 
 <style lang="scss">
-.question-share-item {
-  >.bar {
-    width: calc(var(--ratio) * 100%);
-  }
+.qs-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+  margin-top: 0.125rem;
+}
+
+.qs-bar {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-sm);
+  opacity: 0.35;
+  width: calc(var(--ratio) * 100%);
+  transition: width 0.4s ease;
+}
+
+.qs-num {
+  width: 2rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--c-text-secondary);
+  position: relative;
+  z-index: 1;
+}
+
+.qs-duration {
+  flex: 1;
+  padding-left: 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--c-text-secondary);
+  position: relative;
+  z-index: 1;
+}
+
+.qs-result {
+  width: 2rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+.qs-result-ok {
+  color: var(--c-success);
+}
+
+.qs-result-ko {
+  color: var(--c-error);
 }
 </style>

@@ -19,6 +19,8 @@ const
     return question.questionModule.paramsConfig;
   });
 
+document.title = '口算练习';
+
 function go_to_mistakes_collection() {
   router.push("/mistakes-collection");
 }
@@ -45,87 +47,264 @@ function change_quantity(ev: Event) {
   setting.quantityManager.set((ev.target as HTMLInputElement).value);
 }
 
-function change_avoid_repeat(ev: Event) {
-  setting.avoidRepeatManager.set((ev.target as HTMLSelectElement).value);
+function input_quantity(ev: Event) {
+  let val = (ev.target as HTMLInputElement).value;
+  if (/^\d+$/.test(val) && parseInt(val) >= 1)
+    setting.quantityManager.set(val);
 }
 
-function change_generate_at_once(ev: Event) {
-  setting.generateAtOnceManager.set((ev.target as HTMLSelectElement).value);
+function toggle_avoid_repeat() {
+  setting.avoidRepeatManager.set(String(!setting.avoidRepeat));
+}
+
+function set_quantity(val: number) {
+  setting.quantityManager.set(String(val));
 }
 
 </script>
 
 <template>
-  <div class="welcome pt-8 sm:pt-0">
-    <button type="button" class="btn bg-yellow-700 absolute left-4 top-4"
-      @click="go_to_mistakes_collection">错题本</button>
-    <h2 class="text-2xl font-bold py-4">欢迎来到口算练习</h2>
-    <form class="w-max mx-auto text-lg" @submit.prevent="submit_form">
-      <div class="param-item">
-        <label for="category">类别</label>
-        <span>
-          <select id="category" name="category" title="类别" :value="setting.categoryId" @change="change_category">
+  <div class="welcome-page">
+    <div class="welcome-card">
+      <div class="welcome-header">
+        <h1 class="welcome-title">口算练习</h1>
+        <button class="btn-ghost welcome-mistakes-btn" type="button" @click="go_to_mistakes_collection">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          错题本
+        </button>
+      </div>
+
+      <form class="welcome-form" @submit.prevent="submit_form">
+        <div class="form-field">
+          <label class="form-label" for="category">类别</label>
+          <select id="category" name="category" class="form-input" :value="setting.categoryId" @change="change_category">
             <option v-for="category in CATEGORIES" :value="category.id" :key="category.id">
               {{ category.desc }}
             </option>
           </select>
-        </span>
-      </div>
-      <div class="param-item">
-        <label for="quantity">题数</label>
-        <span>
-          <input id="quantity" name="quantity" type="number" required="true" min="1" step="1" placeholder="练习题数..."
-            :value="setting.quantity" @change="change_quantity">
-        </span>
-      </div>
-      <div class="param-item">
-        <label for="avoid-repeat">避免重复题</label>
-        <span>
-          <select id="avoid-repeat" name="avoid-repeat" title="避免重复题" :value="setting.avoidRepeat"
-            @change="change_avoid_repeat">
-            <option value="true">尽量避免</option>
-            <option value="false">不避免</option>
-          </select>
-        </span>
-      </div>
-      <div class="param-item">
-        <label for="generate-at-once">生成题目</label>
-        <span>
-          <select id="generate-at-once" name="generate-at-once" title="生成题目" :value="setting.generateAtOnce"
-            @change="change_generate_at_once">
-            <option value="false">答题时生成</option>
-            <option value="true">开始时立即生成</option>
-          </select>
-        </span>
-      </div>
-      <hr class="my-2 h-1">
-      <ParamItem v-for="(config, i) in paramsConfig" :key="`${setting.categoryId}-${i}`" :i="i" :config="config"
-        :default="setting.params.length > i ? setting.params[i] : undefined">
-      </ParamItem>
-      <div class="text-right relative left-4 top-4">
-        <button class="btn bg-blue-500" type="submit">开始练习</button>
-      </div>
-    </form>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="quantity">题数</label>
+          <div class="form-field-row">
+            <input id="quantity" name="quantity" type="number" required min="1" step="1" class="form-input flex-1"
+              placeholder="练习题数..." :value="setting.quantity" @input="input_quantity" @change="change_quantity">
+            <div class="quick-btns">
+              <button type="button" class="quick-btn" :class="{ active: setting.quantity === 5 }" @click="set_quantity(5)">5</button>
+              <button type="button" class="quick-btn" :class="{ active: setting.quantity === 10 }" @click="set_quantity(10)">10</button>
+              <button type="button" class="quick-btn" :class="{ active: setting.quantity === 20 }" @click="set_quantity(20)">20</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">避免重复题</label>
+          <div class="toggle-switch" :class="{ on: setting.avoidRepeat }" @click="toggle_avoid_repeat">
+            <div class="toggle-track">
+              <div class="toggle-thumb"></div>
+            </div>
+            <span class="toggle-label">{{ setting.avoidRepeat ? '开启' : '关闭' }}</span>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <ParamItem v-for="(config, i) in paramsConfig" :key="`${setting.categoryId}-${i}`" :i="i" :config="config"
+          :default="setting.params.length > i ? setting.params[i] : undefined">
+        </ParamItem>
+
+        <div class="form-action">
+          <button class="btn-primary" type="submit">开始练习</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <style lang="scss">
-.welcome {
-  .param-item {
-    @apply w-fit;
+.welcome-page {
+  width: 100%;
+  max-width: 420px;
+}
 
-    >label {
-      @apply text-left block w-fit;
-    }
+.welcome-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
 
-    >span {
-      @apply block;
-    }
+.welcome-mistakes-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+}
 
-    input,
-    select {
-      @apply w-64 text-xl inline-block border border-gray-300 px-2 rounded;
-    }
+.welcome-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--c-text);
+  margin: 0;
+}
+
+.welcome-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.welcome-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--c-text-secondary);
+  min-width: 5.5rem;
+  flex-shrink: 0;
+}
+
+.form-field-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9375rem;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  background: var(--c-surface);
+  color: var(--c-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.form-input.flex-1 {
+  flex: 1;
+}
+
+.form-input:focus {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px var(--c-primary-light);
+}
+
+.quick-btns {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.quick-btn {
+  padding: 0.375rem 0.625rem;
+  font-size: 0.8125rem;
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg);
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  line-height: 1;
+}
+
+.quick-btn:hover {
+  border-color: var(--c-primary);
+  color: var(--c-primary);
+}
+
+.quick-btn.active {
+  border-color: var(--c-primary);
+  background: var(--c-primary);
+  color: #fff;
+}
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-track {
+  position: relative;
+  width: 2.25rem;
+  height: 1.25rem;
+  background: var(--c-border);
+  border-radius: 0.625rem;
+  transition: background 0.2s;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.on .toggle-track {
+  background: var(--c-primary);
+}
+
+.toggle-switch.on .toggle-track .toggle-thumb {
+  transform: translateX(1rem);
+}
+
+.toggle-label {
+  font-size: 0.8125rem;
+  color: var(--c-text-secondary);
+}
+
+.form-divider {
+  height: 1px;
+  background: var(--c-border);
+  margin: 0.25rem 0;
+}
+
+.form-action {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .form-field {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.375rem;
+  }
+
+  .form-label {
+    min-width: unset;
+  }
+
+  .form-field-row {
+    flex-wrap: wrap;
+  }
+
+  .quick-btns {
+    width: 100%;
+    justify-content: flex-end;
   }
 }
 </style>
