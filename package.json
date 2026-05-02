@@ -1,6 +1,6 @@
 {
   "name": "oral-calculation",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "scripts": {
     "dev": "vite",
     "ts-check": "vue-tsc --noEmit",

@@ -84,8 +84,8 @@ function go_to_share() {
     </div>
 
     <div class="report-actions">
-      <button class="btn-secondary" type="button" @click="go_to_main_page">返回主页</button>
-      <button class="btn-primary" type="button" @click="go_to_share">分享</button>
+      <button class="btn-secondary" type="button" @click="go_to_main_page" data-umami-event="end-return">返回主页</button>
+      <button class="btn-primary" type="button" @click="go_to_share" data-umami-event="end-share">分享</button>
     </div>
   </div>
 </template>

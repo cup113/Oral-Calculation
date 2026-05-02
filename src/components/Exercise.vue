@@ -124,6 +124,7 @@ function submit_question(ev: Event): void {
       Message.info("请等待跳转");
       return;
   }
+  window.umami?.track('answer-submit');
   const
     formData = new FormData(ev.target as HTMLFormElement),
     answer = (formData.get("answer") as string).trim(),
@@ -192,8 +193,8 @@ function submit_question(ev: Event): void {
 
       <div class="exercise-start-area" v-else>
         <div class="exercise-start-buttons">
-          <button class="btn-primary" type="button" @click="start">开始</button>
-          <button class="btn-secondary" type="button" @click="go_to_print_page">打印</button>
+          <button class="btn-primary" type="button" @click="start" data-umami-event="start-exercise">开始</button>
+          <button class="btn-secondary" type="button" @click="go_to_print_page" data-umami-event="start-print">打印</button>
         </div>
       </div>
     </div>
