@@ -75,6 +75,10 @@ function change_cols(ev: Event) {
           :value="colCnt" @change="change_cols">
       </span>
     </div>
+    <div class="text-gray-400 text-sm mt-2 print-tips">
+      <div>提示：Windows 可用 Microsoft Print to PDF 打印。若表格异常扩大请缩小列数。</div>
+      <div>打印题目和答案可设置不同列数。</div>
+    </div>
     <table class="print-main">
       <thead>
         <tr>
@@ -119,7 +123,8 @@ function change_cols(ev: Event) {
     margin: 15mm;
   }
 
-  .print-setting {
+  .print-setting,
+  .print-tips {
     display: none;
   }
 }

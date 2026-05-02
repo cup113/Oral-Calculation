@@ -70,6 +70,7 @@ function export_all() {
     <div>
       <button type="button" class="btn bg-gray-500 mb-4 mr-4" @click="go_to_main_page">返回主页</button>
       <button type="button" class="btn bg-blue-500 mb-4" @click="export_all">导出记录</button>
+      <span class="cursor-help text-gray-400 hover:text-gray-600" title="题数多时可能需要等待一段时间">ⓘ</span>
     </div>
     <div>
       <button type="button" class="btn bg-red-500" @click="clear_all">清空错题本</button>

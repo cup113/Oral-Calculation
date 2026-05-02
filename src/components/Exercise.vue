@@ -51,6 +51,8 @@ const
   started = computed(() => status.value !== Status.Loaded && status.value !== Status.Loading),
   answerInput = ref(null as HTMLInputElement | null);
 
+const urlParamsHint = computed(() => `当前 URL 已包含题型参数（类别: ${route.params.category}, 参数: ${route.params.params}, 题数: ${route.params.quantity}），可收藏此页快速进入`);
+
 question.reset_questions();
 manage_route_params();
 
@@ -140,7 +142,8 @@ function submit_question(ev: Event): void {
         {{ question.passedCnt }} / {{ setting.quantity }}
       </div>
     </div>
-    <div class="bg-gray-100 w-max mx-auto py-1 my-4">
+    <div class="flex items-center justify-center gap-1 my-4">
+      <div class="bg-gray-100 w-max mx-auto py-1">
       <div class="board-item">
         <span>正确题数 / 已答题目</span>
         <span>{{ question.correctCnt }} / {{ question.passedCnt }}</span>
@@ -155,6 +158,8 @@ function submit_question(ev: Event): void {
           <Duration :duration="question.accumulatedDuration"></Duration>
         </span>
       </div>
+      </div>
+      <span class="cursor-help text-gray-400 hover:text-gray-600 text-lg" :title="urlParamsHint">ⓘ</span>
     </div>
     <form class="text-2xl" @submit.prevent="submit_question">
       <div>{{ question.currentQuestion.problem }}</div>
@@ -163,6 +168,7 @@ function submit_question(ev: Event): void {
           placeholder="请在此处输入答案..." ref="answerInput">
         <button class="btn bg-blue-500 w-max" type="submit" v-bind="{ 'data-umami-event': 'answer-submit' }">提交</button>
       </div>
+      <div class="text-gray-400 text-sm">提示：按 Enter 键（回车/下一步）既可提交答案，又可进入下一题，全程无需离开输入框</div>
     </form>
     <div v-if="!started">
       <button class="btn bg-green-700" type="button" @click="start"
