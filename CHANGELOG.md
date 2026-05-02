@@ -7,13 +7,36 @@ and this project adheres to [Semantic Versioning].
 
 ## [[Unreleased]]
 
+- Developing
+
+## [0.5.0] - 2026-05-02
+
 ### Added
 
-- 添加 `netlify.toml` 配置，构建时自动将 `README.md` / `CHANGELOG.md` 转换为 HTML。
+- PWA 支持（Service Worker + manifest），可离线使用。
+- `boolean` 参数类型，参数配置支持开关切换。
+- 所有页面动态 `document.title`。
+- 打印界面：返回按钮、日期与随机三字母编号（可开关）、列数快捷按钮、固定答案下划线长度。
+- 操作提示信息。
+- `netlify.toml` 构建配置，构建时自动将 `README.md` / `CHANGELOG.md` 转换为 HTML。
+- PWA 图标文件（`favicon.png`、`favicon_192.png`）。
+- README 添加 Magnific favicon 致谢。
+
+### Changed
+
+- 移除"生成题目"选项，统一为一开始全部生成。
+- 欢迎界面表单改为单行布局，题数/位数添加快捷按钮。
+- "避免重复题"/"允许负数"由下拉选择改为开关切换。
+- 用时格式改为 `整数.小数″`（整数大字 + 小数小灰 + 秒符号）。
+- 报告界面正确答案始终显示绿色，生成时间单独展示。
+- 错题本入口移至卡片头部（图标+文字按钮）。
+- 减法模块"允许结果为负数"参数类型改为 `boolean`。
+- `vite.config.js` 迁移至 `.mjs` 格式并添加 PWA 插件。
+- 反馈链接改为金山文档，更新版权至 2023-2026。
 
 ### Fixed
 
-- 修复单题用时计时错误的问题。此前所有题目在页面加载时即被预创建并打上时间戳，导致单题用时包含了从页面加载到作答的全部等待时间。现改为在题目展示给用户时开始计时。
+- 修复单题用时计时错误：题目展示时才开始计时，而非预创建时。
 
 ## [0.4.4] - 2025-08-04
 
@@ -131,7 +154,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.4.4..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.5.0..HEAD
+[0.5.0]: https://github.com/cup113/Oral-Calculation/compare/v0.4.4..v0.5.0
 [0.4.4]: https://github.com/cup113/Oral-Calculation/compare/v0.4.3..v0.4.4
 [0.4.3]: https://github.com/cup113/Oral-Calculation/compare/v0.4.2..v0.4.3
 [0.4.2]: https://github.com/cup113/Oral-Calculation/compare/v0.4.1..v0.4.2
