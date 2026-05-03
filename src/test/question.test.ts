@@ -37,7 +37,7 @@ describe("question-util", () => {
     Fraction,
   } = context;
 
-  it("categories-module", () => {
+  it("categories-module", async () => {
     const ids = [
       CategoryId.Null,
       CategoryId.Add,
@@ -52,7 +52,7 @@ describe("question-util", () => {
     ];
     for (let i in ids) {
       expect(ids[i]).toEqual(CATEGORIES[i].id);
-      expect(get_module(ids[i])).resolves.toBeTypeOf('object');
+      await expect(get_module(ids[i])).resolves.toBeTypeOf('object');
     }
   });
 

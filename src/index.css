@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer components {
   .btn {
@@ -16,7 +14,11 @@
   }
 
   .btn-primary {
-    @apply btn;
+    @apply inline-flex items-center justify-center gap-1.5 select-none whitespace-nowrap;
+    @apply text-sm font-medium leading-none;
+    @apply transition-all duration-200;
+    @apply rounded-xl px-5 py-2.5;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
     background-color: var(--c-primary);
     color: white;
   }
@@ -29,7 +31,11 @@
   }
 
   .btn-secondary {
-    @apply btn;
+    @apply inline-flex items-center justify-center gap-1.5 select-none whitespace-nowrap;
+    @apply text-sm font-medium leading-none;
+    @apply transition-all duration-200;
+    @apply rounded-xl px-5 py-2.5;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
     background-color: transparent;
     color: var(--c-text-secondary);
     border: 1px solid var(--c-border);
@@ -43,7 +49,11 @@
   }
 
   .btn-ghost {
-    @apply btn;
+    @apply inline-flex items-center justify-center gap-1.5 select-none whitespace-nowrap;
+    @apply text-sm font-medium leading-none;
+    @apply transition-all duration-200;
+    @apply rounded-xl px-5 py-2.5;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
     background-color: transparent;
     color: var(--c-text-secondary);
     padding-left: 0.75rem;
@@ -58,7 +68,11 @@
   }
 
   .btn-danger {
-    @apply btn;
+    @apply inline-flex items-center justify-center gap-1.5 select-none whitespace-nowrap;
+    @apply text-sm font-medium leading-none;
+    @apply transition-all duration-200;
+    @apply rounded-xl px-5 py-2.5;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
     background-color: var(--c-error);
     color: white;
   }

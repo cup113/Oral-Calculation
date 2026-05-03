@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Tech Stack
-Vue 3 (Composition API + `<script setup>`) + TypeScript + Pinia + Vue Router + Vite + PWA + Tailwind CSS + SCSS.
+Vue 3 (Composition API + `<script setup>`) + TypeScript + Pinia + Vue Router + Vite + PWA + Tailwind CSS.
 
 ## Project Structure
 
@@ -9,7 +9,7 @@ Vue 3 (Composition API + `<script setup>`) + TypeScript + Pinia + Vue Router + V
 src/
 ├── main.js              # App entry
 ├── App.vue              # Root layout
-├── index.scss           # Global styles
+├── index.css            # Global styles
 ├── util.ts              # Utility functions (localStorage, type aliases)
 ├── router/index.ts      # Routes: /welcome → /exercise/:cat/:params/:n → /report → /report-share
 ├── store/
@@ -53,9 +53,10 @@ src/
 
 ## Version Bump
 
-1. `grep -r "0\.5\.1" --include="*.{json,ts,vue,md,mjs}"` to find all occurrences
-2. Update version in: `package.json`, `src/App.vue`, `CHANGELOG.md`
-3. In `CHANGELOG.md`: write new version entry under `[[Unreleased]]`, move link from `vX.Y.Z..HEAD` to `vX.Y.Z+1..HEAD`, add old version link
-4. `git add -A && git commit -m "Release: v<new.version>"`
-5. `git tag v<new.version>`
-6. `git push && git push --tags` (if user requests)
+1. Read current version from `package.json` (match `"version": "..."`)
+2. `grep -r <current_version> --include="*.{json,ts,vue,md,mjs}"` to find all occurrences
+3. Update version in: `package.json`, `src/App.vue`, `CHANGELOG.md`
+4. In `CHANGELOG.md`: write new version entry under `[[Unreleased]]`, move link from `vX.Y.Z..HEAD` to `vX.Y.Z+1..HEAD`, add old version link
+5. `git add -A && git commit -m "Release: v<new.version>"`
+6. `git tag v<new.version>`
+7. `git push && git push --tags` (if user requests)

@@ -2,12 +2,13 @@ import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'favicon.png', 'favicon_192.png'],
@@ -43,7 +44,7 @@ export default defineConfig({
   },
   test: {
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['lcov'],
     }
   }

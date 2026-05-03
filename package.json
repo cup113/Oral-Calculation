@@ -1,11 +1,13 @@
 {
   "name": "oral-calculation",
-  "version": "0.5.3",
+  "version": "0.6.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "ts-check": "vue-tsc --noEmit",
     "check": "pnpm run ts-check && pnpm run coverage",
-    "build": "pnpm run check && vite build",
+    "build": "vite build",
+    "build:docs": "markdown-to-html-cli --source README.md -o \"public/README.html\" && markdown-to-html-cli --source CHANGELOG.md -o \"public/CHANGELOG.html\"",
     "preview": "vite preview",
     "test": "vitest run",
     "coverage": "vitest run --coverage"
@@ -14,7 +16,6 @@
     "@popperjs/core": "^2.11.8",
     "big-integer": "^1.6.52",
     "js-file-downloader": "^1.1.25",
-    "jsdom": "^21.1.2",
     "pinia": "^3.0.3",
     "qrcode-generator": "^1.4.4",
     "vue": "^3.5.18",
@@ -22,16 +23,17 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4",
     "@types/node": "^24.2.0",
     "@vitejs/plugin-vue": "^6.0.1",
-    "@vitest/coverage-c8": "^0.28.4",
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.21",
-    "tailwindcss": "^3.2.6",
+    "@vitest/coverage-v8": "^3",
+    "jsdom": "^21.1.2",
+    "markdown-to-html-cli": "^2",
+    "tailwindcss": "^4",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-pwa": "^1.2.0",
-    "vitest": "^0.28.4",
+    "vitest": "^3",
     "vue-tsc": "^2.2.12",
     "workbox-window": "^7.4.0"
   }

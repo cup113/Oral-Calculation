@@ -1,3 +1,14 @@
 [build]
-  command = "pnpx markdown-to-html-cli --source README.md -o \"public/README.html\" && pnpx markdown-to-html-cli --source CHANGELOG.md -o \"public/CHANGELOG.html\" && vite build"
+  command = "pnpm run build:docs && vite build"
   publish = "dist"
+
+[context.production]
+  environment = { NODE_ENV = "production" }
+
+[context.deploy-preview]
+  command = "vite build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

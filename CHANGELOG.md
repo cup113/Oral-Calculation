@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning].
 
 - Developing
 
+## [0.6.0] - 2026-05-03
+
+### Changed
+
+- Tailwind CSS 从 v3 升级至 v4（移除 postcss/autoprefixer/tailwind.config.js，改用 @tailwindcss/vite 插件）。
+- vitest 从 0.28.x 升级至 3.x，coverage provider 从 c8 切换至 v8。
+- 构建脚本 `build` 不再串行执行 `check`，本地构建提速。
+- markdown 构建命令封装为 `build:docs` 脚本，替代 Netlify 内联 pnpx。
+
+### Added
+
+- Netlify SPA 重定向规则（`/*` → `/index.html`）。
+- Netlify 分环境上下文（production / deploy-preview）。
+
+### Fixed
+
+- 修复 `question.test.ts` 中未 `await` 的 `expect().resolves` 断言警告。
+
 ## [0.5.3] - 2026-05-03
 
 ### Changed
@@ -173,7 +191,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.5.3..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.6.0..HEAD
+[0.6.0]: https://github.com/cup113/Oral-Calculation/compare/v0.5.3..v0.6.0
 [0.5.3]: https://github.com/cup113/Oral-Calculation/compare/v0.5.2..v0.5.3
 [0.5.2]: https://github.com/cup113/Oral-Calculation/compare/v0.5.1..v0.5.2
 [0.5.1]: https://github.com/cup113/Oral-Calculation/compare/v0.5.0..v0.5.1
