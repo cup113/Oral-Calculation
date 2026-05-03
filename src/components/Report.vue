@@ -90,7 +90,7 @@ function go_to_share() {
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .report-page {
   width: 100%;
   max-width: 640px;

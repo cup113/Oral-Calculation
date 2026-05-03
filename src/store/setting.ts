@@ -15,13 +15,16 @@ export default defineStore("setting", () => {
     Params = "OC_Params",
     /** Avoid repeated questions as possible. */
     AvoidRepeat = "OC_AvoidRepeat",
+    /** Dark mode enabled. */
+    DarkMode = "OC_DarkMode",
   }
 
   const
     categoryId = ref(CategoryId.Null),
     quantity = ref(10),
     params = reactive([] as string[]),
-    avoidRepeat = ref(true);
+    avoidRepeat = ref(true),
+    darkMode = ref(false);
 
   const categoryIdManager = {
     validate(_category: string): _category is CategoryId {
@@ -85,6 +88,17 @@ export default defineStore("setting", () => {
     }
   };
 
+  const darkModeManager = {
+    get(): boolean {
+      return string_to_bool(storage_get(SettingStorageKeys.DarkMode, bool_to_string(darkMode.value)));
+    },
+    set(_darkMode: string): void {
+      let value = string_to_bool(_darkMode);
+      darkMode.value = value;
+      storage_set(SettingStorageKeys.DarkMode, _darkMode);
+    }
+  };
+
   const avoidRepeatManager = {
     get(): boolean {
       return string_to_bool(storage_get(
@@ -101,6 +115,7 @@ export default defineStore("setting", () => {
   categoryId.value = categoryIdManager.get();
   quantity.value = quantityManager.get();
   avoidRepeat.value = avoidRepeatManager.get();
+  darkMode.value = darkModeManager.get();
   params.push(...paramsManager.get());
 
   return {
@@ -110,6 +125,8 @@ export default defineStore("setting", () => {
     quantityManager,
     avoidRepeat,
     avoidRepeatManager,
+    darkMode,
+    darkModeManager,
     params,
     paramsManager,
     PARAMS_SEP,

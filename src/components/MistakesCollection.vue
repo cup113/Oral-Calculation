@@ -90,7 +90,7 @@ function export_all() {
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .mistakes-page {
   width: 100%;
   max-width: 800px;

@@ -103,7 +103,7 @@ const
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .share-page {
   width: 100%;
   max-width: 400px;

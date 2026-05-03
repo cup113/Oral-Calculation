@@ -22,7 +22,7 @@ const
   </span>
 </template>
 
-<style lang="scss">
+<style>
 .duration-text {
   font-variant-numeric: tabular-nums;
 }

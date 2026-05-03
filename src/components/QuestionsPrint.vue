@@ -125,7 +125,7 @@ function set_cols(val: number) {
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .print-page {
   width: 100%;
   background: white;

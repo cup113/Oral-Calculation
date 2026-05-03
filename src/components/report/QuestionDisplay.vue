@@ -41,7 +41,7 @@ const
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .q-item {
   display: flex;
   align-items: flex-start;

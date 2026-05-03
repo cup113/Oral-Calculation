@@ -202,7 +202,7 @@ function submit_question(ev: Event): void {
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .exercise-page {
   width: 100%;
   max-width: 560px;

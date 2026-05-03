@@ -1,6 +1,14 @@
 <script lang="ts" setup>
+import { watch } from 'vue';
 import { RouterView } from 'vue-router';
 import CustomizedFooter from './assets/components/CustomizedFooter.vue';
+import useSettingStore from './store/setting';
+
+const setting = useSettingStore();
+
+watch(() => setting.darkMode, (val) => {
+  document.documentElement.classList.toggle('dark', val);
+}, { immediate: true });
 </script>
 
 <template>
@@ -8,12 +16,12 @@ import CustomizedFooter from './assets/components/CustomizedFooter.vue';
     <main class="app-main">
       <RouterView />
     </main>
-    <CustomizedFooter remote-url="https://github.com/cup113/Oral-Calculation" version="0.5.2"
+    <CustomizedFooter remote-url="https://github.com/cup113/Oral-Calculation" version="0.5.3"
       license="MIT" years="2023-2026" detailed />
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .app-shell {
   min-height: 100vh;
   display: flex;

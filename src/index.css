@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @layer components {
   .btn {
     @apply inline-flex items-center justify-center gap-1.5 select-none whitespace-nowrap;
@@ -79,4 +83,71 @@
     background-color: var(--c-border);
     color: var(--c-text);
   }
+
+  .progress {
+    @apply relative overflow-hidden;
+    height: 8px;
+    background-color: var(--c-border);
+    border-radius: 999px;
+  }
+
+  .progress-bar {
+    @apply absolute inset-y-0 left-0;
+    border-radius: 999px;
+    background-color: var(--c-primary);
+    width: calc(var(--ratio) * 100%);
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+:root {
+  --c-primary: #4f46e5;
+  --c-primary-hover: #4338ca;
+  --c-primary-light: #eef2ff;
+  --c-success: #10b981;
+  --c-success-light: #ecfdf5;
+  --c-error: #ef4444;
+  --c-error-light: #fef2f2;
+  --c-warning: #f59e0b;
+  --c-warning-light: #fffbeb;
+  --c-bg: #f8fafc;
+  --c-surface: #ffffff;
+  --c-text: #0f172a;
+  --c-text-secondary: #64748b;
+  --c-text-muted: #94a3b8;
+  --c-border: #e2e8f0;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+}
+
+.dark {
+  --c-primary: #818cf8;
+  --c-primary-hover: #6366f1;
+  --c-primary-light: #1e1b4b;
+  --c-success: #34d399;
+  --c-success-light: #022c22;
+  --c-error: #f87171;
+  --c-error-light: #450a0a;
+  --c-warning: #fbbf24;
+  --c-warning-light: #451a03;
+  --c-bg: #0f172a;
+  --c-surface: #1e293b;
+  --c-text: #f1f5f9;
+  --c-text-secondary: #94a3b8;
+  --c-text-muted: #64748b;
+  --c-border: #334155;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -2px rgba(0,0,0,0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.5), 0 4px 6px -4px rgba(0,0,0,0.4);
+}
+
+body {
+  background-color: var(--c-bg);
+  color: var(--c-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

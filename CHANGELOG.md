@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning].
 
 - Developing
 
+## [0.5.3] - 2026-05-03
+
+### Changed
+
+- SCSS 全面迁移至传统 CSS（移除 sass 依赖）。
+- 添加黑暗模式支持（class 切换 + localStorage 持久化）。
+
 ## [0.5.2] - 2026-05-02
 
 ### Fixed
@@ -166,7 +173,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.5.2..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.5.3..HEAD
+[0.5.3]: https://github.com/cup113/Oral-Calculation/compare/v0.5.2..v0.5.3
 [0.5.2]: https://github.com/cup113/Oral-Calculation/compare/v0.5.1..v0.5.2
 [0.5.1]: https://github.com/cup113/Oral-Calculation/compare/v0.5.0..v0.5.1
 [0.5.0]: https://github.com/cup113/Oral-Calculation/compare/v0.4.4..v0.5.0

@@ -121,7 +121,7 @@ function set_quantity(val: number) {
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .welcome-page {
   width: 100%;
   max-width: 420px;

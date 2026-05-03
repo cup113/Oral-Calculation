@@ -38,7 +38,7 @@ const colors = ['bg-cyan-400', 'bg-green-600', 'bg-orange-600', 'bg-red-500'];
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .qs-item {
   display: flex;
   align-items: center;

@@ -7,7 +7,7 @@ import Message from 'vue-m-message';
 import router from '@/router';
 
 import 'vue-m-message/dist/style.css';
-import './index.scss';
+import './index.css';
 
 Message.setDefault({
   closable: true,

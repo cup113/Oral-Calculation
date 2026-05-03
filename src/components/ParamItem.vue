@@ -95,7 +95,7 @@ function set_boolean(val: string) {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .form-field-row {
   display: flex;
   align-items: center;
