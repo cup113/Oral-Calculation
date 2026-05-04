@@ -9,6 +9,12 @@ import LoadingQuestion from '@/question/loading';
 import useSettingStore from './setting';
 import useMistakesStore from './mistakes';
 
+interface Notify {
+  success(msg: string): void
+  error(msg: string): void
+  warning(msg: string): void
+}
+
 export default defineStore("question", () => {
   const setting = useSettingStore();
   const { append_mistake } = useMistakesStore();
@@ -30,11 +36,18 @@ export default defineStore("question", () => {
     }),
     passedRatio = computed(() => passedCnt.value / setting.quantity);
 
+  const notify: Notify = {
+    success: (msg) => Message.success(msg, { position: 'bottom-right' }),
+    error: (msg) => Message.error(msg),
+    warning: (msg) => Message.warning(msg),
+  }
+  let createDate = () => new Date()
+
   watch(() => setting.categoryId, newCategoryId => {
     // CategoryId is set through `categoryManager` and is safe now.
     get_module(newCategoryId).then(
       m => questionModule.value = m.default,
-      err => Message.error(`获取类别信息失败: ${err}`)
+      err => notify.error(`获取类别信息失败: ${err}`)
     );
   }, { immediate: true });
 
@@ -116,8 +129,8 @@ export default defineStore("question", () => {
 
   function update_question() {
     currentQuestion.value = questions[passedCnt.value];
-    currentQuestion.value.start = new Date();
-    currentQuestion.value.end = new Date();
+    currentQuestion.value.start = createDate();
+    currentQuestion.value.end = createDate();
   }
 
   /**
@@ -128,9 +141,7 @@ export default defineStore("question", () => {
       case AnswerResult.Correct:
         passedQuestionsDuration.value += currentQuestion.value.get_duration();
         currentQuestionDuration.value = 0;
-        Message.success(`答案 ${answer} 正确`, {
-          position: 'bottom-right'
-        });
+        notify.success(`答案 ${answer} 正确`);
         passedCnt.value += 1;
         if (currentQuestion.value.is_first_time_correct())
           correctCnt.value += 1;
@@ -140,16 +151,16 @@ export default defineStore("question", () => {
         return true;
       case AnswerResult.WrongEmpty:
         currentQuestionDuration.value = currentQuestion.value.get_elapsed();
-        Message.warning("答案不应为空");
+        notify.warning("答案不应为空");
         return false;
       case AnswerResult.WrongAnswered:
         currentQuestionDuration.value = currentQuestion.value.get_elapsed();
-        Message.error(`已经有过错误答案 ${answer}`);
+        notify.error(`已经有过错误答案 ${answer}`);
         return false;
       case AnswerResult.WrongNew:
         currentQuestionDuration.value = currentQuestion.value.get_elapsed();
         wrongAnswerCnt.value += 1;
-        Message.error(`答案 ${answer} 错误`);
+        notify.error(`答案 ${answer} 错误`);
         return false;
     }
   }
@@ -170,5 +181,7 @@ export default defineStore("question", () => {
     get_question,
     update_question,
     answer_current_question,
+    notify,
+    createDate,
   }
 });
