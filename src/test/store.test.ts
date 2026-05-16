@@ -200,16 +200,22 @@ describe("store-mistakes", () => {
 });
 
 describe("store-question", () => {
-  it("exposes overridable notify and createDate", () => {
+  it("exposes overridable notify", () => {
     const store = useQuestionStore();
     expect(store.notify).toBeTypeOf("object");
-    expect(typeof store.createDate).toBe("function");
     store.notify.success = vi.fn();
     store.notify.error = vi.fn();
     store.notify.warning = vi.fn();
-    const mockDate = new Date("2024-01-01");
-    store.createDate = () => mockDate;
-    expect(store.createDate()).toBe(mockDate);
+  });
+
+  it("sets start/end timestamps on update_question", () => {
+    const setting = useSettingStore();
+    setting.quantityManager.set("5");
+    const store = useQuestionStore();
+    store.reset_questions();
+    store.update_question();
+    expect(store.currentQuestion.start).toBeInstanceOf(Date);
+    expect(store.currentQuestion.end).toBeInstanceOf(Date);
   });
 
   describe("reset_questions", () => {

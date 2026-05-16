@@ -41,8 +41,6 @@ export default defineStore("question", () => {
     error: (msg) => Message.error(msg),
     warning: (msg) => Message.warning(msg),
   }
-  let createDate = () => new Date()
-
   watch(() => setting.categoryId, newCategoryId => {
     // CategoryId is set through `categoryManager` and is safe now.
     get_module(newCategoryId).then(
@@ -129,8 +127,8 @@ export default defineStore("question", () => {
 
   function update_question() {
     currentQuestion.value = questions[passedCnt.value];
-    currentQuestion.value.start = createDate();
-    currentQuestion.value.end = createDate();
+    currentQuestion.value.start = new Date();
+    currentQuestion.value.end = new Date();
   }
 
   /**
@@ -182,6 +180,5 @@ export default defineStore("question", () => {
     update_question,
     answer_current_question,
     notify,
-    createDate,
   }
 });
