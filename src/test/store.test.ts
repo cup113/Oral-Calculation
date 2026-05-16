@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 
 import useSettingStore from '@/store/setting';
@@ -316,6 +316,211 @@ describe("store-question", () => {
       const result = store.validate_params();
       expect(result).toContain("应有0个配置项");
       expect(result).toContain("2个");
+    });
+  });
+
+  describe("timing-accumulation", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    function push_q(store: ReturnType<typeof useQuestionStore>, problem: string, answer: string) {
+      store.questions.push(new Question(problem, answer));
+    }
+
+    it("accumulatedDuration matches single correct question duration", () => {
+      const store = useQuestionStore();
+      store.notify.success = vi.fn();
+      store.notify.error = vi.fn();
+      store.notify.warning = vi.fn();
+      push_q(store, "1+1", "2");
+
+      vi.setSystemTime(1000);
+      store.update_question();
+      vi.setSystemTime(2500);
+      store.answer_current_question("2");
+
+      expect(store.accumulatedDuration).toBe(1500);
+    });
+
+    it("each question duration is independent (not cumulative span)", () => {
+      const store = useQuestionStore();
+      store.notify.success = vi.fn();
+      store.notify.error = vi.fn();
+      store.notify.warning = vi.fn();
+      push_q(store, "1+1", "2");
+      push_q(store, "2+2", "4");
+
+      vi.setSystemTime(1000);
+      store.update_question();
+      vi.setSystemTime(2000);
+      store.answer_current_question("2");
+
+      vi.setSystemTime(3000);
+      store.update_question();
+      vi.setSystemTime(3500);
+      store.answer_current_question("4");
+
+      // If wrongly cumulative (start=1000 to end=3500): accumulatedDuration=2500
+      // Correct independent sum (1000 + 500): accumulatedDuration=1500
+      expect(store.accumulatedDuration).toBe(1500);
+    });
+
+    it("update_question resets start and end timestamps", () => {
+      const store = useQuestionStore();
+      push_q(store, "1+1", "2");
+
+      vi.setSystemTime(1000);
+      store.update_question();
+      expect(store.currentQuestion.start.getTime()).toBe(1000);
+      expect(store.currentQuestion.end.getTime()).toBe(1000);
+
+      vi.setSystemTime(5000);
+      store.update_question();
+      expect(store.currentQuestion.start.getTime()).toBe(5000);
+      expect(store.currentQuestion.end.getTime()).toBe(5000);
+    });
+
+    it("wrong answer updates accumulatedDuration and wrongAnswerCnt", () => {
+      const store = useQuestionStore();
+      store.notify.success = vi.fn();
+      store.notify.error = vi.fn();
+      store.notify.warning = vi.fn();
+      push_q(store, "1+1", "2");
+
+      vi.setSystemTime(1000);
+      store.update_question();
+
+      vi.setSystemTime(2000);
+      store.answer_current_question("3");
+
+      // currentQuestionDuration (internal) is reflected in accumulatedDuration
+      expect(store.accumulatedDuration).toBe(1000);
+      expect(store.passedCnt).toBe(0);
+      expect(store.wrongAnswerCnt).toBe(1);
+    });
+
+    it("wrong then correct: no double counting", () => {
+      const store = useQuestionStore();
+      store.notify.success = vi.fn();
+      store.notify.error = vi.fn();
+      store.notify.warning = vi.fn();
+      push_q(store, "1+1", "2");
+
+      vi.setSystemTime(1000);
+      store.update_question();
+
+      vi.setSystemTime(1500);
+      store.answer_current_question("3"); // WrongNew→accumulatedDuration=500 (elapsed)
+
+      vi.setSystemTime(2500);
+      store.answer_current_question("2"); // Correct→accumulatedDuration=1500 (end-start)
+
+      // Full duration = 2500-1000 = 1500
+      // If elapsed (500) were added separately: accumulatedDuration=2000
+      // Correct: accumulatedDuration=1500
+      expect(store.accumulatedDuration).toBe(1500);
+      expect(store.passedCnt).toBe(1);
+      expect(store.correctCnt).toBe(0); // Not first-time correct
+      expect(store.wrongAnswerCnt).toBe(1);
+    });
+
+    it("multiple wrong answers: elapsed updates, final duration covers entire span", () => {
+      const store = useQuestionStore();
+      store.notify.success = vi.fn();
+      store.notify.error = vi.fn();
+      store.notify.warning = vi.fn();
+      push_q(store, "1+1", "2");
+
+      vi.setSystemTime(1000);
+      store.update_question();
+
+      vi.setSystemTime(1200);
+      store.answer_current_question("3");
+
+      vi.setSystemTime(1500);
+      store.answer_current_question("5");
+
+      vi.setSystemTime(2500);
+      store.answer_current_question("2");
+
+      // Full duration from start (1000) to correct (2500) = 1500
+      // Individual wrong timestamps not added separately
+      expect(store.accumulatedDuration).toBe(1500);
+    });
+
+    it("all correct: accumulatedDuration equals sum of individual durations", () => {
+      const store = useQuestionStore();
+      store.notify.success = vi.fn();
+      store.notify.error = vi.fn();
+      store.notify.warning = vi.fn();
+      push_q(store, "1+1", "2");
+      push_q(store, "2+2", "4");
+      push_q(store, "3+3", "6");
+
+      vi.setSystemTime(1000); store.update_question();
+      vi.setSystemTime(1500); store.answer_current_question("2"); // 500ms
+      vi.setSystemTime(2000); store.update_question();
+      vi.setSystemTime(3200); store.answer_current_question("4"); // 1200ms
+      vi.setSystemTime(4000); store.update_question();
+      vi.setSystemTime(4300); store.answer_current_question("6"); // 300ms
+
+      expect(store.accumulatedDuration).toBe(2000); // 500 + 1200 + 300
+      expect(store.correctCnt).toBe(3);
+      expect(store.passedCnt).toBe(3);
+      expect(store.wrongAnswerCnt).toBe(0);
+    });
+
+    it("empty answer does not affect passed count or wrong count", () => {
+      const store = useQuestionStore();
+      store.notify.success = vi.fn();
+      store.notify.error = vi.fn();
+      store.notify.warning = vi.fn();
+      push_q(store, "1+1", "2");
+
+      vi.setSystemTime(1000);
+      store.update_question();
+
+      vi.setSystemTime(2000);
+      store.answer_current_question("");
+      expect(store.passedCnt).toBe(0);
+      expect(store.wrongAnswerCnt).toBe(0);
+      expect(store.accumulatedDuration).toBeGreaterThan(0);
+
+      vi.setSystemTime(2500);
+      store.answer_current_question("2");
+      expect(store.accumulatedDuration).toBe(1500);
+    });
+
+    it("repeated wrong answer increments wrong count only once per distinct answer", () => {
+      const store = useQuestionStore();
+      store.notify.success = vi.fn();
+      store.notify.error = vi.fn();
+      store.notify.warning = vi.fn();
+      push_q(store, "1+1", "2");
+
+      vi.setSystemTime(1000);
+      store.update_question();
+
+      vi.setSystemTime(1200);
+      store.answer_current_question("3");
+      expect(store.wrongAnswerCnt).toBe(1);
+
+      vi.setSystemTime(1500);
+      store.answer_current_question("3"); // WrongAnswered, not counted
+      expect(store.wrongAnswerCnt).toBe(1);
+
+      vi.setSystemTime(2000);
+      store.answer_current_question("5");
+      expect(store.wrongAnswerCnt).toBe(2);
+
+      vi.setSystemTime(3000);
+      store.answer_current_question("2");
+      expect(store.accumulatedDuration).toBe(2000); // 3000-1000
     });
   });
 });
