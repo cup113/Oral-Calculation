@@ -1,24 +1,14 @@
-import type { QuestionProvider, Question, QuestionModule, QuestionContext } from './index';
+import { defineQuestionModule } from './index';
 
-class LoadingQuestionProvider implements QuestionProvider {
-  private context: QuestionContext;
-  constructor(context: QuestionContext, _params: string[]) {
-    this.context = context;
-  }
+type Params = Record<string, never>;
 
-  public get_question(): Question {
-    return new this.context.Question("Loading...", "");
-  }
-
-  public get_title(): string {
-    return "ERROR";
-  }
-}
-
-export default {
-  get_provider(context: QuestionContext, params: string[]): LoadingQuestionProvider {
-    return new LoadingQuestionProvider(context, params)
-  },
-  paramsConfig: [],
+export default defineQuestionModule<Params>({
   id: 'loading',
-} satisfies QuestionModule;
+  paramsConfig: [],
+  generate(context) {
+    return new context.Question("Loading...", "");
+  },
+  get_title() {
+    return "ERROR";
+  },
+});

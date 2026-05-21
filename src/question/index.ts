@@ -328,21 +328,116 @@ export interface QuestionProvider {
 
 /** The config of param */
 export type ParamConfig = {
+  key: string,
   name: string,
   type: 'integer',
   default: number,
   min: number,
   max?: number,
 } | {
+  key: string,
   name: string,
   type: 'boolean',
   default: number,
 } | {
+  key: string,
   name: string,
   type: 'select',
   choices: string[],
   /** The default choice. Start from 0 index */
   default: number,
+}
+
+type TypedParams = Record<string, number | boolean>;
+
+function parse_params(configs: ParamConfig[], raw: string[]): TypedParams {
+  const result: TypedParams = {};
+  for (const [i, cfg] of configs.entries()) {
+    const v = raw[i];
+    switch (cfg.type) {
+      case 'integer':
+      case 'select':
+        result[cfg.key] = parseInt(v);
+        break;
+      case 'boolean':
+        result[cfg.key] = v === '1';
+        break;
+    }
+  }
+  return result;
+}
+
+/** Validate raw string params against a param config array.
+ * @returns An empty string if legal, otherwise error message.
+ */
+export function validate_params(
+  paramsConfig: ParamConfig[],
+  raw: string[],
+  moduleValidate?: (raw: string[]) => string,
+): string {
+  if (paramsConfig.length !== raw.length)
+    return `应有${paramsConfig.length}个配置项，只得到了${raw.length}个。`;
+  for (let i = 0; i < paramsConfig.length; ++i) {
+    const param = raw[i], paramConfig = paramsConfig[i];
+    switch (paramConfig.type) {
+      case 'integer': {
+        let paramNum = parseInt(param);
+        if (!Number.isInteger(paramNum))
+          return `配置项“${paramConfig.name}”传入参数时应为整数，但接受到“${param}”`;
+        if (paramNum < paramConfig.min)
+          return `配置项”${paramConfig.name}“传入参数时应为不小于${paramConfig.min}的数，但接受到“${param}”`;
+        if (paramConfig.max !== undefined && paramNum > paramConfig.max)
+          return `配置项”${paramConfig.name}“传入参数时应为不大于${paramConfig.max}的数，但接受到“${param}”`;
+        break;
+      }
+      case 'boolean': {
+        if (param !== '0' && param !== '1')
+          return `配置项”${paramConfig.name}“应为 0 或 1，但接受到“${param}”`;
+        break;
+      }
+      case 'select': {
+        let paramNum = parseInt(param);
+        if (!Number.isInteger(paramNum))
+          return `配置项“${paramConfig.name}”传入参数时应为整数，但接受到“${param}”`;
+        if (paramNum < 0)
+          return `配置项”${paramConfig.name}“传入参数时应为不小于 0 的数，但接受到“${param}”`;
+        if (paramNum >= paramConfig.choices.length)
+          return `配置项”${paramConfig.name}“传入参数时应为不大于${paramConfig.choices.length}的数，但接受到“${param}”`;
+        break;
+      }
+    }
+  }
+  if (moduleValidate !== undefined) {
+    let result = moduleValidate(raw);
+    if (result.length > 0)
+      return result;
+  }
+  return "";
+}
+
+/** Wrap a lean question module definition into a full `QuestionModule`. */
+export function defineQuestionModule<T extends TypedParams>(def: {
+  id: string;
+  paramsConfig: ParamConfig[];
+  generate(context: QuestionContext, params: T): Question;
+  get_title(params: T): string;
+  validate?: (params: T) => string;
+}): QuestionModule {
+  const { id, paramsConfig, generate, get_title, validate } = def;
+  return {
+    id,
+    paramsConfig,
+    get_provider(context: QuestionContext, raw: string[]): QuestionProvider {
+      const params = parse_params(paramsConfig, raw) as T;
+      return {
+        get_question: () => generate(context, params),
+        get_title: () => get_title(params),
+      };
+    },
+    validate: validate
+      ? (raw: string[]) => validate(parse_params(paramsConfig, raw) as T)
+      : undefined,
+  };
 }
 
 /** Question module interface. (implemented in files under `question` directory.) */

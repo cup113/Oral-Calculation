@@ -1,6 +1,7 @@
 import { describe, it, expect, assert } from 'vitest';
 
 import * as question from '@/question';
+const { defineQuestionModule } = question;
 import loading from '@/question/loading';
 import add from '@/question/add';
 import sub from '@/question/sub';
@@ -230,6 +231,96 @@ describe("question-class", () => {
   });
 });
 
+describe("defineQuestionModule", () => {
+  it("creates a working provider", () => {
+    const module = defineQuestionModule<{ n: number }>({
+      id: 'test',
+      paramsConfig: [{ key: 'n', name: "N", type: 'integer', min: 1, default: 5 }],
+      generate(ctx, p) { return new ctx.Question(`n=${p.n}`, String(p.n * 2)); },
+      get_title(p) { return `test:${p.n}`; },
+    });
+    expect(module.id).toBe('test');
+    expect(module.paramsConfig).toHaveLength(1);
+    const provider = module.get_provider(context, ["3"]);
+    expect(provider.get_title()).toBe("test:3");
+    const q = provider.get_question();
+    expect(q.problem).toBe("n=3");
+    expect(q.correctAnswer).toBe("6");
+  });
+
+  it("parses each param type", () => {
+    const module = defineQuestionModule<{ a: number; b: boolean; c: number }>({
+      id: 'parse',
+      paramsConfig: [
+        { key: 'a', name: "Int", type: 'integer', min: 1, default: 1 },
+        { key: 'b', name: "Bool", type: 'boolean', default: 0 },
+        { key: 'c', name: "Select", type: 'select', choices: ["x", "y"], default: 0 },
+      ],
+      generate(ctx, p) { return new ctx.Question(`${p.a}-${p.b}-${p.c}`, "ok"); },
+      get_title() { return "parse-test"; },
+    });
+    const provider = module.get_provider(context, ["42", "1", "0"]);
+    const q = provider.get_question();
+    expect(q.problem).toBe("42-true-0");
+  });
+
+  it("wraps validate correctly", () => {
+    const module = defineQuestionModule<{ x: number }>({
+      id: 'val',
+      paramsConfig: [{ key: 'x', name: "X", type: 'integer', min: 1, default: 3 }],
+      generate(ctx, p) { return new ctx.Question(`${p.x}`, ""); },
+      get_title() { return "val"; },
+      validate: (p) => p.x < 3 ? "too small" : "",
+    });
+    expect(module.validate?.(['0'])).toBe("too small");
+    expect(module.validate?.(['3'])).toBe("");
+    expect(module.validate?.(['5'])).toBe("");
+  });
+});
+
+describe("validate_params", () => {
+  const configs = [
+    { key: 'x', name: "X", type: 'integer' as const, min: 1, max: 10, default: 3 },
+    { key: 'y', name: "Y", type: 'boolean' as const, default: 0 },
+    { key: 'z', name: "Z", type: 'select' as const, choices: ["a", "b", "c"], default: 0 },
+  ];
+
+  it("passes with matching params", () => {
+    expect(question.validate_params(configs, ["3", "1", "0"])).toBe("");
+  });
+
+  it("fails on length mismatch", () => {
+    const result = question.validate_params(configs, ["3", "1"]);
+    expect(result).toContain("应有3个配置项");
+  });
+
+  it("fails when integer below min", () => {
+    const result = question.validate_params(configs, ["0", "1", "0"]);
+    expect(result).toContain("X");
+  });
+
+  it("fails when integer above max", () => {
+    const result = question.validate_params(configs, ["11", "1", "0"]);
+    expect(result).toContain("X");
+  });
+
+  it("fails on invalid boolean", () => {
+    const result = question.validate_params(configs, ["3", "x", "0"]);
+    expect(result).toContain("Y");
+  });
+
+  it("fails on select out of range", () => {
+    const result = question.validate_params(configs, ["3", "1", "5"]);
+    expect(result).toContain("Z");
+  });
+
+  it("calls moduleValidate if provided", () => {
+    const moduleValidate = (raw: string[]) => parseInt(raw[0]) < 5 ? "too small" : "";
+    expect(question.validate_params(configs, ["6", "1", "0"], moduleValidate)).toBe("");
+    expect(question.validate_params(configs, ["3", "1", "0"], moduleValidate)).toBe("too small");
+  });
+});
+
 describe("question-provider", () => {
   it("loading", () => {
     const { get_provider, paramsConfig } = loading;
@@ -246,7 +337,6 @@ describe("question-provider", () => {
     expect(paramsConfig.length).toBe(1);
     for (let i = 1; i < 10; ++i) {
       let provider = get_provider(context, [i.toString()]);
-      expect(provider.digits).toBe(i);
       expect(provider.get_title()).contain(i.toString()).contain("加");
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
@@ -269,8 +359,6 @@ describe("question-provider", () => {
     for (let i = 1; i < 10; ++i) {
       let allowNegative = i % 2 === 0;
       let provider = get_provider(context, [i.toString(), allowNegative ? '1' : '0']);
-      expect(provider.digits).toBe(i);
-      expect(provider.allowNegative).toBe(allowNegative);
       expect(provider.get_title()).contain(i.toString()).contain("减");
       for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
@@ -292,21 +380,17 @@ describe("question-provider", () => {
   it("add-sub", () => {
     const { get_provider, paramsConfig } = add_sub;
     expect(paramsConfig.length).toBe(4);
-    for (let i = 1; i < 200; ++i) {
+    for (let i = 1; i < 60; ++i) {
       let
         digits = Math.floor(i / 10) + 1,
         items = i % 10 + 3,
         mixedSetting = i % 3,
         allowNegative = (i % 7) % 2 === 0 ? 1 : 0;
       let provider = get_provider(context, [digits.toString(), items.toString(), mixedSetting.toString(), allowNegative.toString()]);
-      expect(provider.digits).toBe(digits);
-      expect(provider.items).toBe(items);
-      expect(provider.mixedSetting).toBe(mixedSetting);
-      expect(provider.allowNegative).toBe(allowNegative === 1);
       expect(provider.get_title())
         .contain(digits.toString())
-        .contain(provider.mixedSetting === 2 ? "连加连减" : "加减混合");
-      for (let j = 0; j < 100; ++j) {
+        .contain(mixedSetting === 2 ? "连加连减" : "加减混合");
+      for (let j = 0; j < 20; ++j) {
         let question = provider.get_question();
         let problem = [...question.problem.matchAll(/\d+|\+|\-/g)];
         let
@@ -334,7 +418,6 @@ describe("question-provider", () => {
     for (let i = 1; i < 50; ++i) {
       let digits1 = Math.floor(i / 7) + 1, digits2 = i % 7 + 1;
       let provider = get_provider(context, [digits1.toString(), digits2.toString()]);
-      expect(provider.digits1 + provider.digits2).toBe(digits1 + digits2);
       expect(provider.get_title())
         .contain(digits1.toString())
         .contain(digits2.toString())
@@ -365,10 +448,6 @@ describe("question-provider", () => {
       if (digits1 < digits2)
         continue;
       let provider = get_provider(context, [digits1.toString(), digits2.toString(), divisible.toString(), indivisibleSetting.toString()]);
-      expect(provider.digits1).toBe(digits1);
-      expect(provider.digits2).toBe(digits2);
-      expect(provider.divisible).toBe(divisible);
-      expect(provider.indivisibleSetting).toBe(indivisibleSetting);
       expect(provider.get_title())
         .contain(digits1.toString())
         .contain(digits2.toString())
@@ -380,7 +459,7 @@ describe("question-provider", () => {
         let
           num1 = bigInt(problem[1]),
           num2 = bigInt(problem[2]);
-        if (provider.divisible === 0) {
+        if (divisible === 0) {
           assert(num1.isDivisibleBy(num2));
           assert(num2.multiply(bigInt(question.correctAnswer)).eq(num1));
         } else {

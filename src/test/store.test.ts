@@ -303,21 +303,6 @@ describe("store-question", () => {
     });
   });
 
-  describe("validate_params", () => {
-    it("passes with matching params", () => {
-      const store = useQuestionStore();
-      expect(store.validate_params()).toBe("");
-    });
-
-    it("fails on length mismatch", () => {
-      const setting = useSettingStore();
-      setting.paramsManager.set("3,1");
-      const store = useQuestionStore();
-      const result = store.validate_params();
-      expect(result).toContain("应有0个配置项");
-      expect(result).toContain("2个");
-    });
-  });
 
   describe("timing-accumulation", () => {
     beforeEach(() => {

@@ -49,51 +49,6 @@ export default defineStore("question", () => {
     );
   }, { immediate: true });
 
-  /** Validate current parameters of current question module.
-   * @returns An empty string if parameters are legal, otherwise a string with error information.
-   */
-  function validate_params(): string {
-    const paramsConfig = questionModule.value.paramsConfig;
-    if (paramsConfig.length !== setting.params.length)
-      return `应有${paramsConfig.length}个配置项，只得到了${setting.params.length}个。`;
-    for (let i = 0; i < paramsConfig.length; ++i) {
-      const param = setting.params[i], paramConfig = paramsConfig[i];
-      switch (paramConfig.type) {
-        case 'integer': {
-          let paramNum = parseInt(param);
-          if (!Number.isInteger(paramNum))
-            return `配置项“${paramConfig.name}”传入参数时应为整数，但接受到“${param}”`;
-          if (paramNum < paramConfig.min)
-            return `配置项”${paramConfig.name}“传入参数时应为不小于${paramConfig.min}的数，但接受到“${param}”`;
-          if (paramConfig.max !== undefined && paramNum > paramConfig.max)
-            return `配置项”${paramConfig.name}“传入参数时应为不大于${paramConfig.max}的数，但接受到“${param}”`;
-          break;
-        }
-        case 'boolean': {
-          if (param !== '0' && param !== '1')
-            return `配置项”${paramConfig.name}“应为 0 或 1，但接受到“${param}”`;
-          break;
-        }
-        case 'select': {
-          let paramNum = parseInt(param);
-          if (!Number.isInteger(paramNum))
-            return `配置项“${paramConfig.name}”传入参数时应为整数，但接受到“${param}”`;
-          if (paramNum < 0)
-            return `配置项”${paramConfig.name}“传入参数时应为不小于 0 的数，但接受到“${param}”`;
-          if (paramNum >= paramConfig.choices.length)
-            return `配置项”${paramConfig.name}“传入参数时应为不大于${paramConfig.choices.length}的数，但接受到“${param}”`;
-          break;
-        }
-      }
-    }
-    if (questionModule.value.validate !== undefined) {
-      let validate_result = questionModule.value.validate(setting.params);
-      if (validate_result.length > 0)
-        return validate_result;
-    }
-    return "";
-  }
-
   function reset_questions() {
     questions.splice(0, questions.length);
     existProblems.value.clear();
@@ -174,7 +129,6 @@ export default defineStore("question", () => {
     wrongAnswerCnt,
     accumulatedDuration,
     passedRatio,
-    validate_params,
     reset_questions,
     get_question,
     update_question,

@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { computed, ref, watch, nextTick } from 'vue';
 import Message from 'vue-m-message';
 
-import { QUESTION_CONTEXT } from '@/question';
+import { QUESTION_CONTEXT, validate_params } from '@/question';
 import useQuestionStore from '@/store/question';
 import useSettingStore from '@/store/setting';
 
@@ -86,7 +86,11 @@ function warn_loading(): void {
 }
 
 function question_module_onload() {
-  let validate_result = question.validate_params();
+  let validate_result = validate_params(
+    question.questionModule.paramsConfig,
+    setting.params,
+    question.questionModule.validate,
+  );
   if (validate_result.length > 0) {
     Message.error(`验证参数时出错: 当前模块${validate_result}`);
     go_back();

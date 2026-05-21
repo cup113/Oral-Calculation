@@ -1,50 +1,26 @@
-import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
+import { defineQuestionModule } from './index';
 
-class MultiplyQuestionProvider implements QuestionProvider {
-  private context: QuestionContext;
-  public digits1: number;
-  public digits2: number;
-  constructor(context: QuestionContext, params: string[]) {
-    this.context = context;
-    this.digits1 = parseInt(params[0]);
-    this.digits2 = parseInt(params[1]);
+type Params = { digits1: number; digits2: number };
 
-    if (this.digits1 < this.digits2)
-      [this.digits1, this.digits2] = [this.digits2, this.digits1];
-  }
-
-  public get_question(): Question {
-    const { rand_digit_big_int, Question } = this.context;
+export default defineQuestionModule<Params>({
+  id: 'mul',
+  paramsConfig: [
+    { key: 'digits1', name: "运算项 #1 位数", type: 'integer', min: 1, default: 2 },
+    { key: 'digits2', name: "运算项 #2 位数", type: 'integer', min: 1, default: 1 },
+  ],
+  generate(context, params) {
+    const { rand_digit_big_int, Question } = context;
+    let digits1 = params.digits1, digits2 = params.digits2;
+    if (digits1 < digits2)
+      [digits1, digits2] = [digits2, digits1];
     const
-      num1 = rand_digit_big_int(this.digits1, { avoidIsOne: true, avoidEndsWithZero: true }),
-      num2 = rand_digit_big_int(this.digits2, { avoidIsOne: true, avoidEndsWithZero: true }),
+      num1 = rand_digit_big_int(digits1, { avoidIsOne: true, avoidEndsWithZero: true }),
+      num2 = rand_digit_big_int(digits2, { avoidIsOne: true, avoidEndsWithZero: true }),
       correctAnswer = num1.multiply(num2);
     const problem = `${num1.toString()} × ${num2.toString()} = ?`;
     return new Question(problem, correctAnswer.toString());
-  }
-
-  public get_title(): string {
-    return `${this.digits1}位数乘${this.digits2}位数`;
-  }
-}
-
-export default {
-  get_provider(context: QuestionContext, params: string[]): MultiplyQuestionProvider {
-    return new MultiplyQuestionProvider(context, params);
   },
-  paramsConfig: [
-    {
-      type: 'integer',
-      name: "运算项 #1 位数",
-      min: 1,
-      default: 2,
-    },
-    {
-      type: 'integer',
-      name: "运算项 #2 位数",
-      min: 1,
-      default: 1,
-    }
-  ],
-  id: 'mul',
-} satisfies QuestionModule;
+  get_title(params) {
+    return `${params.digits1}位数乘${params.digits2}位数`;
+  },
+});

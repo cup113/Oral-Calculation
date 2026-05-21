@@ -1,29 +1,26 @@
-import type { QuestionProvider, QuestionContext, Question, QuestionModule } from './index';
+import { defineQuestionModule } from './index';
+
+type Params = { digits: number; isPerfectSquare: number };
 
 const enum IsPerfectSquare {
   Always = 0,
   NoAndFloor = 1,
 }
 
-class SqrtQuestionProvider implements QuestionProvider {
-  private context: QuestionContext;
-  public digits: number;
-  public isPerfectSquare: IsPerfectSquare;
-
-  constructor(context: QuestionContext, params: string[]) {
-    this.context = context;
-    this.digits = parseInt(params[0]);
-    this.isPerfectSquare = parseInt(params[1]) as IsPerfectSquare;
-  }
-
-  public get_question(): Question {
-    const { rand_digit_big_int, rand_between_big_int, minmax_big_int, Question, bigInt } = this.context;
-    const [minNum, maxNum] = minmax_big_int(this.digits);
+export default defineQuestionModule<Params>({
+  id: 'sqrt',
+  paramsConfig: [
+    { key: 'digits', name: "被开方数位数", type: 'integer', min: 1, default: 3 },
+    { key: 'isPerfectSquare', name: "保证完全平方数", type: 'select', choices: ["保证", "不保证，答案向下取整"], default: 0 },
+  ],
+  generate(context, params) {
+    const { rand_digit_big_int, rand_between_big_int, minmax_big_int, Question, bigInt } = context;
+    const [minNum, maxNum] = minmax_big_int(params.digits);
     while (true) {
-      const correctAnswer = rand_digit_big_int(Math.floor((this.digits + 1) / 2), { avoidEndsWithZero: true });
+      const correctAnswer = rand_digit_big_int(Math.floor((params.digits + 1) / 2), { avoidEndsWithZero: true });
       let num = correctAnswer.square();
-      let problem: string;
-      switch (this.isPerfectSquare) {
+      let problem = "";
+      switch (params.isPerfectSquare) {
         case IsPerfectSquare.Always:
           problem = `√(${num})`;
           break;
@@ -38,30 +35,8 @@ class SqrtQuestionProvider implements QuestionProvider {
       problem += ` = ?`;
       return new Question(problem, correctAnswer.toString());
     }
-  }
-
-  public get_title(): string {
-    return `${this.digits}位数开平方`;
-  }
-}
-
-export default {
-  get_provider(context: QuestionContext, params: string[]): SqrtQuestionProvider {
-    return new SqrtQuestionProvider(context, params);
   },
-  paramsConfig: [
-    {
-      type: 'integer',
-      name: "被开方数位数",
-      min: 1,
-      default: 3,
-    },
-    {
-      type: 'select',
-      name: "保证完全平方数",
-      choices: ["保证", "不保证，答案向下取整"],
-      default: 0,
-    }
-  ],
-  id: 'sqrt',
-} satisfies QuestionModule;
+  get_title(params) {
+    return `${params.digits}位数开平方`;
+  },
+});
