@@ -3,7 +3,7 @@ import { ref, nextTick, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 import useQuestionStore from '@/store/question';
-import { empty_array } from '@/util';
+import { formatProblems, formatAnswers, generatePrintId, chunkArray } from '@/util';
 
 const router = useRouter();
 
@@ -26,31 +26,14 @@ const enum PrintStatus {
 const
   title = questionProvider.get_title(),
   today = new Date().toLocaleDateString(),
-  printId = String.fromCharCode(
-    65 + Math.floor(Math.random() * 26),
-    65 + Math.floor(Math.random() * 26),
-    65 + Math.floor(Math.random() * 26)
-  ),
+  printId = generatePrintId(),
   showPrintId = ref(true),
-  problems = questions.map((q, index) => {
-    let problemBase: string = `(${index + 1}) ${q.problem}`;
-    if (q.problem.includes('?'))
-      return problemBase.replace("?", "__________");
-    else
-      return problemBase + "__________";
-  }),
-  answers = questions.map((q, index) => {
-    return `(${index + 1}) ${q.correctAnswer}`;
-  }),
+  problems = formatProblems(questions),
+  answers = formatAnswers(questions),
   colCnt = ref(2),
   printStatus = ref(PrintStatus.Ready),
   displaySource = computed(() => [problems, problems, answers][printStatus.value]),
-  rows = computed(() => {
-    let rows = empty_array(Math.ceil(displaySource.value.length / colCnt.value)).map((_, index) => {
-      return displaySource.value.slice(index * colCnt.value, (index + 1) * colCnt.value);
-    });
-    return rows;
-  });
+  rows = computed(() => chunkArray(displaySource.value, colCnt.value));
 
 function go_back() {
   router.push("/");

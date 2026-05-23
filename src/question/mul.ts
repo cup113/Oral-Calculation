@@ -21,6 +21,8 @@ export default defineQuestionModule<Params>({
     return new Question(problem, correctAnswer.toString());
   },
   get_title(params) {
-    return `${params.digits1}位数乘${params.digits2}位数`;
+    let d1 = params.digits1, d2 = params.digits2;
+    if (d1 < d2) [d1, d2] = [d2, d1];
+    return `${d1}位数乘${d2}位数`;
   },
 });

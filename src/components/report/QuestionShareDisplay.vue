@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { Question } from '@/question';
 import type { Milliseconds } from '@/util';
+import { formatDuration, formatResult, computeProgressColorIndex, computeDurationBarRatio } from '@/report/report-stats';
 
 const props = defineProps<{
   question: Question,
@@ -17,13 +18,13 @@ const
   { slow: slowDur, fast: fastDur, min: minDur, max: maxDur } = props.durationDistribution,
   serialNum = props.num,
   duration = props.question.get_duration(),
-  durationDisplay = (duration / 1000).toFixed(3) + 's',
+  durationDisplay = formatDuration(duration),
   isCorrect = props.question.is_first_time_correct(),
-  resultDisplay = isCorrect ? '✓' : props.question.wrongAnswers.size.toString(),
+  resultDisplay = formatResult(isCorrect, props.question.wrongAnswers.size),
   isFast = duration <= fastDur,
   isSlow = duration >= slowDur,
-  progressColorIndex = isFast ? 0 : (isCorrect ? (isSlow ? 2 : 1) : 3),
-  ratio = 0.4 + 0.4 * (maxDur - duration + 1) / (maxDur - minDur + 2);
+  progressColorIndex = computeProgressColorIndex(isFast, isCorrect, isSlow),
+  ratio = computeDurationBarRatio(duration, minDur, maxDur);
 
 const colors = ['bg-cyan-400', 'bg-green-600', 'bg-orange-600', 'bg-red-500'];
 

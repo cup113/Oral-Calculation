@@ -6,6 +6,16 @@ import Message from 'vue-m-message';
 import { QUESTION_CONTEXT, validate_params } from '@/question';
 import useQuestionStore from '@/store/question';
 import useSettingStore from '@/store/setting';
+import {
+  ExerciseStatus,
+  canSubmitAnswer,
+  shouldWarnLoading,
+  shouldSkipToNext,
+  shouldStartFromSubmit,
+  getStatusOnModuleLoad,
+  getStatusOnStart,
+  getStatusOnCorrectAnswer,
+} from '@/exercise/exercise-machine';
 
 import Duration from '../assets/components/Duration.vue';
 
@@ -34,17 +44,9 @@ function manage_route_params() {
   }
 }
 
-const enum Status {
-  Loading,
-  Loaded,
-  Ready,
-  Answering,
-  Ended,
-}
-
 const
-  status = ref(Status.Loading),
-  started = computed(() => status.value !== Status.Loaded && status.value !== Status.Loading),
+  status = ref(ExerciseStatus.Loading),
+  started = computed(() => status.value !== ExerciseStatus.Loaded && status.value !== ExerciseStatus.Loading),
   answerInput = ref(null as HTMLInputElement | null);
 
 const urlParamsHint = computed(() => `当前 URL 已包含题型参数（类别: ${route.params.category}, 参数: ${route.params.params}, 题数: ${route.params.quantity}），可收藏此页快速进入`);
@@ -57,16 +59,17 @@ watch(() => question.loaded, loaded => {
 manage_route_params();
 
 function start(): void {
-  if (!question.loaded) {
+  const next = getStatusOnStart(question.loaded);
+  if (next === null) {
     warn_loading();
     return;
   }
-  status.value = Status.Ready;
+  status.value = next;
   next_question();
 }
 
 function end(): void {
-  status.value = Status.Ended;
+  status.value = ExerciseStatus.Ended;
   Message.success("题目全部完成，生成报告中……");
   setTimeout(() => {
     router.push("/report");
@@ -86,17 +89,18 @@ function warn_loading(): void {
 }
 
 function question_module_onload() {
-  let validate_result = validate_params(
+  const validate_result = validate_params(
     question.questionModule.paramsConfig,
     setting.params,
     question.questionModule.validate,
   );
-  if (validate_result.length > 0) {
+  const next = getStatusOnModuleLoad(validate_result);
+  if (next === 'exit') {
     Message.error(`验证参数时出错: 当前模块${validate_result}`);
     go_back();
   } else {
     question.reset_questions();
-    status.value = Status.Loaded;
+    status.value = next;
     question.currentQuestion = QUESTION_CONTEXT.Question.new_loaded();
     Message.info("加载完成。点击“开始”答题。");
   }
@@ -104,7 +108,7 @@ function question_module_onload() {
 
 function next_question(): void {
   question.update_question();
-  status.value = Status.Answering;
+  status.value = ExerciseStatus.Answering;
   nextTick(() => {
     answerInput.value?.focus();
     if (answerInput.value) answerInput.value.value = "";
@@ -112,21 +116,21 @@ function next_question(): void {
 }
 
 function submit_question(ev: Event): void {
-  switch (status.value) {
-    case Status.Answering:
-      break;
-    case Status.Ready:
-      next_question();
-      return;
-    case Status.Loaded:
-      start();
-      return;
-    case Status.Loading:
-      warn_loading();
-      return;
-    case Status.Ended:
-      Message.info("请等待跳转");
-      return;
+  const s = status.value;
+  if (canSubmitAnswer(s)) {
+    // proceed to answer processing below
+  } else if (shouldSkipToNext(s)) {
+    next_question();
+    return;
+  } else if (shouldStartFromSubmit(s)) {
+    start();
+    return;
+  } else if (shouldWarnLoading(s)) {
+    warn_loading();
+    return;
+  } else {
+    Message.info("请等待跳转");
+    return;
   }
   window.umami?.track('answer-submit');
   const
@@ -134,8 +138,9 @@ function submit_question(ev: Event): void {
     answer = (formData.get("answer") as string).trim(),
     isCorrect = question.answer_current_question(answer);
   if (isCorrect) {
-    status.value = Status.Ready;
-    if (question.passedCnt === setting.quantity)
+    const isLast = question.passedCnt === setting.quantity;
+    status.value = getStatusOnCorrectAnswer(isLast);
+    if (isLast)
       end();
   }
 }

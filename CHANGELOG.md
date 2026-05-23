@@ -5,9 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
-## [[Unreleased]]
+## [0.6.1] - 2026-05-23
 
-- Developing
+### Changed
+
+- 引入 `defineQuestionModule` 简化题面模块定义。
+- 移除 `createDate` 包装函数，直接使用 `new Date()`。
+
+### Added
+
+- 新增 Report 组件测试和 store 计时累加测试。
+- 补充 store 单元测试并重构 question store 以提升可测试性。
+
+### Fixed
+
+- 移除 `Exercise.vue` 中未使用的 `canStart` 导入。
 
 ## [0.6.0] - 2026-05-03
 
@@ -191,7 +203,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.6.0..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.6.1..HEAD
+[0.6.1]: https://github.com/cup113/Oral-Calculation/compare/v0.6.0..v0.6.1
 [0.6.0]: https://github.com/cup113/Oral-Calculation/compare/v0.5.3..v0.6.0
 [0.5.3]: https://github.com/cup113/Oral-Calculation/compare/v0.5.2..v0.5.3
 [0.5.2]: https://github.com/cup113/Oral-Calculation/compare/v0.5.1..v0.5.2

@@ -4,6 +4,14 @@ import qrcode from 'qrcode-generator'
 
 import useQuestionStore from '@/store/question';
 import QuestionNew from './report/QuestionShareDisplay.vue';
+import {
+  computeCorrectRatio,
+  formatPercentage,
+  mapAndSortDurations,
+  formatAverageDuration,
+  computeDurationPercentiles,
+  createDurationDistribution,
+} from '@/report/report-stats';
 
 const router = useRouter();
 
@@ -20,29 +28,12 @@ if (questions.length === 0) {
 const
   title = questionProvider.get_title(),
   generatedDisplay = (new Date()).toLocaleString(),
-  correctRatio = correctCnt / questions.length,
-  correctRatioDisplay = `${(correctRatio * 100).toFixed(0)}%`,
-  durationArray = (() => {
-    let arr = questions.map(q => q.get_duration());
-    arr.sort((a, b) => a - b);
-    return arr;
-  })(),
-  avgDuration = (accumulatedDuration / questions.length / 1000).toFixed(3) + "s",
-  [fastDuration, slowDuration] = (() => {
-    if (durationArray.length < 5)
-      return [durationArray[0] - 1, durationArray[durationArray.length - 1] + 1];
-    let oneFifth = Math.floor(durationArray.length / 5);
-    return [
-      durationArray[oneFifth - 1],
-      durationArray[durationArray.length - oneFifth]
-    ];
-  })(),
-  durationDistribution = Object.freeze({
-    min: durationArray[0],
-    max: durationArray[durationArray.length - 1],
-    fast: fastDuration,
-    slow: slowDuration
-  }),
+  correctRatio = computeCorrectRatio(correctCnt, questions.length),
+  correctRatioDisplay = formatPercentage(correctRatio),
+  durationArray = mapAndSortDurations(questions),
+  avgDuration = formatAverageDuration(accumulatedDuration, questions.length),
+  [fastDuration, slowDuration] = computeDurationPercentiles(durationArray),
+  durationDistribution = createDurationDistribution(durationArray, fastDuration, slowDuration),
   qrImg = (() => {
     const qr = qrcode(0, 'M');
     qr.addData(`${location.protocol}//${location.host}${location.pathname}`);

@@ -16,7 +16,7 @@ watch(() => setting.darkMode, (val) => {
     <main class="app-main">
       <RouterView />
     </main>
-    <CustomizedFooter remote-url="https://github.com/cup113/Oral-Calculation" version="0.6.0"
+    <CustomizedFooter remote-url="https://github.com/cup113/Oral-Calculation" version="0.6.1"
       license="MIT" years="2023-2026" detailed />
   </div>
 </template>

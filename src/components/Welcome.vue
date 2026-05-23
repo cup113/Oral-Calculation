@@ -6,6 +6,7 @@ import Message from 'vue-m-message';
 import { CATEGORIES, CategoryId } from '@/question';
 import useQuestionStore from '@/store/question';
 import useSettingStore from '@/store/setting';
+import { extractParamsFromFormData, buildExerciseUrl, validatePositiveInteger } from '@/util';
 
 import ParamItem from './ParamItem.vue';
 
@@ -31,12 +32,8 @@ function submit_form(ev: Event): void {
     Message.warning("请选择类别");
     return;
   }
-  let params: string[] = new Array(paramsConfig.value.length);
-  data.forEach((value, key) => {
-    if (key.startsWith("param-"))
-      params[parseInt(key.substring("param-".length))] = value as string;
-  });
-  router.push(`/exercise/${setting.categoryId}/${params.join(',')}/${setting.quantity}`);
+  const params = extractParamsFromFormData(data, paramsConfig.value.length);
+  router.push(buildExerciseUrl(setting.categoryId, params, setting.quantity));
 }
 
 function change_category(ev: Event) {
@@ -48,8 +45,9 @@ function change_quantity(ev: Event) {
 }
 
 function input_quantity(ev: Event) {
-  let val = (ev.target as HTMLInputElement).value;
-  if (/^\d+$/.test(val) && parseInt(val) >= 1)
+  const val = (ev.target as HTMLInputElement).value;
+  const parsed = validatePositiveInteger(val);
+  if (parsed !== null)
     setting.quantityManager.set(val);
 }
 
