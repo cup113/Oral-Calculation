@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import Message from 'vue-m-message';
-
-import { CATEGORIES, CategoryId } from '@/question';
+import { CATEGORIES } from '@/question';
 import useQuestionStore from '@/store/question';
 import useSettingStore from '@/store/setting';
 import { extractParamsFromFormData, buildExerciseUrl, validatePositiveInteger } from '@/util';
@@ -28,10 +26,6 @@ function go_to_mistakes_collection() {
 
 function submit_form(ev: Event): void {
   const data = new FormData(ev.target as HTMLFormElement);
-  if (data.get("category") === CategoryId.Null) {
-    Message.warning("请选择类别");
-    return;
-  }
   const params = extractParamsFromFormData(data, paramsConfig.value.length);
   router.push(buildExerciseUrl(setting.categoryId, params, setting.quantity));
 }

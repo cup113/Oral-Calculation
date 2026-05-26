@@ -4,15 +4,6 @@ import { mount } from '@vue/test-utils';
 import { setActivePinia, createPinia } from 'pinia';
 import { createRouter, createMemoryHistory } from 'vue-router';
 
-vi.mock('vue-m-message', () => ({
-  default: {
-    warning: vi.fn(),
-    success: vi.fn(),
-    error: vi.fn(),
-    info: vi.fn(),
-  },
-}));
-
 const Home = { template: '<div />' };
 const Exercise = { template: '<div />' };
 
@@ -37,25 +28,6 @@ describe("Welcome", () => {
     });
     expect(wrapper.text()).toContain("口算练习");
     expect(wrapper.find('select').exists()).toBe(true);
-  });
-
-  it("shows warning when submitting without category", async () => {
-    const router = createRouter({
-      history: createMemoryHistory(),
-      routes: [
-        { path: '/', component: Home },
-        { path: '/welcome', component: Home },
-        { path: '/exercise/:category/:params/:quantity', component: Exercise },
-      ],
-    });
-    const { default: Welcome } = await import('./Welcome.vue');
-    const wrapper = mount(Welcome, {
-      global: { plugins: [router] },
-    });
-    const form = wrapper.find('form');
-    await form.trigger('submit.prevent');
-    const Message = (await import('vue-m-message')).default;
-    expect(Message.warning).toHaveBeenCalledWith("请选择类别");
   });
 
   it("navigates to exercise on valid form submission", async () => {

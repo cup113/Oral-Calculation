@@ -17,7 +17,7 @@ beforeEach(() => {
 describe("store-setting", () => {
   it("defaults", () => {
     const store = useSettingStore();
-    expect(store.categoryId).toBe("null");
+    expect(store.categoryId).toBe("add");
     expect(store.quantity).toBe(10);
     expect(store.params).toEqual([]);
     expect(store.avoidRepeat).toBe(true);
@@ -27,7 +27,7 @@ describe("store-setting", () => {
   describe("categoryIdManager", () => {
     it("get returns default", () => {
       const store = useSettingStore();
-      expect(store.categoryIdManager.get()).toBe("null");
+      expect(store.categoryIdManager.get()).toBe("add");
     });
 
     it("set validates and persists", () => {
@@ -40,7 +40,7 @@ describe("store-setting", () => {
     it("set rejects invalid category", () => {
       const store = useSettingStore();
       expect(store.categoryIdManager.set("invalid")).toBeFalsy();
-      expect(store.categoryId).toBe("null");
+    expect(store.categoryId).toBe("add");
     });
 
     it("get reads from localStorage on fresh store", () => {
@@ -54,7 +54,22 @@ describe("store-setting", () => {
       expect(store.categoryIdManager.validate("add")).toBeTruthy();
       expect(store.categoryIdManager.validate("sqrt")).toBeTruthy();
       expect(store.categoryIdManager.validate("bogus")).toBeFalsy();
-      expect(store.categoryIdManager.validate("null")).toBeTruthy();
+      expect(store.categoryIdManager.validate("mul")).toBeTruthy();
+    });
+
+    it("reloads params when category changes", () => {
+      const store = useSettingStore();
+      store.paramsManager.set("3");
+      expect(store.params).toEqual(["3"]);
+      expect(localStorage.getItem("OC_Params_add")).toBe("3");
+      store.categoryIdManager.set("add-sub");
+      expect(store.categoryId).toBe("add-sub");
+      const saved = localStorage.getItem("OC_Params_add-sub");
+      if (saved) {
+        expect(store.params).toEqual(saved.split(","));
+      } else {
+        expect(store.params).toEqual([]);
+      }
     });
   });
 
@@ -99,7 +114,7 @@ describe("store-setting", () => {
       const store = useSettingStore();
       store.paramsManager.set("3,1");
       expect(store.params).toEqual(["3", "1"]);
-      expect(localStorage.getItem("OC_Params_null")).toBe("3,1");
+      expect(localStorage.getItem("OC_Params_add")).toBe("3,1");
     });
 
     it("set replaces previous params", () => {
@@ -119,7 +134,7 @@ describe("store-setting", () => {
 
     it("filter_empty strips single empty string", () => {
       const store = useSettingStore();
-      localStorage.setItem("OC_Params_null", "");
+      localStorage.setItem("OC_Params_add", "");
       expect(store.paramsManager.get()).toEqual([]);
     });
   });

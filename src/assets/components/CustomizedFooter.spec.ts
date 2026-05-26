@@ -13,13 +13,13 @@ describe("CustomizedFooter", () => {
     const wrapper = mount(CustomizedFooter, {
       props: {
         remoteUrl: 'https://github.com/test/repo',
-        version: '0.6.1',
+        version: '0.6.2',
         license: 'MIT',
         years: '2023-2026',
         detailed: true,
       },
     });
-    expect(wrapper.text()).toContain("v0.6.1");
+    expect(wrapper.text()).toContain("v0.6.2");
     expect(wrapper.text()).toContain("MIT");
   });
 
@@ -28,7 +28,7 @@ describe("CustomizedFooter", () => {
     const wrapper = mount(CustomizedFooter, {
       props: {
         remoteUrl: 'https://github.com/test/repo',
-        version: '0.6.1',
+        version: '0.6.2',
         license: 'MIT',
         years: '2023-2026',
         detailed: true,
@@ -46,7 +46,7 @@ describe("CustomizedFooter", () => {
     const wrapper = mount(CustomizedFooter, {
       props: {
         remoteUrl: 'https://github.com/test/repo',
-        version: '0.6.1',
+        version: '0.6.2',
         license: 'MIT',
         years: '2023-2026',
         detailed: true,

@@ -20,7 +20,7 @@ export default defineStore("setting", () => {
   }
 
   const
-    categoryId = ref(CategoryId.Null),
+    categoryId = ref(CategoryId.Add),
     quantity = ref(10),
     params = reactive([] as string[]),
     avoidRepeat = ref(true),
@@ -40,6 +40,8 @@ export default defineStore("setting", () => {
       if (this.validate(_category)) {
         categoryId.value = _category;
         storage_set(SettingStorageKeys.CategoryId, _category);
+        params.splice(0, params.length);
+        params.push(...paramsManager.get());
         return true;
       }
       return false;

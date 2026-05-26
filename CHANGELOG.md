@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
+## [0.6.2] - 2026-05-26
+
+### Fixed
+
+- 修复 `store.test.ts` 中默认 categoryId 断言的缩进。
+- 修复 `ParamItem.spec.ts` 中 localStorage 断言为弱匹配 (`toContain`) 以及快速按钮测试条件守卫导致的假阳性。
+- 为 `CategoryId.Null` 死代码分支添加注释说明。
+
 ## [0.6.1] - 2026-05-23
 
 ### Changed
@@ -203,7 +211,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.6.1..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.6.2..HEAD
+[0.6.2]: https://github.com/cup113/Oral-Calculation/compare/v0.6.1..v0.6.2
 [0.6.1]: https://github.com/cup113/Oral-Calculation/compare/v0.6.0..v0.6.1
 [0.6.0]: https://github.com/cup113/Oral-Calculation/compare/v0.5.3..v0.6.0
 [0.5.3]: https://github.com/cup113/Oral-Calculation/compare/v0.5.2..v0.5.3

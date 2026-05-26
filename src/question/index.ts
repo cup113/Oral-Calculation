@@ -8,7 +8,7 @@ import LoadingQuestion from './loading';
 
 /** Ids of categories. Used in select value, module getting, etc. */
 export const enum CategoryId {
-  Null = "null",
+  Null = "null", // backup: kept in case referenced by old persisted data
   Add = "add",
   Sub = "sub",
   AddSub = "add-sub",
@@ -28,7 +28,6 @@ export interface Category {
 
 /** Categories of questions */
 export const CATEGORIES: Category[] = [
-  { id: CategoryId.Null, desc: "--请选择--" },
   { id: CategoryId.Add, desc: "加法" },
   { id: CategoryId.Sub, desc: "减法" },
   { id: CategoryId.AddSub, desc: "加减混合" },
@@ -65,7 +64,7 @@ export async function get_module(categoryId: CategoryId): Promise<{ default: Que
     case CategoryId.Sqrt:
       return import("./sqrt");
     case CategoryId.Null:
-      return Promise.resolve({ default: LoadingQuestion });
+      return Promise.resolve({ default: LoadingQuestion }); // backup: legacy category handler
   }
 }
 

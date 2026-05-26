@@ -16,7 +16,10 @@ const props = defineProps<{
 const
   itemName = computed(() => `param-${props.i}`),
   itemTitle = computed(() => props.config.name + "..."),
-  value = computed(() => props.default ?? String(props.config.default));
+  value = computed(() => {
+    const v = props.default;
+    return (v !== undefined && v !== '') ? v : String(props.config.default);
+  });
 
 const isDigitParam = computed(() =>
   props.config.type === 'integer' && props.config.name.includes("位数")
@@ -35,6 +38,12 @@ function input_digit(ev: Event) {
     newParams[props.i] = val;
     setting.paramsManager.set(newParams.join(setting.PARAMS_SEP));
   }
+}
+
+function set_select(val: string) {
+  const newParams = [...setting.params];
+  newParams[props.i] = val;
+  setting.paramsManager.set(newParams.join(setting.PARAMS_SEP));
 }
 
 function set_boolean(val: string) {
@@ -78,7 +87,8 @@ function set_boolean(val: string) {
       :id="itemName"
       :name="itemName"
       class="form-input"
-      :value="value">
+      :value="value"
+      @change="set_select(($event.target as HTMLSelectElement).value)">
       <option
         v-for="(choice, i) in config.choices"
         :value="i"

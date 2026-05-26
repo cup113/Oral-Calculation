@@ -40,7 +40,6 @@ describe("question-util", () => {
 
   it("categories-module", async () => {
     const ids = [
-      CategoryId.Null,
       CategoryId.Add,
       CategoryId.Sub,
       CategoryId.AddSub,
