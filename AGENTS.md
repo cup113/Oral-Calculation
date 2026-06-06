@@ -50,13 +50,7 @@ src/
 - `QUESTION_CONTEXT` singleton contains all question helper dependencies (reduces bundle via code splitting)
 - Dynamic imports for question categories (lazy loading)
 - PWA via `vite-plugin-pwa` with Workbox `NetworkOnly` for umami analytics
-
-## Version Bump
-
-1. Read current version from `package.json` (match `"version": "..."`)
-2. `grep -r <current_version> --include="*.{json,ts,vue,md,mjs}"` to find all occurrences
-3. Update version in: `package.json`, `src/App.vue`, `CHANGELOG.md`
-4. In `CHANGELOG.md`: write new version entry under `[[Unreleased]]`, move link from `vX.Y.Z..HEAD` to `vX.Y.Z+1..HEAD`, add old version link
-5. `git add -A && git commit -m "Release: v<new.version>"`
-6. `git tag v<new.version>`
-7. `git push && git push --tags` (if user requests)
+- `pnpm build` — production build
+- `pnpm test` — run tests
+- `pnpm ts-check` — TypeScript type checking
+- `pnpm check` — type checking + test coverage

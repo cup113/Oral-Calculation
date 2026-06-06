@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router';
-import { computed, ref, watch, nextTick } from 'vue';
+import { computed, ref, watch, nextTick, onMounted, onUnmounted } from 'vue';
 import Message from 'vue-m-message';
 
 import { QUESTION_CONTEXT, validate_params } from '@/question';
@@ -145,6 +145,15 @@ function submit_question(ev: Event): void {
   }
 }
 
+function handleKeydown(e: KeyboardEvent) {
+  if (e.key === 'Enter' && status.value === ExerciseStatus.Loaded) {
+    e.preventDefault();
+    start();
+  }
+}
+
+onMounted(() => document.addEventListener('keydown', handleKeydown));
+onUnmounted(() => document.removeEventListener('keydown', handleKeydown));
 </script>
 
 <template>
@@ -197,7 +206,7 @@ function submit_question(ev: Event): void {
           <button class="btn-primary" type="submit">提交</button>
         </form>
 
-        <p class="question-hint">按 Enter 提交并继续，全程无需离开输入框</p>
+        <p class="question-hint">按 <kbd>Enter</kbd> 提交本题，再按一次进入下一题</p>
       </div>
 
       <div class="exercise-start-area" v-else>
@@ -205,6 +214,7 @@ function submit_question(ev: Event): void {
           <button class="btn-primary" type="button" @click="start" data-umami-event="start-exercise">开始</button>
           <button class="btn-secondary" type="button" @click="go_to_print_page" data-umami-event="start-print">打印</button>
         </div>
+        <p class="question-hint">按 <kbd>Enter</kbd> 开始答题，全程无需离开输入框</p>
       </div>
     </div>
 
@@ -330,6 +340,15 @@ function submit_question(ev: Event): void {
   font-size: 0.8125rem;
   color: var(--c-text-muted);
   margin-top: 0.75rem;
+}
+
+.question-hint kbd {
+  font-family: inherit;
+  padding: 0.0625rem 0.375rem;
+  border: 1px solid var(--c-border);
+  border-radius: 3px;
+  background: var(--c-bg);
+  font-weight: 600;
 }
 
 .exercise-start-area {
