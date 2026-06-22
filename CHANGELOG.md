@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
+## [0.7.0] - 2026-06-22
+
+### Changed
+
+- 成绩单页面重构：ReportShare 合并为模态框，题目列表改为表格布局，加入筛选标签（全部/正确/错误）。
+- 统计逻辑抽取为 `useReportStats` composable，提升可维护性。
+- 正确率显示改为保留一位小数（如 `66.7%`）。
+- `pnpm-lock.yaml` 依赖版本更新。
+
+### Fixed
+
+- `computeCorrectRatio` 除零保护，避免题数为 0 时显示 `NaN%`。
+- 质因数分解（pff）参数上限从 10 修正为 9。
+
 ## [0.6.3] - 2026-06-06
 
 ### Added
@@ -222,7 +236,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.6.3..HEAD
+[Unreleased]: https://github.com/cup113/Oral-Calculation/compare/v0.7.0..HEAD
+[0.7.0]: https://github.com/cup113/Oral-Calculation/compare/v0.6.3..v0.7.0
 [0.6.3]: https://github.com/cup113/Oral-Calculation/compare/v0.6.2..v0.6.3
 [0.6.2]: https://github.com/cup113/Oral-Calculation/compare/v0.6.1..v0.6.2
 [0.6.1]: https://github.com/cup113/Oral-Calculation/compare/v0.6.0..v0.6.1
