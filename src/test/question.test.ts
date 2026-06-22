@@ -502,10 +502,10 @@ describe("question-provider", () => {
   it("pff", () => {
     const { get_provider, paramsConfig } = pff;
     expect(paramsConfig.length).toBe(1);
-    for (let i = 1; i < 11; ++i) {
+    for (let i = 1; i < 10; ++i) {
       let provider = get_provider(context, [i.toString()]);
       expect(provider.get_title()).contain(i.toString()).contain("质因数分解");
-      for (let j = i === 10 ? 90 : 0; j < 100; ++j) {
+      for (let j = 0; j < 100; ++j) {
         let question = provider.get_question();
         let problem = /(\d+)\s/.exec(question.problem);
         assert(problem !== null);

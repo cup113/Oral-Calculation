@@ -19,114 +19,110 @@ const
 </script>
 
 <template>
-  <div class="q-item" :class="isCorrect ? 'q-correct' : 'q-wrong'">
-    <div class="q-head">
-      <span class="q-num">{{ number }}</span>
-      <span class="q-dot" :class="isCorrect ? 'dot-correct' : 'dot-wrong'"></span>
-    </div>
-    <div class="q-body">
-      <span class="q-problem">{{ problem }}</span>
-      <div class="q-meta">
-        <span class="q-answer q-answer-correct">{{ correctAnswer }}</span>
-        <span class="q-sep">&middot;</span>
-        <Duration :duration="duration" />
-        <template v-if="wrongAnswers.length">
-          <span class="q-sep">&middot;</span>
-          <span class="q-wrong-list">
-            ✘ {{ wrongAnswers.join(', ') }}
-          </span>
-        </template>
-      </div>
-    </div>
-  </div>
+  <tr class="q-row" :class="isCorrect ? 'q-row-correct' : 'q-row-wrong'">
+    <td class="q-col-num">{{ number }}</td>
+    <td class="q-col-problem">{{ problem }}</td>
+    <td class="q-col-answer">
+      <template v-if="wrongAnswers.length">
+        <span class="q-wrong-answers">{{ wrongAnswers.join(', ') }}</span>
+      </template>
+      <span v-else class="q-no-answer">&ndash;</span>
+    </td>
+    <td class="q-col-correct">
+      <span class="q-answer-value">{{ correctAnswer }}</span>
+    </td>
+    <td class="q-col-duration">
+      <Duration :duration="duration" />
+    </td>
+    <td class="q-col-status">
+      <span v-if="isCorrect" class="q-status-ok" title="正确">&#10003;</span>
+      <span v-else class="q-status-ko" title="错误">&#10007;</span>
+    </td>
+  </tr>
 </template>
 
 <style>
-.q-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.625rem;
-  padding: 0.625rem 0.75rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--c-border);
-  background: var(--c-surface);
-  width: 100%;
+.q-row {
+  transition: background-color 0.15s;
 }
 
-.q-item.q-correct {
-  border-left: 3px solid var(--c-success);
+.q-row:hover {
+  background-color: var(--c-bg);
 }
 
-.q-item.q-wrong {
-  border-left: 3px solid var(--c-error);
-  background: var(--c-error-light);
+.q-row-correct {
+  background-color: var(--c-success-light);
 }
 
-.q-head {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  min-width: 2rem;
-  padding-top: 0.125rem;
+.q-row-wrong {
+  background-color: var(--c-error-light);
 }
 
-.q-num {
+.q-col-num {
+  text-align: center;
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--c-text-muted);
+  padding: 0.5rem 0.25rem;
+  white-space: nowrap;
+  width: 2rem;
 }
 
-.q-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.dot-correct {
-  background: var(--c-success);
-}
-
-.dot-wrong {
-  background: var(--c-error);
-}
-
-.q-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.q-problem {
-  display: block;
-  font-size: 1rem;
+.q-col-problem {
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--c-text);
-  line-height: 1.4;
+  padding: 0.5rem 0.5rem;
 }
 
-.q-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25rem;
-  margin-top: 0.25rem;
+.q-col-answer {
   font-size: 0.8125rem;
+  padding: 0.5rem 0.5rem;
+  white-space: nowrap;
+}
+
+.q-wrong-answers {
+  color: var(--c-error);
+  font-weight: 500;
+}
+
+.q-no-answer {
+  color: var(--c-text-muted);
+}
+
+.q-col-correct {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.5rem;
+  white-space: nowrap;
+}
+
+.q-answer-value {
+  color: var(--c-success);
+  font-weight: 700;
+}
+
+.q-col-duration {
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.5rem;
+  white-space: nowrap;
   color: var(--c-text-secondary);
 }
 
-.q-answer {
-  font-weight: 600;
+.q-col-status {
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+  width: 2rem;
 }
 
-.q-answer-correct {
+.q-status-ok {
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--c-success);
 }
 
-.q-sep {
-  color: var(--c-text-muted);
-}
-
-.q-wrong-list {
+.q-status-ko {
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--c-error);
 }
 </style>

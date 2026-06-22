@@ -8,11 +8,11 @@ export interface DurationDistribution {
 }
 
 export function computeCorrectRatio(correctCount: number, totalCount: number): number {
-  return correctCount / totalCount;
+  return totalCount === 0 ? 0 : correctCount / totalCount;
 }
 
 export function formatPercentage(ratio: number): string {
-  return `${(ratio * 100).toFixed(0)}%`;
+  return `${(ratio * 100).toFixed(1)}%`;
 }
 
 export function mapAndSortDurations(questions: { get_duration(): Milliseconds }[]): Milliseconds[] {

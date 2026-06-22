@@ -11,7 +11,7 @@ src/
 ├── App.vue              # Root layout
 ├── index.css            # Global styles
 ├── util.ts              # Utility functions (localStorage, type aliases)
-├── router/index.ts      # Routes: /welcome → /exercise/:cat/:params/:n → /report → /report-share
+├── router/index.ts      # Routes: /welcome → /exercise/:cat/:params/:n → /report
 ├── store/
 │   ├── setting.ts       # Persisted settings (category, quantity, params, avoidRepeat)
 │   ├── question.ts      # Question session state (questions, progress, timing, answer logic)
@@ -24,8 +24,7 @@ src/
 ├── components/
 │   ├── Welcome.vue      # Category/params form
 │   ├── Exercise.vue     # Main exercise UI (question display, answer input, progress)
-│   ├── Report.vue       # Score report / results
-│   ├── ReportShare.vue  # Shareable report card
+│   ├── Report.vue       # Score report / results (includes share modal)
 │   ├── QuestionsPrint.vue    # Printable question sheet
 │   ├── MistakesCollection.vue  # Mistake review page
 │   └── report/

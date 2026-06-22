@@ -25,10 +25,6 @@ export default createRouter({
       component: ReportVue,
     },
     {
-      path: "/report-share",
-      component: () => import('@/components/ReportShare.vue'),
-    },
-    {
       path: "/print-question",
       component: () => import('@/components/QuestionsPrint.vue'),
     },

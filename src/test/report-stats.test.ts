@@ -26,17 +26,17 @@ describe("report-stats", () => {
   });
 
   describe("formatPercentage", () => {
-    it("formats 0.6 as 60%", () => {
-      expect(formatPercentage(0.6)).toBe("60%");
+    it("formats 0.6 as 60.0%", () => {
+      expect(formatPercentage(0.6)).toBe("60.0%");
     });
-    it("formats 0 as 0%", () => {
-      expect(formatPercentage(0)).toBe("0%");
+    it("formats 0 as 0.0%", () => {
+      expect(formatPercentage(0)).toBe("0.0%");
     });
-    it("formats 1 as 100%", () => {
-      expect(formatPercentage(1)).toBe("100%");
+    it("formats 1 as 100.0%", () => {
+      expect(formatPercentage(1)).toBe("100.0%");
     });
-    it("rounds 0.6666 to 67%", () => {
-      expect(formatPercentage(0.6666)).toBe("67%");
+    it("rounds 0.6666 to 66.7%", () => {
+      expect(formatPercentage(0.6666)).toBe("66.7%");
     });
   });
 

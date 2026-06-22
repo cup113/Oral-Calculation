@@ -53,7 +53,7 @@ describe('Report', () => {
     vi.useRealTimers();
   });
 
-  it('renders a QuestionDisplay for each question', () => {
+  it('renders a question row for each question', () => {
     vi.useFakeTimers();
     const store = useQuestionStore();
     store.notify.success = vi.fn();
@@ -80,7 +80,7 @@ describe('Report', () => {
       global: { plugins: [router] },
     });
 
-    expect(wrapper.findAll('.q-correct')).toHaveLength(3);
+    expect(wrapper.findAll('.q-row-correct')).toHaveLength(3);
     vi.useRealTimers();
   });
 
@@ -128,7 +128,34 @@ describe('Report', () => {
     });
 
     expect(wrapper.text()).toContain('返回主页');
-    expect(wrapper.text()).toContain('分享');
+    expect(wrapper.text()).toContain('截图分享');
+    vi.useRealTimers();
+  });
+
+  it('renders filter tabs', () => {
+    vi.useFakeTimers();
+    const store = useQuestionStore();
+    store.notify.success = vi.fn();
+    store.notify.error = vi.fn();
+    store.notify.warning = vi.fn();
+
+    push_q(store, '1+1', '2');
+    vi.setSystemTime(1000); store.update_question();
+    vi.setSystemTime(2000); store.answer_current_question('2');
+
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [{ path: '/', component: Home }],
+    });
+    const wrapper = mount(Report, {
+      global: { plugins: [router] },
+    });
+
+    const tabs = wrapper.findAll('.filter-tab');
+    expect(tabs).toHaveLength(3);
+    expect(tabs[0].text()).toBe('全部');
+    expect(tabs[1].text()).toBe('正确');
+    expect(tabs[2].text()).toBe('错误');
     vi.useRealTimers();
   });
 

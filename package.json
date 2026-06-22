@@ -15,6 +15,7 @@
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "big-integer": "^1.6.52",
+    "dom-to-image-more": "^3.10.0",
     "js-file-downloader": "^1.1.25",
     "pinia": "^3.0.3",
     "qrcode-generator": "^1.4.4",

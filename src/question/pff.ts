@@ -22,7 +22,7 @@ function pff(num: bigInt.BigInteger, context: { bigInt: bigInt.BigIntegerStatic;
 export default defineQuestionModule<Params>({
   id: 'pff',
   paramsConfig: [
-    { key: 'digits', name: "位数", type: 'integer', min: 1, max: 10, default: 3 },
+    { key: 'digits', name: "位数", type: 'integer', min: 1, max: 9, default: 3 },
   ],
   generate(context, params) {
     const { rand_digit_big_int, Question } = context;

@@ -15,43 +15,88 @@ function createQuestion(options: { duration?: number; wrongAnswers?: string[] } 
   return q;
 }
 
+function mountInTable(component: typeof QuestionDisplay, props: Record<string, unknown>) {
+  return mount({
+    components: { QuestionDisplay },
+    template: '<table><tbody><QuestionDisplay v-bind="props" /></tbody></table>',
+    setup() {
+      return { props };
+    },
+  });
+}
+
 describe('QuestionDisplay', () => {
-  it('renders correct question with q-correct class', () => {
+  it('renders correct question with q-row-correct class', () => {
     const q = createQuestion();
-    const wrapper = mount(QuestionDisplay, { props: { question: q, i: 0 } });
-    expect(wrapper.classes()).toContain('q-correct');
-    expect(wrapper.classes()).not.toContain('q-wrong');
+    const wrapper = mount(QuestionDisplay, {
+      props: { question: q, i: 0 },
+    });
+    expect(wrapper.classes()).toContain('q-row-correct');
+    expect(wrapper.classes()).not.toContain('q-row-wrong');
   });
 
-  it('renders wrong question with q-wrong class and shows wrong answers', () => {
+  it('renders wrong question with q-row-wrong class and shows wrong answers', () => {
     const q = createQuestion({ wrongAnswers: ['3', '7'] });
-    const wrapper = mount(QuestionDisplay, { props: { question: q, i: 0 } });
-    expect(wrapper.classes()).toContain('q-wrong');
-    expect(wrapper.text()).toContain('✘');
+    const wrapper = mount(QuestionDisplay, {
+      props: { question: q, i: 0 },
+    });
+    expect(wrapper.classes()).toContain('q-row-wrong');
     expect(wrapper.text()).toContain('3, 7');
   });
 
   it('displays question number as i + 1', () => {
     const q = createQuestion();
-    const wrapper = mount(QuestionDisplay, { props: { question: q, i: 4 } });
-    expect(wrapper.find('.q-num').text()).toBe('5');
+    const wrapper = mount(QuestionDisplay, {
+      props: { question: q, i: 4 },
+    });
+    expect(wrapper.find('.q-col-num').text()).toBe('5');
   });
 
   it('displays the problem text', () => {
     const q = createQuestion();
-    const wrapper = mount(QuestionDisplay, { props: { question: q, i: 0 } });
-    expect(wrapper.find('.q-problem').text()).toBe('1 + 1 = ?');
+    const wrapper = mount(QuestionDisplay, {
+      props: { question: q, i: 0 },
+    });
+    expect(wrapper.find('.q-col-problem').text()).toBe('1 + 1 = ?');
   });
 
   it('displays the correct answer', () => {
     const q = createQuestion();
-    const wrapper = mount(QuestionDisplay, { props: { question: q, i: 0 } });
-    expect(wrapper.find('.q-answer-correct').text()).toBe('2');
+    const wrapper = mount(QuestionDisplay, {
+      props: { question: q, i: 0 },
+    });
+    expect(wrapper.find('.q-answer-value').text()).toBe('2');
   });
 
   it('displays duration via Duration child component', () => {
     const q = createQuestion({ duration: 2500 });
-    const wrapper = mount(QuestionDisplay, { props: { question: q, i: 0 } });
+    const wrapper = mount(QuestionDisplay, {
+      props: { question: q, i: 0 },
+    });
     expect(wrapper.text()).toContain('2.500');
+  });
+
+  it('shows dash for correct answer with no wrong answers', () => {
+    const q = createQuestion();
+    const wrapper = mount(QuestionDisplay, {
+      props: { question: q, i: 0 },
+    });
+    expect(wrapper.find('.q-no-answer').exists()).toBe(true);
+  });
+
+  it('shows checkmark for correct answer', () => {
+    const q = createQuestion();
+    const wrapper = mount(QuestionDisplay, {
+      props: { question: q, i: 0 },
+    });
+    expect(wrapper.find('.q-status-ok').exists()).toBe(true);
+  });
+
+  it('shows cross for wrong answer', () => {
+    const q = createQuestion({ wrongAnswers: ['3'] });
+    const wrapper = mount(QuestionDisplay, {
+      props: { question: q, i: 0 },
+    });
+    expect(wrapper.find('.q-status-ko').exists()).toBe(true);
   });
 });
